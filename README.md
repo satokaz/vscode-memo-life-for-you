@@ -40,7 +40,7 @@ The following commands are supported.
 
 ## Requirements
 
-* Separately, installation of memo command is necessary.
+* `memo` should be installed already
    * [memo (Memo Life For You)](https://github.com/mattn/memo)
 
 ## Extension Settings
