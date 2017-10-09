@@ -1,0 +1,83 @@
+{
+    "name": "vscode-memo-life-for-you",
+    "displayName": "vscode-memo-life-for-you",
+    "description": "",
+    "version": "0.0.1",
+    "publisher": "satokaz",
+    "engines": {
+        "vscode": "^1.17.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "icon": "media/icon.png",
+    "homepage": "https://github.com/satokaz/vscode-memo-life-for-you",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/satokaz/vscode-memo-life-for-you"
+    },
+    "activationEvents": [
+        "*"
+    ],
+    "main": "./out/src/extension",
+    "contributes": {
+        "commands": [
+        {
+            "command": "extension.memoNew",
+            "title": "New",
+            "category": "Memo"
+        },
+        {
+            "command": "extension.memoEdit",
+            "title": "Edit",
+            "category": "Memo"
+        },
+        {
+            "command": "extension.memoGrep",
+            "title": "Grep",
+            "category": "Memo"
+        },
+        {
+            "command": "extension.memoConfig",
+            "title": "Config",
+            "category": "Memo"
+        },
+        {
+            "command": "extension.memoServe",
+            "title": "Serve",
+            "category": "Memo"
+        }
+        ],
+        "configuration": {
+        "type": "object",
+        "title": "memo-life-for-you",
+        "order": 20,
+        "properties": {
+            "memo-life-for-you.memoPath": {
+            "type": "string",
+            "default": ""
+            },
+            "memo-life-for-you.memoDir": {
+            "type": "string",
+            "default": ""
+            }
+        }
+        }
+    },
+    "scripts": {
+        "vscode:prepublish": "npm run compile",
+        "compile": "tsc -p ./",
+        "watch": "tsc -watch -p ./",
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.5.2",
+        "vscode": "^1.1.5",
+        "mocha": "^3.5.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+    }
+}
