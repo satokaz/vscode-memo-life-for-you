@@ -4,7 +4,9 @@ This extension is for executing some commands of [memo (Memo Life For You)](http
 
 ## Features
 
-<blockquote class="twitter-video" data-lang="ja"><p lang="ja" dir="ltr">mattn/memo で作成した資産を vscode からも利用できないかと勉強がてら拡張機能の作成にチャレンジしているが、形になったものは vscode が memo のセレクタだった。何を言っているかわからないと思うが grep と edit のセレクタだった。戸惑っている <a href="https://t.co/naH5Z2MSMa">pic.twitter.com/naH5Z2MSMa</a></p>&mdash; Kazuyuki Sato (@satokaz) <a href="https://twitter.com/satokaz/status/917247810205999105?ref_src=twsrc%5Etfw">2017年10月9日</a></blockquote> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+sample movie:
+https://pic.twitter.com/naH5Z2MSMa
+
 
 The following commands are supported.
 
@@ -16,32 +18,49 @@ The following commands are supported.
 
 ### Memo: New
 
-* YY-MM-DD-入力された値.md のようなファイル名を作成し、オープンする
+* `memo new` コマンドに入力された値を渡し、`YY-MM-DD-入力された値.md` のようなファイルを memodir に作成し、オープンする
 * **Mac Only**: 何も入力がない場合は、YY-MM-DD.md ファイルが作成し、オープンする 
+
 
 ### Memo: Edit
 
-* memo edit のようにファイル名をリスト表示。keyword を入力することで絞り込み可能。memo list の機能も兼ねる
+* `memo list` のようにファイル名とそのファイルの先頭 1 行目をリスト表示。keyword を入力することで絞り込み、選択されたファイルを開く。
+* `memo edit` コマンドは利用していない
 
 ### Memo: Grep
 
 * keyword を入力することで、memo grep による検索結果を Quick Picker に表示。選択することで、該当するファイルを開き、該当行にカーソルを移動させる
+* `memo grep` コマンドの出力から Picker Items を作成 
 
 >**Note:** 統合ターミナルで memo grep すると、出力のファイル名部分が自動的にリンクになるので、Cmd + Click で似たような操作ができる！(この拡張機能は関係ない)
 
 ### Memo: Config
 
-* memo c による confgigure file を VS Code 上にオープン
+* `memo config` による confgigure file を VS Code 上にオープン
 
 ### Memo: Serve
 
-* memo コマンド内蔵の http server を起動し、ブラウザで表示。再起動は、手動で kill した後にさ
+* `memo serve` を実行し、memo コマンド内蔵の http server を起動し、ブラウザで表示。手動でプロセスの kill が必要
 
 
 ## Requirements
 
 * `memo` should be installed already
    * [memo (Memo Life For You)](https://github.com/mattn/memo)
+
+example configuration:
+
+```yaml
+memodir = "/Users/satokaz/.config/memo"
+editor = "code-insiders"
+column = 50
+selectcmd = "peco"
+grepcmd = "grep -niH ${PATTERN} ${FILES}"
+assetsdir = "/Users/satokaz/.config/memo/satokaz"
+pluginsdir = "/Users/satokaz/.config/memo/satokaz"
+templatedirfile = "/Users/satokaz/.config/memo/satokaz/dir.html"
+templatebodyfile = "/Users/satokaz/.config/memo/satokaz/body.html"
+```
 
 ## Extension Settings
 

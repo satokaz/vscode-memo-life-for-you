@@ -48,7 +48,10 @@ class Memo {
     
     constructor() {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
-        console.log(this.memopath)
+        // console.log('path =', process.env.HOME);
+        // console.log('path =', process.env.USERPROFIL);
+        
+        // this.memodir can not be used with path.join (). Required research
         // this.memodir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir');
         // console.log(this.memodir)
         
@@ -57,13 +60,13 @@ class Memo {
     public New() {
         vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
             (fileName) => {
-                console.log('name =', fileName);
+                // console.log('name =', fileName);
                 if (fileName == undefined || "") {
-                    return;
+                    return void 0;
                 }
                 if (fileName == "" && process.platform == 'win32') {
                     vscode.window.showInformationMessage('Please Enter a Filename');
-                    return;
+                    return void 0;
                 } 
 
                 if (fileName == "") {
@@ -77,10 +80,10 @@ class Memo {
 
     public Edit() {
         let memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
-        console.log("memodir = ", memodir)
-        let list = cp.execSync(`${this.memopath} list`,{maxBuffer: 4096}).toString().split('\n');
+        // console.log("memodir = ", memodir)
+        let list = cp.execSync(`${this.memopath} list`,{maxBuffer: 1024 * 1024}).toString().split('\n');
         
-        console.log('list =', list);
+        // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
         
         list.forEach(async function (v, i) {
@@ -89,14 +92,14 @@ class Memo {
             }
 
             let array = fs.readFileSync(path.normalize(path.join(memodir, v))).toString().split("\n");
-            console.log('v =', v);
+            // console.log('v =', v);
             
             items.push({ 
                 "label": v, 
                 "description": array[0], 
                 "detail": "" });
         })
-        console.log("items =", items)
+        // console.log("items =", items)
         
         this.options.placeHolder = 'Please select or enter a filename...';
         vscode.window.showQuickPick(items, this.options).then(function (selected) {
@@ -104,7 +107,7 @@ class Memo {
                 return;
             }
 
-            console.log('selected =', path.normalize(path.join(memodir, selected.label)));            
+            // console.log('selected =', path.normalize(path.join(memodir, selected.label)));            
 
             vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
                 vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
@@ -116,10 +119,10 @@ class Memo {
     public Grep() {
         vscode.window.showInputBox({placeHolder: 'Please enter a keyword'}).then(
             (keyword) => {
-                let list = cp.execSync(`${this.memopath} grep ${keyword}`,{maxBuffer: 4096}).toString().split('\n');
-                console.log('name =', keyword);                
-                console.log(list);
-                console.log("list.length =", list.length);
+                let list = cp.execSync(`${this.memopath} grep ${keyword}`,{maxBuffer: 1024 * 1024}).toString().split('\n');
+                // console.log('name =', keyword);                
+                // console.log(list);
+                // console.log("list.length =", list.length);
 
                 let items: vscode.QuickPickItem[] = [];
 
@@ -127,7 +130,7 @@ class Memo {
                     if (v == '') {
                         return void 0;
                     }
-                    console.log('v = ', v);
+                    // console.log('v = ', v);
                     
                     items.push({ 
                         "label": v.replace(/^(.*?)(?=:)/gm, '').toString(), 
@@ -135,15 +138,15 @@ class Memo {
                         "detail": (v.match(/^(.*?)(?=:)/gm)).toString(),
                     });
                 })
-                console.log("items =", items)
+                // console.log("items =", items)
                 
                 this.options.placeHolder = 'Please Enter Keywords To Search...';
                 vscode.window.showQuickPick(items, this.options).then(function (selected) {
                     if (selected == null) {
                         return void 0;
                     }
-                    console.log('selected =', selected);
-                    console.log('selected split = ', selected.label.split(':')[1]);
+                    // console.log('selected =', selected);
+                    // console.log('selected split = ', selected.label.split(':')[1]);
                     
                     vscode.workspace.openTextDocument(selected.detail).then(document => {
                         vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => { 
@@ -152,9 +155,9 @@ class Memo {
                             const position = editor.selection.active;
                             var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
                             // カーソルで選択 (ここでは、まだエディタ上で見えない)
-                            vscode.window.activeTextEditor.selection = new vscode.Selection(newPosition, newPosition);
+                            editor.selection = new vscode.Selection(newPosition, newPosition);
                             // カーソル位置までスクロール
-                            vscode.window.activeTextEditor.revealRange(vscode.window.activeTextEditor.selection,vscode.TextEditorRevealType.AtTop);
+                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.AtTop);
                         });
                     });
                 });        
@@ -170,7 +173,7 @@ class Memo {
     }
 
     public Serve() {
-        console.log('Current directory: ' + process.cwd());
+        // console.log('Current directory: ' + process.cwd());
         let proc = cp.spawn(`${this.memopath}`, ['serve'], {
             stdio: ['ignore'],
             detached: false,
