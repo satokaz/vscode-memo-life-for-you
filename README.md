@@ -24,8 +24,7 @@ The following commands are supported.
 
 ### Memo: Edit
 
-* `memo list` のようにファイル名とそのファイルの先頭 1 行目をリスト表示。keyword を入力することで絞り込み、選択されたファイルを開く。
-* `memo edit` コマンドは利用していない
+* `memo list` や `memo edit` のようにファイル名とそのファイルの先頭 1 行目をリスト表示。keyword を入力することで絞り込みが可能。選択でファイルを開く。
 
 ### Memo: Grep
 
@@ -72,6 +71,8 @@ This extension contributes the following settings:
 * `"memo-life-for-you.memoDir"`: Path to memodir 
    * ex: Mac/Linux: `"/Users/satokaz/.config/memo/_posts"`
    * ex: Windows: `"C:/Users/Sato/AppData/Roaming/memo/_posts"`
+* `"memo-life-for-you.serve-addr"`: server address (default: "8080")
+   * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
 
 ## Known Issues
 

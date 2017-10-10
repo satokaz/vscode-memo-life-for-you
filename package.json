@@ -2,7 +2,7 @@
     "name": "vscode-memo-life-for-you",
     "displayName": "vscode-memo-life-for-you",
     "description": "This extension is for executing some commands of memo (Memo Life For You) from VS Code.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "satokaz",
     "engines": {
         "vscode": "^1.17.0"
@@ -62,7 +62,7 @@
             "default": ""
             },
             "memo-life-for-you.serve-addr": {
-                "type": "number",
+                "type": "string",
                 "default": "8080"
             }
     
