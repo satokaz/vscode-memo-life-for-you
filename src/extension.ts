@@ -11,13 +11,18 @@ export function activate(context: vscode.ExtensionContext) {
     
     let memo = new Memo();
 
-    vscode.workspace.onDidChangeConfiguration(e => console.log('onDidChangeConfiguration =', e));
+    // vscode.workspace.onDidChangeConfiguration(event => {
+    //     console.log('event =', event)
+    // });
 
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () => memo.New()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoEdit", () => memo.Edit()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoGrep", () => memo.Grep()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoConfig", () => memo.Config()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoServe", () => memo.Serve()));
+    context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
+        memo.updateConfiguration();
+    }));
 }
 
 export function deactivate() {
@@ -37,9 +42,8 @@ export enum MemoConfig {
 };
 
 class Memo {
-    private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private memopath: string; 
-    private memoaddr: number;
+    private memoaddr: string;
     // private memodir: string;
 
     public options: vscode.QuickPickOptions = {
@@ -50,15 +54,14 @@ class Memo {
     }
     
     constructor() {
-            this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
-            this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<number>('serve-addr');
-    
+        this.updateConfiguration();
+        // this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+        // this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<number>('serve-addr');
+        
         // console.log('path =', process.env.HOME);
         // console.log('path =', process.env.USERPROFIL);
         
-        // this.memodir can not be used with path.join (). Required research
-        // this.memodir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir');
-        // console.log(this.memodir)
+
         
     }
 
@@ -84,8 +87,14 @@ class Memo {
     }
 
     public Edit() {
+        // this.memodir can not be used with path.join (). Required research
+        // this.memodir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir');
+        // console.log(this.memodir)
+
         let memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
+
         // console.log("memodir = ", memodir)
+
         let list = cp.execSync(`${this.memopath} list`,{maxBuffer: 1024 * 1024}).toString().split('\n');
         
         // console.log('list =', list);
@@ -154,7 +163,6 @@ class Memo {
                     }
                     // console.log('selected =', selected);
                     // console.log('selected split = ', selected.label.split(':')[1]);
-                    
                     vscode.workspace.openTextDocument(selected.detail).then(document => {
                         vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => { 
                             // カーソルを目的の行に移動させて表示する為の処理
@@ -181,7 +189,7 @@ class Memo {
 
     public Serve() {
         // console.log('Current directory: ' + process.cwd());
-        console.log(`serve --addr :` + `${this.memoaddr}`);
+        // console.log(`serve --addr :` + `${this.memoaddr}`);
         let proc = cp.spawn(`${this.memopath}`, ['serve', '--addr', `:${this.memoaddr}`], {
             stdio: ['inherit'],
             detached: false,
@@ -198,16 +206,11 @@ class Memo {
         //     console.log(`child process exited with code ${code}`);
         // });
 
-        console.log("child:" + proc.pid);
-        return proc.pid;
+        // console.log("child:" + proc.pid);
     }
 
-    public update(uri: vscode.Uri) {
-        this._onDidChange.fire(uri);
-    }
-
-    get onDidChange(): vscode.Event<vscode.Uri> {
-        return this._onDidChange.event;
-    }
+    public updateConfiguration() {
+        this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+        this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
+	}
 }
-
