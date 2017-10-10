@@ -11,6 +11,8 @@ export function activate(context: vscode.ExtensionContext) {
     
     let memo = new Memo();
 
+    vscode.workspace.onDidChangeConfiguration(e => console.log('onDidChangeConfiguration =', e));
+
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () => memo.New()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoEdit", () => memo.Edit()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoGrep", () => memo.Grep()));
@@ -35,8 +37,9 @@ export enum MemoConfig {
 };
 
 class Memo {
-
+    private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
     private memopath: string; 
+    private memoaddr: number;
     // private memodir: string;
 
     public options: vscode.QuickPickOptions = {
@@ -47,7 +50,9 @@ class Memo {
     }
     
     constructor() {
-        this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+            this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+            this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<number>('serve-addr');
+    
         // console.log('path =', process.env.HOME);
         // console.log('path =', process.env.USERPROFIL);
         
@@ -116,11 +121,13 @@ class Memo {
         });
     }
 
+    // memo grep
     public Grep() {
         vscode.window.showInputBox({placeHolder: 'Please enter a keyword'}).then(
             (keyword) => {
+                keyword = keyword.replace(/\s/g, '\ ');
                 let list = cp.execSync(`${this.memopath} grep ${keyword}`,{maxBuffer: 1024 * 1024}).toString().split('\n');
-                // console.log('name =', keyword);                
+                console.log('name =', keyword);                
                 // console.log(list);
                 // console.log("list.length =", list.length);
 
@@ -174,13 +181,33 @@ class Memo {
 
     public Serve() {
         // console.log('Current directory: ' + process.cwd());
-        let proc = cp.spawn(`${this.memopath}`, ['serve'], {
-            stdio: ['ignore'],
+        console.log(`serve --addr :` + `${this.memoaddr}`);
+        let proc = cp.spawn(`${this.memopath}`, ['serve', '--addr', `:${this.memoaddr}`], {
+            stdio: ['inherit'],
             detached: false,
         });
 
-        console.log("child:" + proc.pid);        
+        // proc.stdout.on('data', (data) => {
+        //     console.log(`stdout: ${data}`);
+        // });
+        
+        // proc.stderr.on('data', (data) => {
+        //     console.log(`stderr: ${data}`);
+        // });
+        // proc.on('close', (code) => {
+        //     console.log(`child process exited with code ${code}`);
+        // });
+
+        console.log("child:" + proc.pid);
         return proc.pid;
+    }
+
+    public update(uri: vscode.Uri) {
+        this._onDidChange.fire(uri);
+    }
+
+    get onDidChange(): vscode.Event<vscode.Uri> {
+        return this._onDidChange.event;
     }
 }
 
