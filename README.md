@@ -7,7 +7,6 @@ This extension is for executing some commands of [memo (Memo Life For You)](http
 sample movie:
 https://pic.twitter.com/naH5Z2MSMa
 
-
 The following commands are supported.
 
 * `Memo: New` - create memo
@@ -20,7 +19,7 @@ The following commands are supported.
 
 * `memo new` コマンドに入力された値を渡し、`YY-MM-DD-入力された値.md` のようなファイルを memodir に作成し、オープンする
 * **Mac Only**: 何も入力がない場合は、YY-MM-DD.md ファイルが作成し、オープンする 
-
+* `"memo-life-for-you.nativeNew"`:`true` で、memo new コマンドを使わずに memodir にファイルを作成します
 
 ### Memo: Edit
 
@@ -73,6 +72,10 @@ This extension contributes the following settings:
    * ex: Windows: `"C:/Users/Sato/AppData/Roaming/memo/_posts"`
 * `"memo-life-for-you.serve-addr"`: server address (default: "8080")
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
+* `"memo-life-for-you.nativeNew"`
+   * `true` (default: false): Use the built-in New command 
+* `"memo-life-for-you.insertTimeInFilename"`
+   * `true` (default: false): Insert time (hhmm) in filename (ex : 2017-10-13-`1824-test`.md)
 
 ## Known Issues
 

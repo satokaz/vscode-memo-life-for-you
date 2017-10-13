@@ -8,14 +8,14 @@ import * as readline from 'readline';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
-    
+
     let memo = new Memo();
 
     // vscode.workspace.onDidChangeConfiguration(event => {
     //     console.log('event =', event)
     // });
 
-    context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () => memo.New()));
+    context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () =>  memo.New()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoEdit", () => memo.Edit()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoGrep", () => memo.Grep()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoConfig", () => memo.Config()));
@@ -44,7 +44,9 @@ export enum MemoConfig {
 class Memo {
     private memopath: string; 
     private memoaddr: string;
-    // private memodir: string;
+    private memodir: string;
+    private isNative: boolean;
+    private insertTime: boolean;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -60,27 +62,46 @@ class Memo {
         
         // console.log('path =', process.env.HOME);
         // console.log('path =', process.env.USERPROFIL);
-        
-
-        
     }
-
+    
     public New() {
-        vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
-            (fileName) => {
-                // console.log('name =', fileName);
-                if (fileName == undefined || "") {
-                    return void 0;
-                }
-                if (fileName == "" && process.platform == 'win32') {
-                    vscode.window.showInformationMessage('Please Enter a Filename');
-                    return void 0;
-                } 
+        let file: string;
+        let date: Date = new Date();
+        let dateFormat: string = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+        let time: string = ('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2);
+        console.log(dateFormat);
+        console.log(time);
 
-                if (fileName == "") {
-                    cp.exec(`echo | ${this.memopath} new`);
-                } else {
-                    cp.exec(`${this.memopath} new ${fileName.replace(/\s/g, "_")}`);
+        vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
+            (title) => {
+                console.log('title =', title);
+                console.log('isNative =', this.isNative);                
+                if (!this.isNative) {  // use memo new command
+                    if (title == undefined || "") {
+                        return void 0;
+                    }
+                    if (title == "" && process.platform == 'win32') {
+                        vscode.window.showInformationMessage('Please Enter a Filename');
+                        return void 0;
+                    } 
+                    if (title == "") {
+                        cp.exec(`echo | ${this.memopath} new`);
+                    } else {
+                        cp.exec(`${this.memopath} new ${(this.insertTime ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
+                    }
+                } else {  // use built-in command
+                    if (title == "") {
+                        file = dateFormat + '-' + ".md";
+                    } else {
+                        file = dateFormat + '-' + (this.insertTime ? time : '') + '-' + title
+                        .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
+                        .replace(/--+/g ,'') + ".md";
+                    }
+                    fs.writeFileSync(path.normalize(path.join(this.memodir, file)), `# ${title}` + "\n\n");
+
+                    vscode.workspace.openTextDocument(path.normalize(path.join(this.memodir, file))).then(document=>{
+                        vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
+                    });
                 }
             }
         );
@@ -136,7 +157,7 @@ class Memo {
             (keyword) => {
                 keyword = keyword.replace(/\s/g, '\ ');
                 let list = cp.execSync(`${this.memopath} grep ${keyword}`,{maxBuffer: 1024 * 1024}).toString().split('\n');
-                console.log('name =', keyword);                
+                // console.log('name =', keyword);                
                 // console.log(list);
                 // console.log("list.length =", list.length);
 
@@ -212,5 +233,8 @@ class Memo {
     public updateConfiguration() {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
+        this.memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
+        this.isNative = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('nativeNew');
+        this.insertTime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertTimeInFilename');
 	}
 }

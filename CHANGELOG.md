@@ -1,6 +1,11 @@
 # Change Log
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.0.3
+
+* Add "memo new" like file creation command
+* Add Insert time (hhmm) in filename setting
+
 # 0.0.2
 
 * Add onDidChangeConfiguration support

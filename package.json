@@ -64,8 +64,15 @@
             "memo-life-for-you.serve-addr": {
                 "type": "string",
                 "default": "8080"
+            },
+            "memo-life-for-you.nativeNew": {
+                "type": "boolean",
+                "default": "false"
+            },
+            "memo-life-for-you.insertTimeInFilename": {
+                "type": "boolean",
+                "default": "false"
             }
-    
         }
         }
     },
