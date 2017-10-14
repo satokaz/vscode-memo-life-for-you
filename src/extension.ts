@@ -69,13 +69,13 @@ class Memo {
         let date: Date = new Date();
         let dateFormat: string = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
         let time: string = ('0' + date.getHours()).slice(-2) + ('0' + date.getMinutes()).slice(-2);
-        console.log(dateFormat);
-        console.log(time);
+        // console.log(dateFormat);
+        // console.log(time);
 
         vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
             (title) => {
-                console.log('title =', title);
-                console.log('isNative =', this.isNative);                
+                // console.log('title =', title);
+                // console.log('isNative =', this.isNative);                
                 if (!this.isNative) {  // use memo new command
                     if (title == undefined || "") {
                         return void 0;
@@ -98,7 +98,7 @@ class Memo {
                         .replace(/--+/g ,'') + ".md";
                     }
                     file = path.normalize(path.join(this.memodir, file));
-                    console.log("isExist =", file);
+                    // console.log("isExist =", file);
 
                     try {
                         fs.statSync(file);
