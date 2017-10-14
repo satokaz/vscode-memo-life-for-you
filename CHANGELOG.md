@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.0.5 
+
+* The handling `memo-life-for-you.nativeNew` and `memo-life-for-you.insertTimeInFilename` was incorrect 
+
 # 0.0.4
 
 * Check existing file in built-in command

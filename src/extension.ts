@@ -11,10 +11,6 @@ export function activate(context: vscode.ExtensionContext) {
 
     let memo = new Memo();
 
-    // vscode.workspace.onDidChangeConfiguration(event => {
-    //     console.log('event =', event)
-    // });
-
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () =>  memo.New()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoEdit", () => memo.Edit()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoGrep", () => memo.Grep()));
@@ -45,8 +41,8 @@ class Memo {
     private memopath: string; 
     private memoaddr: string;
     private memodir: string;
-    private isNative: boolean;
-    private insertTime: boolean;
+    private isNative: string;
+    private insertTime: string;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -76,7 +72,8 @@ class Memo {
             (title) => {
                 // console.log('title =', title);
                 // console.log('isNative =', this.isNative);                
-                if (!this.isNative) {  // use memo new command
+                if (this.isNative == 'false') {  // use memo new command
+                    // console.log('memo new ')
                     if (title == undefined || "") {
                         return void 0;
                     }
@@ -87,13 +84,13 @@ class Memo {
                     if (title == "") {
                         cp.exec(`echo | ${this.memopath} new`);
                     } else {
-                        cp.exec(`${this.memopath} new ${(this.insertTime ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
+                        cp.exec(`${this.memopath} new ${(this.insertTime === 'true' ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
                     }
                 } else {  // use built-in command
                     if (title == "") {
                         file = dateFormat + ".md";
                     } else {
-                        file = dateFormat + '-' + (this.insertTime ? time : '') + '-' + title
+                        file = dateFormat + '-' + (this.insertTime === 'true' ? time + '-' : '') + title
                         .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                         .replace(/--+/g ,'') + ".md";
                     }
@@ -242,7 +239,7 @@ class Memo {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
         this.memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
-        this.isNative = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('nativeNew');
-        this.insertTime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertTimeInFilename');
+        this.isNative = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('nativeNew');
+        this.insertTime = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('insertTimeInFilename');
 	}
 }
