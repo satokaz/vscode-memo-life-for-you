@@ -91,15 +91,23 @@ class Memo {
                     }
                 } else {  // use built-in command
                     if (title == "") {
-                        file = dateFormat + '-' + ".md";
+                        file = dateFormat + ".md";
                     } else {
                         file = dateFormat + '-' + (this.insertTime ? time : '') + '-' + title
                         .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                         .replace(/--+/g ,'') + ".md";
                     }
-                    fs.writeFileSync(path.normalize(path.join(this.memodir, file)), `# ${title}` + "\n\n");
+                    file = path.normalize(path.join(this.memodir, file));
+                    console.log("isExist =", file);
 
-                    vscode.workspace.openTextDocument(path.normalize(path.join(this.memodir, file))).then(document=>{
+                    try {
+                        fs.statSync(file);
+                    } catch(err) {
+                        fs.writeFileSync(file, `# ${dateFormat} ${title}` + "\n\n");  
+                    }
+
+                    vscode.workspace.openTextDocument(file).then(document=>{
+                        let editor = vscode.window.activeTextEditor;
                         vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
                     });
                 }
@@ -185,7 +193,7 @@ class Memo {
                     // console.log('selected =', selected);
                     // console.log('selected split = ', selected.label.split(':')[1]);
                     vscode.workspace.openTextDocument(selected.detail).then(document => {
-                        vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => { 
+                        vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => {
                             // カーソルを目的の行に移動させて表示する為の処理
                             const editor = vscode.window.activeTextEditor;
                             const position = editor.selection.active;
