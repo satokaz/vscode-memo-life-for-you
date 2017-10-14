@@ -1,6 +1,10 @@
 # Change Log
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.0.4
+
+* Check existing file in built-in command
+
 # 0.0.3
 
 * Add "memo new" like file creation command
