@@ -49,31 +49,31 @@
         }
         ],
         "configuration": {
-        "type": "object",
-        "title": "memo-life-for-you",
-        "order": 20,
-        "properties": {
-            "memo-life-for-you.memoPath": {
-            "type": "string",
-            "default": ""
-            },
-            "memo-life-for-you.memoDir": {
-            "type": "string",
-            "default": ""
-            },
-            "memo-life-for-you.serve-addr": {
+            "type": "object",
+            "title": "memo-life-for-you",
+            "order": 20,
+            "properties": {
+                "memo-life-for-you.memoPath": {
                 "type": "string",
-                "default": "8080"
-            },
-            "memo-life-for-you.nativeNew": {
-                "type": "boolean",
-                "default": "false"
-            },
-            "memo-life-for-you.insertTimeInFilename": {
-                "type": "boolean",
-                "default": "false"
+                "default": ""
+                },
+                "memo-life-for-you.memoDir": {
+                "type": "string",
+                "default": ""
+                },
+                "memo-life-for-you.serve-addr": {
+                    "type": "string",
+                    "default": "8080"
+                },
+                "memo-life-for-you.nativeNew": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "memo-life-for-you.insertTimeInFilename": {
+                    "type": "boolean",
+                    "default": "false"
+                }
             }
-        }
         }
     },
     "scripts": {
