@@ -17,29 +17,40 @@ The following commands are supported.
 
 ### Memo: New
 
-* `memo new` コマンドに入力された値を渡し、`YY-MM-DD-入力された値.md` のようなファイルを memodir に作成し、オープンする
-* **Mac Only**: 何も入力がない場合は、YY-MM-DD.md ファイルが作成し、オープンする 
-* `"memo-life-for-you.nativeNew"`:`true` で、memo new コマンドを使わずに memodir にファイルを作成します
+* Create a file with the entered value as `title` and `filename`.
+* When you press enter with empty, create a file with YY-MM-DD.md.
+* The file is opened to the vscode instance that executed the `Memo: Edit` command.
 
 ### Memo: Edit
 
-* `memo list` や `memo edit` のようにファイル名とそのファイルの先頭 1 行目をリスト表示。keyword を入力することで絞り込みが可能。選択でファイルを開く。
+* List the file name and the first line of the file as `memo list` or ` memo edit`.
+* Filter by keyword.
+* selected file will be opened in the vscode instance that executed the `Memo: Edit` command.
+* At the same time, generate `Memo List` output panel which outputs file list.
 
 ### Memo: Grep
 
-* keyword を入力することで、memo grep による検索結果を Quick Picker に表示。選択することで、該当するファイルを開き、該当行にカーソルを移動させる
-* `memo grep` コマンドの出力から Picker Items を作成 
+* By entering keyword, the search results are displayed on Quick Picker.
+* Open by selecting a file and move the cursor to the corresponding line
+* selected file will be opened in the vscode instance that executed the `Memo: Grep` command
+* At the same time, generate `Memo Grep` output panel which outputs file list.
 
->**Note:** 統合ターミナルで memo grep すると、出力のファイル名部分が自動的にリンクになるので、Cmd + Click で似たような操作ができる！(この拡張機能は関係ない)
+####  Supported grep command
+
+Picker Items is created from the output of `memo grep` command.Therefore, picker items may not be generated correctly depending on the output. It checks with the following command:
+
+| command | |
+|---------|-------------------------------|
+| grep    | grep -niH ${PATTERN} ${FILES} |
+| ag      | ag ${PATTERN} ${DIR}          |
 
 ### Memo: Config
 
-* `memo config` による confgigure file を VS Code 上にオープン
+* Execute `memo config` and open configure file on VS Code.
 
 ### Memo: Serve
 
-* `memo serve` を実行し、memo コマンド内蔵の http server を起動し、ブラウザで表示。手動でプロセスの kill が必要
-
+* Execute `memo serve`, start the built-in http server of the memo command. and display it in the browser. Manually you need to kill the process manually.
 
 ## Requirements
 
@@ -59,7 +70,6 @@ pluginsdir = "/Users/satokaz/.config/memo/satokaz"
 templatedirfile = "/Users/satokaz/.config/memo/satokaz/dir.html"
 templatebodyfile = "/Users/satokaz/.config/memo/satokaz/body.html"
 ```
-
 ## Extension Settings
 
 This extension contributes the following settings:
@@ -72,13 +82,12 @@ This extension contributes the following settings:
    * ex: Windows: `"C:/Users/Sato/AppData/Roaming/memo/_posts"`
 * `"memo-life-for-you.serve-addr"`: server address (default: "8080")
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
-* `"memo-life-for-you.nativeNew"`
-   * `true` (default: false): Use the built-in New command 
 * `"memo-life-for-you.insertTimeInFilename"`
    * `true` (default: false): Insert time (hhmm) in filename (ex : 2017-10-13-`1824-test`.md)
 
 ## Known Issues
 
+* If you open a file, the repository information that contains that file will be added to SCM view.
 * macOS でしか動かせていない
 
 ## License

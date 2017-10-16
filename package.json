@@ -2,7 +2,7 @@
     "name": "vscode-memo-life-for-you",
     "displayName": "vscode-memo-life-for-you",
     "description": "This extension is for executing some commands of memo (Memo Life For You) from VS Code.",
-    "version": "0.0.5",
+    "version": "0.0.6",
     "publisher": "satokaz",
     "engines": {
         "vscode": "^1.17.0"
@@ -49,31 +49,31 @@
         }
         ],
         "configuration": {
-        "type": "object",
-        "title": "memo-life-for-you",
-        "order": 20,
-        "properties": {
-            "memo-life-for-you.memoPath": {
-            "type": "string",
-            "default": ""
-            },
-            "memo-life-for-you.memoDir": {
-            "type": "string",
-            "default": ""
-            },
-            "memo-life-for-you.serve-addr": {
+            "type": "object",
+            "title": "memo-life-for-you",
+            "order": 20,
+            "properties": {
+                "memo-life-for-you.memoPath": {
                 "type": "string",
-                "default": "8080"
-            },
-            "memo-life-for-you.nativeNew": {
-                "type": "boolean",
-                "default": "false"
-            },
-            "memo-life-for-you.insertTimeInFilename": {
-                "type": "boolean",
-                "default": "false"
+                "default": ""
+                },
+                "memo-life-for-you.memoDir": {
+                "type": "string",
+                "default": ""
+                },
+                "memo-life-for-you.serve-addr": {
+                    "type": "string",
+                    "default": "8080"
+                },
+                "memo-life-for-you.nativeNew": {
+                    "type": "boolean",
+                    "default": "false"
+                },
+                "memo-life-for-you.insertTimeInFilename": {
+                    "type": "boolean",
+                    "default": "false"
+                }
             }
-        }
         }
     },
     "scripts": {

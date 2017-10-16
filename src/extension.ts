@@ -9,6 +9,7 @@ import * as readline from 'readline';
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
 
+
     let memo = new Memo();
 
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () =>  memo.New()));
@@ -38,11 +39,17 @@ export enum MemoConfig {
 };
 
 class Memo {
+    // private _outputChannel: vscode.OutputChannel;
+
+    private memoListChannel: vscode.OutputChannel;
+    private memoGrepChannel: vscode.OutputChannel;    
     private memopath: string; 
     private memoaddr: string;
     private memodir: string;
     private isNative: string;
     private insertTime: string;
+    private isEnabled: boolean = false;
+    private memoChannel;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -50,14 +57,17 @@ class Memo {
         matchOnDetail: true,
         placeHolder: ''
     }
+
+    public cp_options = {
+        maxBuffer: 1024 * 1024
+    }
     
     constructor() {
+        this.memoListChannel = vscode.window.createOutputChannel("Memo List");
+        this.memoGrepChannel = vscode.window.createOutputChannel("Memo Grep");
         this.updateConfiguration();
         // this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         // this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<number>('serve-addr');
-        
-        // console.log('path =', process.env.HOME);
-        // console.log('path =', process.env.USERPROFIL);
     }
     
     public New() {
@@ -71,43 +81,46 @@ class Memo {
         vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
             (title) => {
                 // console.log('title =', title);
-                // console.log('isNative =', this.isNative);                
-                if (this.isNative == 'false') {  // use memo new command
-                    // console.log('memo new ')
-                    if (title == undefined || "") {
-                        return void 0;
-                    }
-                    if (title == "" && process.platform == 'win32') {
-                        vscode.window.showInformationMessage('Please Enter a Filename');
-                        return void 0;
-                    } 
-                    if (title == "") {
-                        cp.exec(`echo | ${this.memopath} new`);
-                    } else {
-                        cp.exec(`${this.memopath} new ${(this.insertTime === 'true' ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
-                    }
-                } else {  // use built-in command
-                    if (title == "") {
-                        file = dateFormat + ".md";
-                    } else {
-                        file = dateFormat + '-' + (this.insertTime === 'true' ? time + '-' : '') + title
-                        .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
-                        .replace(/--+/g ,'') + ".md";
-                    }
-                    file = path.normalize(path.join(this.memodir, file));
-                    // console.log("isExist =", file);
+                // console.log('isNative =', this.isNative);
+                //
+                // if (this.isNative == 'false') {  // use memo new command
+                //     // console.log('memo new ')
+                //     if (title == undefined || "") {
+                //         return void 0;
+                //     }
+                //     if (title == "" && process.platform == 'win32') {
+                //         vscode.window.showInformationMessage('Please Enter a Filename');
+                //         return void 0;
+                //     } 
+                //     if (title == "") {
+                //         cp.exec(`echo | ${this.memopath} new`);
+                //     } else {
+                //         cp.exec(`${this.memopath} new ${(this.insertTime === 'true' ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
+                //     }
+                // } else {  // use built-in command
 
-                    try {
-                        fs.statSync(file);
-                    } catch(err) {
-                        fs.writeFileSync(file, `# ${dateFormat} ${title}` + "\n\n");  
-                    }
-
-                    vscode.workspace.openTextDocument(file).then(document=>{
-                        let editor = vscode.window.activeTextEditor;
-                        vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
-                    });
+                if (title == "") {
+                    file = dateFormat + ".md";
+                } else {
+                    file = dateFormat + '-' + (this.insertTime === 'true' ? time + '-' : '') + title
+                    .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
+                    .replace(/--+/g ,'') + ".md";
                 }
+                file = path.normalize(path.join(this.memodir, file));
+                // console.log("isExist =", file);
+
+                try {
+                    fs.statSync(file);
+                } catch(err) {
+                    fs.writeFileSync(file, `# ${dateFormat} ${title}` + "\n\n");  
+                }
+                
+                vscode.workspace.openTextDocument(file).then(document=>{
+                    // console.log('uri =', document.uri.toString()); // uri = file:///Users/satokaz/.config/memo/2017-10-15.md
+                    let editor = vscode.window.activeTextEditor;
+                    vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
+                });
+                // }
             }
         );
     }
@@ -117,70 +130,108 @@ class Memo {
         // this.memodir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir');
         // console.log(this.memodir)
 
-        let memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
+        let memopath = this.memopath;
+        let memodir = this.memodir;
 
+        // let memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
         // console.log("memodir = ", memodir)
 
-        let list = cp.execSync(`${this.memopath} list`,{maxBuffer: 1024 * 1024}).toString().split('\n');
+        let memoChannel = vscode.window.createOutputChannel('Memo List');
+        
+        let list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
         
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
         
-        list.forEach(async function (v, i) {
-            if (v == '') {
-                return;
+        // list.forEach(async function (v, i) {
+        //     if (v == '') {
+        //         return;
+        //     }
+
+        //     let array = fs.readFileSync(path.normalize(path.join(memodir, v))).toString().split("\n");
+        //     // console.log('v =', v);
+            
+        //     items.push({ 
+        //         "label": v, 
+        //         "description": array[0], 
+        //         "detail": "" });
+
+        //     memoChannel.appendLine('file://' + path.join(memodir, v) + `\t` + array[0]);
+        // })
+
+        for (let index = 0; index < list.length; index++) {
+            // let v = list[index];
+
+            if (list[index] == '') {
+                break;
             }
 
-            let array = fs.readFileSync(path.normalize(path.join(memodir, v))).toString().split("\n");
-            // console.log('v =', v);
-            
+            let array = fs.readFileSync(path.normalize(path.join(this.memodir, list[index]))).toString().split("\n");
+
             items.push({ 
-                "label": v, 
+                "label": list[index], 
                 "description": array[0], 
                 "detail": "" });
-        })
+            
+            this.memoListChannel.appendLine('file://' + path.join(this.memodir, list[index]) + `\t` + array[0]);
+            this.memoListChannel.appendLine('');
+        }
+        this.memoListChannel.show();
+
         // console.log("items =", items)
         
         this.options.placeHolder = 'Please select or enter a filename...';
         vscode.window.showQuickPick(items, this.options).then(function (selected) {
+            
             if (selected == null) {
                 return;
             }
 
-            // console.log('selected =', path.normalize(path.join(memodir, selected.label)));            
-
+            // vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.normalize(path.join(memodir, selected.label))), true);
+            // vscode.commands.executeCommand("vscode.open", vscode.Uri.file(path.normalize(path.join(memodir, selected.label))));
+            
             vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
                 vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
             });
-            
         });
     }
 
     // memo grep
     public Grep() {
+        let items: vscode.QuickPickItem[] = [];
+        
         vscode.window.showInputBox({placeHolder: 'Please enter a keyword'}).then(
             (keyword) => {
+                this.memoGrepChannel.clear();
                 keyword = keyword.replace(/\s/g, '\ ');
-                let list = cp.execSync(`${this.memopath} grep ${keyword}`,{maxBuffer: 1024 * 1024}).toString().split('\n');
                 // console.log('name =', keyword);                
+
+                let list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
                 // console.log(list);
                 // console.log("list.length =", list.length);
 
-                let items: vscode.QuickPickItem[] = [];
+                for (let index = 0; index < list.length; index++) {
+                    // let v = list[index];
 
-                list.forEach(function (v, i) {
-                    if (v == '') {
-                        return void 0;
+                    if (list[index] == '') {
+                        break;
                     }
-                    // console.log('v = ', v);
-                    
+
+                    let vsplit = list[index].split(":", 2);
+                    let vdetail = (list[index].match(/^(.*?)(?=:)/gm)).toString();
+
                     items.push({ 
-                        "label": v.replace(/^(.*?)(?=:)/gm, '').toString(), 
+                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString(),
                         "description": "", 
-                        "detail": (v.match(/^(.*?)(?=:)/gm)).toString(),
+                        "detail": vsplit[0]
                     });
-                })
-                // console.log("items =", items)
+                    // console.log(items[i]);
+
+                    this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + vsplit[0] + (process.platform == 'linux' ? ":" : "#") + vsplit[1]);
+                    this.memoGrepChannel.appendLine(list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
+                    this.memoGrepChannel.appendLine('');
+                }
+                this.memoGrepChannel.show();                
                 
                 this.options.placeHolder = 'Please Enter Keywords To Search...';
                 vscode.window.showQuickPick(items, this.options).then(function (selected) {
@@ -201,7 +252,7 @@ class Memo {
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.AtTop);
                         });
                     });
-                });        
+                });
             });
     }
 
