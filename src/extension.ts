@@ -104,8 +104,6 @@ class Memo {
     public Edit() {
         let memopath = this.memopath;
         let memodir = this.memodir;
-
-        // let memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
         // console.log("memodir = ", memodir)
 
         let memoChannel = vscode.window.createOutputChannel('Memo List');
@@ -138,11 +136,9 @@ class Memo {
         
         this.options.placeHolder = 'Please select or enter a filename...';
         vscode.window.showQuickPick(items, this.options).then(function (selected) {
-            
             if (selected == null) {
                 return;
             }
-            
             vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
                 vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
             });
@@ -152,7 +148,6 @@ class Memo {
     // memo grep
     public Grep() {
         let items: vscode.QuickPickItem[] = [];
-        
         vscode.window.showInputBox({placeHolder: 'Please enter a keyword'}).then(
             (keyword) => {
                 this.memoGrepChannel.clear();
@@ -231,7 +226,6 @@ class Memo {
                 console.log("editor =", editor);
             }
         });
-        
         this.memodir = memodir;
     }
 
@@ -260,8 +254,6 @@ class Memo {
     public updateConfiguration() {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
-        // this.memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
-        this.isNative = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('nativeNew');
         this.insertTime = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('insertTimeInFilename');
     }
 }
