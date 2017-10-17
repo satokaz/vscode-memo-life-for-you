@@ -205,8 +205,19 @@ class Memo {
     }
 
     public Config() {
-        this.readConfig();
-        vscode.workspace.openTextDocument(path.normalize(path.join(this.memodir, 'config.toml'))).then(document=>{
+        let memoconfdir;
+        if (process.platform == "win32") {
+            memoconfdir = process.env.APPDATA;
+            if (memoconfdir == "") {
+                memoconfdir = path.join(process.env.USERPROFILE, "Application Data", "memo");
+            }
+            memoconfdir = path.join(memoconfdir, "memo");
+        } else {
+            memoconfdir = path.join(process.env.HOME, ".config", "memo");
+        }
+        console.log("memoconfdir =", path.normalize(path.join(memoconfdir, 'config.toml')));
+
+        vscode.workspace.openTextDocument(path.normalize(path.join(memoconfdir, 'config.toml'))).then(document=>{
             vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
         });
     }
