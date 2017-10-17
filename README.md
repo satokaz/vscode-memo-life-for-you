@@ -56,6 +56,8 @@ Picker Items is created from the output of `memo grep` command.Therefore, picker
 
 ## Requirements
 
+This extension requires the memo command to work correctly.
+
 * `memo` should be installed already
    * [memo (Memo Life For You)](https://github.com/mattn/memo)
 
