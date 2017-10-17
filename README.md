@@ -15,6 +15,8 @@ The following commands are supported.
 * `Memo: Config` - configure
 * `Memo: Serve` - start http server
 
+From `memo config - cat`, read the memodir setting and use it.
+
 ### Memo: New
 
 * Create a file with the entered value as `title` and `filename`.
@@ -46,7 +48,7 @@ Picker Items is created from the output of `memo grep` command.Therefore, picker
 
 ### Memo: Config
 
-* Execute `memo config` and open configure file on VS Code.
+* Open configure file on VS Code.
 
 ### Memo: Serve
 
@@ -77,9 +79,6 @@ This extension contributes the following settings:
 * `"memo-life-for-you.memoPath"`: Path to memo command 
    * ex: Mac/Linux: `"/Users/satokaz/golang/bin/memo"`
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
-* `"memo-life-for-you.memoDir"`: Path to memodir 
-   * ex: Mac/Linux: `"/Users/satokaz/.config/memo/_posts"`
-   * ex: Windows: `"C:/Users/Sato/AppData/Roaming/memo/_posts"`
 * `"memo-life-for-you.serve-addr"`: server address (default: "8080")
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
 * `"memo-life-for-you.insertTimeInFilename"`

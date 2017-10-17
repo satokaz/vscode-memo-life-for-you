@@ -4,11 +4,9 @@ import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as readline from 'readline';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
-
 
     let memo = new Memo();
 
@@ -39,8 +37,6 @@ export enum MemoConfig {
 };
 
 class Memo {
-    // private _outputChannel: vscode.OutputChannel;
-
     private memoListChannel: vscode.OutputChannel;
     private memoGrepChannel: vscode.OutputChannel;    
     private memopath: string; 
@@ -49,7 +45,7 @@ class Memo {
     private isNative: string;
     private insertTime: string;
     private isEnabled: boolean = false;
-    private memoChannel;
+    private memoConfig = [];
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -66,8 +62,7 @@ class Memo {
         this.memoListChannel = vscode.window.createOutputChannel("Memo List");
         this.memoGrepChannel = vscode.window.createOutputChannel("Memo Grep");
         this.updateConfiguration();
-        // this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
-        // this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<number>('serve-addr');
+        this.readConfig();        
     }
     
     public New() {
@@ -80,25 +75,6 @@ class Memo {
 
         vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
             (title) => {
-                // console.log('title =', title);
-                // console.log('isNative =', this.isNative);
-                //
-                // if (this.isNative == 'false') {  // use memo new command
-                //     // console.log('memo new ')
-                //     if (title == undefined || "") {
-                //         return void 0;
-                //     }
-                //     if (title == "" && process.platform == 'win32') {
-                //         vscode.window.showInformationMessage('Please Enter a Filename');
-                //         return void 0;
-                //     } 
-                //     if (title == "") {
-                //         cp.exec(`echo | ${this.memopath} new`);
-                //     } else {
-                //         cp.exec(`${this.memopath} new ${(this.insertTime === 'true' ? time + '-' : '')}${title.replace(/\s/g, "_")}`);
-                //     }
-                // } else {  // use built-in command
-
                 if (title == "") {
                     file = dateFormat + ".md";
                 } else {
@@ -126,10 +102,6 @@ class Memo {
     }
 
     public Edit() {
-        // this.memodir can not be used with path.join (). Required research
-        // this.memodir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir');
-        // console.log(this.memodir)
-
         let memopath = this.memopath;
         let memodir = this.memodir;
 
@@ -143,22 +115,6 @@ class Memo {
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
         
-        // list.forEach(async function (v, i) {
-        //     if (v == '') {
-        //         return;
-        //     }
-
-        //     let array = fs.readFileSync(path.normalize(path.join(memodir, v))).toString().split("\n");
-        //     // console.log('v =', v);
-            
-        //     items.push({ 
-        //         "label": v, 
-        //         "description": array[0], 
-        //         "detail": "" });
-
-        //     memoChannel.appendLine('file://' + path.join(memodir, v) + `\t` + array[0]);
-        // })
-
         for (let index = 0; index < list.length; index++) {
             // let v = list[index];
 
@@ -186,9 +142,6 @@ class Memo {
             if (selected == null) {
                 return;
             }
-
-            // vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.normalize(path.join(memodir, selected.label))), true);
-            // vscode.commands.executeCommand("vscode.open", vscode.Uri.file(path.normalize(path.join(memodir, selected.label))));
             
             vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
                 vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
@@ -249,19 +202,37 @@ class Memo {
                             // カーソルで選択 (ここでは、まだエディタ上で見えない)
                             editor.selection = new vscode.Selection(newPosition, newPosition);
                             // カーソル位置までスクロール
-                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.AtTop);
+                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
                         });
                     });
                 });
             });
     }
 
-    public Config(): any{
-        // cp.exec(`${this.memopath} config`);
-        cp.spawn(`${this.memopath}`, ['config'], {
-            stdio: ['ignore'],
-            detached: true
-        }).unref();
+    public Config() {
+        this.readConfig();
+        vscode.workspace.openTextDocument(path.normalize(path.join(this.memodir, 'config.toml'))).then(document=>{
+            vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
+        });
+    }
+
+    public readConfig() {
+        let editor;
+        let memodir;
+        let list = cp.execSync(`${this.memopath} config --cat`, this.cp_options).toString().split('\n');
+
+        list.forEach(async function (v, i) {
+            // console.log(v.split("=")[1]);
+            if (v.match(/memodir =/)) {
+                memodir = v.split("=")[1].replace(/"/g, "").trim();
+            }
+            if (v.match(/editor =/)) {
+                editor = v.split("=")[1].replace(/"/g, "").trim();
+                console.log("editor =", editor);
+            }
+        });
+        
+        this.memodir = memodir;
     }
 
     public Serve() {
@@ -289,8 +260,8 @@ class Memo {
     public updateConfiguration() {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
-        this.memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
+        // this.memodir = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoDir'));
         this.isNative = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('nativeNew');
         this.insertTime = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('insertTimeInFilename');
-	}
+    }
 }
