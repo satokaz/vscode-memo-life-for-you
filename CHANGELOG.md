@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.0.9
+
+* Add `Memo: Quick Memo` command
+* Delete: `"memo-life-for-you.insertTimeInFilename"` option
+
 ## 0.0.8
 
 * Fix handling of config.toml file path

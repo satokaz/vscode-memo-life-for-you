@@ -15,13 +15,24 @@ The following commands are supported.
 * `Memo: Config` - configure
 * `Memo: Serve` - start http server
 
+Unique command:
+
+* `Memo: Today's quick Memo`
+
 From `memo config - cat`, read the memodir setting and use it.
 
 ### Memo: New
 
 * Create a file with the entered value as `title` and `filename`.
-* When you press enter with empty, create a file with YY-MM-DD.md.
+* When you press enter with empty, create a file with `YY-MM-DD.md`. If a file with the same name already exists, it opens the file without overwriting it. 
+
 * The file is opened to the vscode instance that executed the `Memo: Edit` command.
+
+### Memo: Today's quick Memo
+
+* Open the `YY-MM-DD.md` file if it exists. If it does not exist, create it and open.
+* Every time you open, add a timestamp on the bottom line. example: `## 2017-10-19 Thu 06:38`
+* You can insert ISOweek and Emoji into the timestamp. example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
 
 ### Memo: Edit
 
@@ -83,12 +94,12 @@ This extension contributes the following settings:
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
 * `"memo-life-for-you.serve-addr"`: server address (default: "8080")
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
-* `"memo-life-for-you.insertTimeInFilename"`
-   * `true` (default: false): Insert time (hhmm) in filename (ex : 2017-10-13-`1824-test`.md)
+* `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
+* `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
 
 ## Known Issues
 
-* If you open a file, the repository information that contains that file will be added to SCM view.
+* If you open a file, the repository information that contains that file will be added to SCM view. (See [When I Open Just One File in Initialized Git Folder - Source Control Shows Number of Changed Files · Issue #35555 · Microsoft/vscode](https://github.com/Microsoft/vscode/issues/35555))
 * macOS でしか動かせていない
 
 ## License
