@@ -94,6 +94,7 @@ This extension contributes the following settings:
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
 * `"memo-life-for-you.serve-addr"`: server address (default: "8080")
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
+* `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
 
