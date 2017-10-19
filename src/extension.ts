@@ -93,7 +93,7 @@ class Memo {
                     try {
                         fs.statSync(file);
                     } catch(err) {
-                        fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
+                        fs.writeFileSync(file, "# " + dateFns.format(new Date(), 'YYYY-MM-DD') + " " + `${title}` + "\n\n");
                     }
 
                     vscode.workspace.openTextDocument(file).then(document=>{
@@ -123,7 +123,7 @@ class Memo {
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
         let getISOWeek = this.memoISOWeek == true ? "[Week: " + dateFns.getISOWeek(new Date()) + "/" + dateFns.getISOWeeksInYear(new Date()) + "] " : "";
-        let getEmoji = this.memoEmoji == true ? randomEmoji.random({count: 1})[0].character : "";
+        let getEmoji = this.memoEmoji == true ? randomEmoji.random({count: 1})[0].character + " " : "";
         // console.log(getISOWeek);
         // console.log(getEmoji);
 
@@ -147,7 +147,6 @@ class Memo {
                             "\n" + "## "
                             + getISOWeek
                             + getEmoji
-                            + " "
                             + dateFns.format(new Date(), `${dateFormat}`)
                             + "\n\n");
                     });
