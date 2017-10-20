@@ -187,10 +187,9 @@ class Memo {
             this.memoListChannel.appendLine('file://' + path.join(this.memodir, list[index]) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
         }
-        this.memoListChannel.show();
+        // this.memoListChannel.show();
 
         // console.log("items =", items)
-
         
         vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
@@ -201,7 +200,6 @@ class Memo {
                 if (selected == null) {
                     return void 0;
                 }
-                // console.log('showQuickPick', selected);
                 console.log(selected.label);
 
                 vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
@@ -238,7 +236,8 @@ class Memo {
                     let vdetail = (list[index].match(/^(.*?)(?=:)/gm)).toString();
 
                     items.push({
-                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString(),
+                        // "label": list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString(),
+                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').toString(),                        
                         "description": "",
                         "detail": vsplit[0]
                     });
@@ -248,33 +247,37 @@ class Memo {
                     this.memoGrepChannel.appendLine(list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                     this.memoGrepChannel.appendLine('');
                 }
-                this.memoGrepChannel.show();
+                // this.memoGrepChannel.show();
 
-                this.options.placeHolder = 'Please Enter Keywords To Search...';
-                vscode.window.showQuickPick(items, this.options).then(function (selected) {
-                    if (selected == null) {
-                        return void 0;
-                    }
-                    // console.log('selected =', selected);
-                    // console.log('selected split = ', selected.label.split(':')[1]);
-                    vscode.workspace.openTextDocument(selected.detail).then(document => {
-                        vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => {
-                            // カーソルを目的の行に移動させて表示する為の処理
-                            const editor = vscode.window.activeTextEditor;
-                            const position = editor.selection.active;
-                            var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
-                            // カーソルで選択 (ここでは、まだエディタ上で見えない)
-                            editor.selection = new vscode.Selection(newPosition, newPosition);
-                            // カーソル位置までスクロール
-                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
+                vscode.window.showQuickPick(items, {
+                    ignoreFocusOut: true,
+                    matchOnDescription: true,
+                    matchOnDetail: true,
+                    placeHolder: 'grep Result: ' + `${keyword}`,
+                    onDidSelectItem: async (selected:vscode.QuickPickItem) => { 
+                        if (selected == null) {
+                            return void 0;
+                        }
+                        console.log(selected.label);
+        
+                        vscode.workspace.openTextDocument(selected.detail).then(document => {
+                            vscode.window.showTextDocument(document, vscode.ViewColumn.One, true).then(document => {
+                                // カーソルを目的の行に移動させて表示する為の処理
+                                const editor = vscode.window.activeTextEditor;
+                                const position = editor.selection.active;
+                                var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
+                                // カーソルで選択 (ここでは、まだエディタ上で見えない)
+                                editor.selection = new vscode.Selection(newPosition, newPosition);
+                                // カーソル位置までスクロール
+                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.AtTop);
+                            });
                         });
-                    });
+                    }
                 });
             });
     }
 
     public Config() {
-        // let memoconfdir;
         if (process.platform == "win32") {
             this.memoconfdir = process.env.APPDATA;
             if (this.memoconfdir == "") {

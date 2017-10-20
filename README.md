@@ -25,20 +25,20 @@ From `memo config - cat`, read the memodir setting and use it.
 
 * Create a file with the entered value as `title` and `filename`.
 * When you press enter with empty, create a file with `YY-MM-DD.md`. If a file with the same name already exists, it opens the file without overwriting it. 
-
 * The file is opened to the vscode instance that executed the `Memo: Edit` command.
 
 ### Memo: Today's quick Memo
 
 * Open the `YY-MM-DD.md` file if it exists. If it does not exist, create it and open.
 * Every time you open, add a timestamp on the bottom line. example: `## 2017-10-19 Thu 06:38`
-* You can insert ISOweek and Emoji into the timestamp. example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
+* You can insert ISOweek and random-Emoji into the timestamp. example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
 
 ### Memo: Edit
 
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
 * Filter by keyword.
 * selected file will be opened in the vscode instance that executed the `Memo: Edit` command.
+* 
 * At the same time, generate `Memo List` output panel which outputs file list.
 
 ### Memo: Grep
