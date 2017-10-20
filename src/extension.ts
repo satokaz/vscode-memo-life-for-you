@@ -166,6 +166,9 @@ class Memo {
 
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
+        // let items = [];
+        
+        // let items;
 
         for (let index = 0; index < list.length; index++) {
             // let v = list[index];
@@ -188,14 +191,23 @@ class Memo {
 
         // console.log("items =", items)
 
-        this.options.placeHolder = 'Please select or enter a filename...';
-        vscode.window.showQuickPick(items, this.options).then(function (selected) {
-            if (selected == null) {
-                return void 0;
+        
+        vscode.window.showQuickPick(items, {
+            ignoreFocusOut: true,
+            matchOnDescription: true,
+            matchOnDetail: true,
+            placeHolder: 'Please select or enter a filename...',
+            onDidSelectItem: async (selected:vscode.QuickPickItem) => { 
+                if (selected == null) {
+                    return void 0;
+                }
+                // console.log('showQuickPick', selected);
+                console.log(selected.label);
+
+                vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
+                    vscode.window.showTextDocument(document, vscode.ViewColumn.One, true);
+                });
             }
-            vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
-                    vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
-            });
         });
     }
 
@@ -327,4 +339,3 @@ class Memo {
         this.memoEmoji = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertEmoji');
     }
 }
-
