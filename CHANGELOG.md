@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.0.11
+
+* Added onDidSelectItem event to "memo edit / Grep" quick-pick. 
+* Added not to automatically open outputchannel. If necessary manually
+
+
 ## 0.0.10
 
 * The value entered in `memo new` is not handled correctly as a title
