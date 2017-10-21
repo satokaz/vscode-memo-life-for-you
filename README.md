@@ -4,8 +4,7 @@ This extension is for executing some commands of [memo (Memo Life For You)](http
 
 ## Features
 
-sample movie:
-https://pic.twitter.com/naH5Z2MSMa
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/media/media/vscode-memo-new.gif)
 
 The following commands are supported.
 
@@ -21,6 +20,7 @@ Unique command:
 
 From `memo config - cat`, read the memodir setting and use it.
 
+
 ### Memo: New
 
 * Create a file with the entered value as `title` and `filename`.
@@ -35,13 +35,17 @@ From `memo config - cat`, read the memodir setting and use it.
 
 ### Memo: Edit
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/media/media/vscode-memo-list.gif)
+
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
 * Filter by keyword.
-* selected file will be opened in the vscode instance that executed the `Memo: Edit` command.
 * 
+* selected file will be opened in the vscode instance that executed the `Memo: Edit` command.
 * At the same time, generate `Memo List` output panel which outputs file list.
 
 ### Memo: Grep
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/media/media/vscode-memo-grep.gif)
 
 * By entering keyword, the search results are displayed on Quick Picker.
 * Open by selecting a file and move the cursor to the corresponding line

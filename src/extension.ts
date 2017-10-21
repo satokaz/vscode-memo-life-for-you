@@ -74,7 +74,11 @@ class Memo {
         let file: string;
         let dateFormat = this.memoDateFormat;
 
-        vscode.window.showInputBox({placeHolder: 'Please Enter a Filename'}).then(
+        vscode.window.showInputBox({
+            placeHolder: 'Please Enter a Filename',
+            // prompt: "",
+            ignoreFocusOut: true
+        }).then(
                 (title) => {
                     if (title == undefined) {
                         return void 0;
@@ -98,7 +102,11 @@ class Memo {
 
                     vscode.workspace.openTextDocument(file).then(document=>{
                         // console.log('uri =', document.uri.toString()); // uri = file:///Users/satokaz/.config/memo/2017-10-15.md
-                            vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => {
+                            vscode.window.showTextDocument(document, {
+                                viewColumn: 1,
+                                preserveFocus: false,
+                                preview: true
+                            }).then(document => {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
@@ -137,7 +145,10 @@ class Memo {
         }
 
         vscode.workspace.openTextDocument(file).then(document=>{
-            vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(document => {
+            vscode.window.showTextDocument(document, {
+                viewColumn: 1,
+                preserveFocus: false,
+            }).then(document => {
                 const editor = vscode.window.activeTextEditor;
                 const position = editor.selection.active;
                 var newPosition = position.with(editor.document.lineCount + 1 , 0);
@@ -191,37 +202,54 @@ class Memo {
 
         // console.log("items =", items)
         
+        // let previousFile = vscode.window.activeTextEditor.document.uri;
+
         vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
             placeHolder: 'Please select or enter a filename...',
-            onDidSelectItem: async (selected:vscode.QuickPickItem) => { 
+            onDidSelectItem: async (selected:vscode.QuickPickItem) => {
                 if (selected == null) {
                     return void 0;
                 }
-                console.log(selected.label);
-
+                // console.log(selected.label);
                 vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
-                    vscode.window.showTextDocument(document, vscode.ViewColumn.One, true);
+                    vscode.window.showTextDocument(document, {
+                        viewColumn: 1,
+                        preserveFocus: true,
+                        preview: true
+                    });
                 });
             }
         });
+        
     }
 
     // memo grep
     public Grep() {
         let items: vscode.QuickPickItem[] = [];
-        vscode.window.showInputBox({placeHolder: 'Please enter a keyword'}).then(
+        let list;
+
+        vscode.window.showInputBox({
+            placeHolder: 'Please enter a keyword',
+            // prompt: "",
+            ignoreFocusOut: true
+        }).then(
             (keyword) => {
                 if(keyword == undefined || "") {
-                    return;
+                    return void 0;
                 }
                 this.memoGrepChannel.clear();
                 keyword = keyword.replace(/\s/g, '\ ');
                 // console.log('name =', keyword);
 
-                let list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
+                try {
+                    list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
+                } catch(err) {
+                    vscode.window.showErrorMessage("memo: pattern required");
+                    return;
+                }
                 // console.log(list);
                 // console.log("list.length =", list.length);
 
@@ -255,13 +283,17 @@ class Memo {
                     matchOnDetail: true,
                     placeHolder: 'grep Result: ' + `${keyword}`,
                     onDidSelectItem: async (selected:vscode.QuickPickItem) => { 
-                        if (selected == null) {
+                        if (selected == null || "") {
                             return void 0;
                         }
-                        console.log(selected.label);
+                        // console.log(selected.label);
         
                         vscode.workspace.openTextDocument(selected.detail).then(document => {
-                            vscode.window.showTextDocument(document, vscode.ViewColumn.One, true).then(document => {
+                            vscode.window.showTextDocument(document, {
+                                viewColumn: 1,
+                                preserveFocus: true,
+                                preview: true
+                            }).then(document => {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
@@ -290,7 +322,11 @@ class Memo {
         // console.log("memoconfdir =", path.normalize(path.join(this.memoconfdir, 'config.toml')));
 
         vscode.workspace.openTextDocument(path.normalize(path.join(this.memoconfdir, 'config.toml'))).then(document=>{
-            vscode.window.showTextDocument(document, vscode.ViewColumn.One, false);
+            vscode.window.showTextDocument(document, {
+                viewColumn: 1,
+                preserveFocus: true,
+                preview: false
+            });
         });
     }
 
@@ -301,10 +337,10 @@ class Memo {
 
         list.forEach(async function (v, i) {
             // console.log(v.split("=")[1]);
-            if (v.match(/memodir =/)) {
+            if (v.match(/^memodir =/)) {
                 memodir = v.split("=")[1].replace(/"/g, "").trim();
             }
-            if (v.match(/editor =/)) {
+            if (v.match(/^editor =/)) {
                 editor = v.split("=")[1].replace(/"/g, "").trim();
                 // console.log("editor =", editor);
             }
