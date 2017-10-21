@@ -170,10 +170,16 @@ class Memo {
     public Edit() {
         let memopath = this.memopath;
         let memodir = this.memodir;
+        let list: string[];
         // console.log("memodir = ", memodir)
 
-        let memoChannel = vscode.window.createOutputChannel('Memo List');
-        let list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
+        this.memoListChannel.clear();
+
+        try {
+            list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
+        } catch(err) {
+
+        }
 
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
