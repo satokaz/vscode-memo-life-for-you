@@ -184,7 +184,7 @@ class Memo {
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
         // let items = [];
-        
+
         // let items;
 
         for (let index = 0; index < list.length; index++) {
@@ -207,9 +207,10 @@ class Memo {
         // this.memoListChannel.show();
 
         // console.log("items =", items)
-        
+
         // let previousFile = vscode.window.activeTextEditor.document.uri;
 
+        // New
         vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
@@ -228,14 +229,24 @@ class Memo {
                     });
                 });
             }
+        }).then(function (selected) {   // When selected with the mouse
+            if (selected == null) {
+                return void 0;
+            }
+            vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document => {
+                    vscode.window.showTextDocument(document, {
+                        viewColumn: 1,
+                        preserveFocus: true,
+                        preview: true
+                    });
+            });
         });
-        
     }
 
     // memo grep
     public Grep() {
         let items: vscode.QuickPickItem[] = [];
-        let list;
+        let list: string[];
 
         vscode.window.showInputBox({
             placeHolder: 'Please enter a keyword',
@@ -254,24 +265,19 @@ class Memo {
                     list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
                 } catch(err) {
                     vscode.window.showErrorMessage("memo: pattern required");
-                    return;
+                    return void 0;
                 }
                 // console.log(list);
-                // console.log("list.length =", list.length);
-
                 for (let index = 0; index < list.length; index++) {
-                    // let v = list[index];
-
                     if (list[index] == '') {
                         break;
                     }
 
                     let vsplit = list[index].split(":", 2);
-                    let vdetail = (list[index].match(/^(.*?)(?=:)/gm)).toString();
+                    // let vdetail = (list[index].match(/^(.*?)(?=:)/gm)).toString();
 
                     items.push({
-                        // "label": list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString(),
-                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').toString(),                        
+                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').toString(),
                         "description": "",
                         "detail": vsplit[0]
                     });
@@ -288,12 +294,12 @@ class Memo {
                     matchOnDescription: true,
                     matchOnDetail: true,
                     placeHolder: 'grep Result: ' + `${keyword}`,
-                    onDidSelectItem: async (selected:vscode.QuickPickItem) => { 
+                    onDidSelectItem: async (selected:vscode.QuickPickItem) => {
                         if (selected == null || "") {
                             return void 0;
                         }
                         // console.log(selected.label);
-        
+
                         vscode.workspace.openTextDocument(selected.detail).then(document => {
                             vscode.window.showTextDocument(document, {
                                 viewColumn: 1,
@@ -311,6 +317,26 @@ class Memo {
                             });
                         });
                     }
+                }).then(function (selected) {   // When selected with the mouse
+                    if (selected == null) {
+                        return void 0;
+                    }
+                    vscode.workspace.openTextDocument(selected.detail).then(document => {
+                        vscode.window.showTextDocument(document, {
+                            viewColumn: 1,
+                            preserveFocus: true,
+                            preview: true
+                        }).then(document => {
+                            // カーソルを目的の行に移動させて表示する為の処理
+                            const editor = vscode.window.activeTextEditor;
+                            const position = editor.selection.active;
+                            var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
+                            // カーソルで選択 (ここでは、まだエディタ上で見えない)
+                            editor.selection = new vscode.Selection(newPosition, newPosition);
+                            // カーソル位置までスクロール
+                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
+                        });
+                    });
                 });
             });
     }
