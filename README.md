@@ -1,10 +1,11 @@
 # vscode-memo-life-for-you README
 
-This extension is for executing some commands of [memo (Memo Life For You)](https://github.com/mattn/memo) from VS Code.
+This extension is for writing notes on VS Code.
 
 * Compatibility of memo command configuration file `config.toml` and placement directory
 * Memo: New/Edit/Grep/Config does not require the memo command.
 * If you use Memo: Serve, you need to install memo command.
+* Inspired by [memo (Memo Life For You)](https://github.com/mattn/memo)
 
 ## Features
 
@@ -112,11 +113,11 @@ This extension requires the memo command to work correctly.
 
 This extension contributes the following settings:
 
-* `"memo-life-for-you.memoPath"`: Path to memo command 
+* `"memo-life-for-you.memoPath"`: Path to memo command (If you use Serve command)
    * ex: Mac/Linux: `"/Users/satokaz/golang/bin/memo"`
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
-* `"memo-life-for-you.serve-addr"`: server address (default: "8080")
-   * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" 
+* `"memo-life-for-you.serve-addr"`: server address (If you use Serve command)
+   * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" (default: "8080")
 * `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
@@ -124,6 +125,10 @@ This extension contributes the following settings:
 ## Known Issues
 
 * If you open a file, the repository information that contains that file will be added to SCM view. (See [When I Open Just One File in Initialized Git Folder - Source Control Shows Number of Changed Files · Issue #35555 · Microsoft/vscode](https://github.com/Microsoft/vscode/issues/35555))
+
+## Tanks
+
+* [memo (Memo Life For You)](https://github.com/mattn/memo)
 
 ## License
 

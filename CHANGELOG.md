@@ -2,6 +2,15 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.2.0
+
+* Changed to implementation that does not depend on memo command (except for Serve)
+
+## 0.1.1
+
+* not clear OutputChannel when executing Memo: Edit/Grep
+* Memo: Edit/Grep quickpick itme is not reflected even if it is selected with the mouse
+
 ## 0.0.11
 
 * Added onDidSelectItem event to "memo edit / Grep" quick-pick. 
