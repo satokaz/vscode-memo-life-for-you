@@ -3,12 +3,18 @@
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as fs from 'fs';
+import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
+import * as http from 'http';
+import * as  tomlify from 'tomlify-j0.4';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
+    // console.log(vscode.env);
+
+    // console.log(path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg")));
 
     let memo = new Memo();
 
@@ -39,12 +45,27 @@ export enum MemoConfig {
 	TemplateBodyFile = "templatebodyfile"
 };
 
+/**
+ * config.toml を作るための interface
+ */
+interface IMemoConfig {
+    memodir: string;
+	editor: string;
+	column: number;
+    selectcmd: string;
+	grepcmd: string; 
+	assetsdir: string;
+	pluginsdir: string; 
+    templatedirfile: string;
+    templatebodyfile: string;
+}
+
 class Memo {
     private memoListChannel: vscode.OutputChannel;
     private memoGrepChannel: vscode.OutputChannel;
     private memopath: string;
     private memoaddr: string;
-    private memodir: string;
+    public  memodir: string;
     private memoconfdir: string;
     private memoDateFormat: string;
     private memoISOWeek: boolean;
@@ -59,18 +80,29 @@ class Memo {
     }
 
     public cp_options = {
+        encoding: 'utf8',
         maxBuffer: 1024 * 1024
     }
 
     constructor() {
+        this.init(); // 初期化を同期にしたいので async/await で実行する
         this.memoListChannel = vscode.window.createOutputChannel("Memo List");
         this.memoGrepChannel = vscode.window.createOutputChannel("Memo Grep");
         this.updateConfiguration();
-        this.readConfig();
     }
 
-    // memo new
+    async init(){
+        await this.setMemoConfDir(); // 初回に memoconfdir が必要なので、createConfig で this.memoconfigdir に値を格納する
+        // console.log("setMemoConfDir =", this.memoconfdir);
+        await this.createConfig();
+        await this.readConfig();
+    }
+
+    /**
+     * New
+     */
     public New() {
+        this.readConfig(); 
         let file: string;
         let dateFormat = this.memoDateFormat;
 
@@ -101,7 +133,6 @@ class Memo {
                     }
 
                     vscode.workspace.openTextDocument(file).then(document=>{
-                        // console.log('uri =', document.uri.toString()); // uri = file:///Users/satokaz/.config/memo/2017-10-15.md
                             vscode.window.showTextDocument(document, {
                                 viewColumn: 1,
                                 preserveFocus: false,
@@ -117,7 +148,7 @@ class Memo {
                                     //     edit.insert(newPosition, "## " + date + "\n");
                                     // });
                                 // カーソル位置までスクロール
-                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
+                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                             });
                     });
                     // }
@@ -125,8 +156,11 @@ class Memo {
             );
     }
 
-    //
+    /**
+     * QuickNew
+     */
     public QuickNew() {
+        this.readConfig(); 
         let file: string;
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
@@ -144,7 +178,7 @@ class Memo {
             fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
         }
 
-        vscode.workspace.openTextDocument(file).then(document=>{
+        vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
                 preserveFocus: false,
@@ -161,34 +195,44 @@ class Memo {
                             + dateFns.format(new Date(), `${dateFormat}`)
                             + "\n\n");
                     });
-                editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
+                editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
             });
         });
     }
 
-    // memo edit
+    /**
+     * Edit
+     */
     public Edit() {
+        this.readConfig(); 
         let memopath = this.memopath;
         let memodir = this.memodir;
         let list: string[];
         // console.log("memodir = ", memodir)
 
         this.memoListChannel.clear();
-
         try {
-            list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
+            // list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
+            list = fs.readdirSync(this.memodir, this.cp_options);
         } catch(err) {
-
+            console.log(err);
         }
 
+        // .md file のみで配列を作り直し
+        list = list.filter(function(v, i) {
+            return (path.extname(v) == ".md");
+        });
+        
+        // 新しいものを先頭にするための sort  
+        list.sort(function(a,b) {
+            return (a < b ? 1 : -1);
+        });
+                
         // console.log('list =', list);
         let items: vscode.QuickPickItem[] = [];
-        // let items = [];
-
-        // let items;
 
         for (let index = 0; index < list.length; index++) {
-            // let v = list[index];
+            let v = list[index];
 
             if (list[index] == '') {
                 break;
@@ -201,21 +245,18 @@ class Memo {
                 "description": array[0],
                 "detail": "" });
 
-            this.memoListChannel.appendLine('file://' + path.join(this.memodir, list[index]) + `\t` + array[0]);
+            this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
         }
-        // this.memoListChannel.show();
-
         // console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
 
-        // New
         vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
-            placeHolder: 'Please select or enter a filename...',
+            placeHolder: 'Please select or enter a filename...' + `(All items: ${items.length})`,
             onDidSelectItem: async (selected:vscode.QuickPickItem) => {
                 if (selected == null) {
                     return void 0;
@@ -243,10 +284,18 @@ class Memo {
         });
     }
 
-    // memo grep
+    /**
+     * Grep
+     * Implementation using bundled ripgrep
+     * macOS: /Applications/Visual Studio Code - Insiders.app/Contents/Resources/app/node_modules/vscode-ripgrep/bin/rg
+     * win32:
+     * Linux:
+    */
     public Grep() {
+        this.readConfig(); 
         let items: vscode.QuickPickItem[] = [];
         let list: string[];
+        let list2;
 
         vscode.window.showInputBox({
             placeHolder: 'Please enter a keyword',
@@ -258,47 +307,60 @@ class Memo {
                     return void 0;
                 }
                 this.memoGrepChannel.clear();
+
                 keyword = keyword.replace(/\s/g, '\ ');
                 // console.log('name =', keyword);
 
                 try {
-                    list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
+                    // list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
+
+                    const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
+
+                    // rg は tty で実行された時だけ行番号を出力するオプションがデフォルトで設定される
+                    list = cp.execFileSync(rgPath, ['--color', 'never', '-g', '*.md', '-n', '-S', `${keyword}`, `${this.memodir}`], {
+                        maxBuffer: 1024 * 1024,
+                        stdio: ['inherit']
+                    }).toString().split('\n');
                 } catch(err) {
+                    // console.log(err);
                     vscode.window.showErrorMessage("memo: pattern required");
                     return void 0;
                 }
-                // console.log(list);
+                // console.log('list =', list);
+                
+                // Picker Item の作成
                 for (let index = 0; index < list.length; index++) {
                     if (list[index] == '') {
                         break;
                     }
 
-                    let vsplit = list[index].split(":", 2);
-                    // let vdetail = (list[index].match(/^(.*?)(?=:)/gm)).toString();
+                    let vsplit = list[index].split(":");
+                    console.log(vsplit);
+                    // console.log(list[index].replace(/^:/gm, '').replace(/^(.*?)(?=:)/gm, '').toString());
 
                     items.push({
-                        "label": list[index].replace(/^(.*?)(?=:)/gm, '').toString(),
+                        "label": (process.platform == "win32") ? vsplit[2] + ":" + vsplit[3] : vsplit[1] + ":" + vsplit[2],
                         "description": "",
-                        "detail": vsplit[0]
+                        "detail": (process.platform == "win32") ? path.normalize(path.join(vsplit[0] + ":", vsplit[1])) : vsplit[0]
                     });
-                    // console.log(items[i]);
 
                     this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + vsplit[0] + (process.platform == 'linux' ? ":" : "#") + vsplit[1]);
                     this.memoGrepChannel.appendLine(list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                     this.memoGrepChannel.appendLine('');
                 }
-                // this.memoGrepChannel.show();
-
+                // console.log(items);
+                
                 vscode.window.showQuickPick(items, {
                     ignoreFocusOut: true,
                     matchOnDescription: true,
                     matchOnDetail: true,
-                    placeHolder: 'grep Result: ' + `${keyword}`,
+                    placeHolder: 'grep Result: ' + `${keyword} ... (Number of results: ${items.length})`,
                     onDidSelectItem: async (selected:vscode.QuickPickItem) => {
                         if (selected == null || "") {
                             return void 0;
                         }
                         // console.log(selected.label);
+                        // console.log(selected.label.split(':')[1]);
 
                         vscode.workspace.openTextDocument(selected.detail).then(document => {
                             vscode.window.showTextDocument(document, {
@@ -309,11 +371,11 @@ class Memo {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
-                                var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
+                                var newPosition = position.with(Number(selected.label.split(':')[0]) - 1 , 0);
                                 // カーソルで選択 (ここでは、まだエディタ上で見えない)
                                 editor.selection = new vscode.Selection(newPosition, newPosition);
                                 // カーソル位置までスクロール
-                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.AtTop);
+                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                             });
                         });
                     }
@@ -334,25 +396,17 @@ class Memo {
                             // カーソルで選択 (ここでは、まだエディタ上で見えない)
                             editor.selection = new vscode.Selection(newPosition, newPosition);
                             // カーソル位置までスクロール
-                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
+                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                         });
                     });
                 });
             });
     }
 
+    /**
+     * Config
+     */
     public Config() {
-        if (process.platform == "win32") {
-            this.memoconfdir = process.env.APPDATA;
-            if (this.memoconfdir == "") {
-                this.memoconfdir = path.join(process.env.USERPROFILE, "Application Data", "memo");
-            }
-            this.memoconfdir = path.join(this.memoconfdir, "memo");
-        } else {
-            this.memoconfdir = path.join(process.env.HOME, ".config", "memo");
-        }
-        // console.log("memoconfdir =", path.normalize(path.join(this.memoconfdir, 'config.toml')));
-
         vscode.workspace.openTextDocument(path.normalize(path.join(this.memoconfdir, 'config.toml'))).then(document=>{
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
@@ -362,26 +416,10 @@ class Memo {
         });
     }
 
-    public readConfig() {
-        let editor;
-        let memodir;
-        let list = cp.execSync(`${this.memopath} config --cat`, this.cp_options).toString().split('\n');
-
-        list.forEach(async function (v, i) {
-            // console.log(v.split("=")[1]);
-            if (v.match(/^memodir =/)) {
-                memodir = v.split("=")[1].replace(/"/g, "").trim();
-            }
-            if (v.match(/^editor =/)) {
-                editor = v.split("=")[1].replace(/"/g, "").trim();
-                // console.log("editor =", editor);
-            }
-        });
-        this.memodir = memodir;
-    }
-
+    /**
+     * Serve
+     */
     public Serve() {
-        // console.log('Current directory: ' + process.cwd());
         // console.log(`serve --addr :` + `${this.memoaddr}`);
         let proc = cp.spawn(`${this.memopath}`, ['serve', '--addr', `:${this.memoaddr}`], {
             stdio: ['inherit'],
@@ -402,6 +440,107 @@ class Memo {
         // console.log("child:" + proc.pid);
     }
 
+    /**
+     * setMemoConfDir
+     */
+    public setMemoConfDir() {
+        if (process.platform == "win32") {
+            this.memoconfdir = process.env.APPDATA;
+            if (this.memoconfdir == "") {
+                this.memoconfdir = path.normalize(path.join(process.env.USERPROFILE, "Application Data", "memo"));
+            }
+            this.memoconfdir = path.normalize(path.join(this.memoconfdir, "memo"));
+        } else {
+            this.memoconfdir = path.normalize(path.join(process.env.HOME, ".config", "memo"));
+        }
+        return void 0;
+    }
+
+    /**
+     * createConfig
+     */
+    public createConfig() {
+        fse.pathExists(this.memoconfdir, (err, exists) => {
+            if (!exists) {
+                // memo ディレクトリが存在しているか確認しなければ、memo dir, _post dir と plugins dir を作成
+                fse.mkdirpSync(this.memoconfdir, {mode: 0o700});
+                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, '_post')), {mode: 0o700});
+                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, 'plugins')), {mode: 0o700});
+                fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir), {mode: 0o600});
+                vscode.window.showInformationMessage("vscode memo life for you: " + `${this.memoconfdir}` + " directory created");;
+            } else {
+                // config.toml が存在しているかチェック
+                fse.pathExists(path.normalize(path.join(this.memoconfdir, "config.toml")), (err, exists) => {
+                    if (!exists) {
+                        fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir));
+                        vscode.window.showInformationMessage("vscode memo life for you: " + `${path.normalize(path.join(this.memoconfdir, "config.toml"))}` + " created");
+                    }
+                });
+            }
+        });  
+        return;
+    }
+
+    /**
+     * readConfig
+     */
+    public readConfig() {
+        let editor;
+        let memodir;
+        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split("\n");
+        
+        // console.log('readConfig =', list);
+        list.forEach(async function (v, i) {
+            // console.log(v.split("=")[1]);
+            if (v.match(/^memodir =/)) {
+                memodir = v.split("=")[1].replace(/"/g, "").trim();
+            }
+            if (v.match(/^editor =/)) {
+                editor = v.split("=")[1].replace(/"/g, "").trim();
+            }
+        });
+
+        this.memodir = memodir;
+        return void 0;
+    }
+
+    /**
+     * cfgtoml
+     * @param confDir 
+     */
+    public cfgtoml(confDir) {
+        let config: IMemoConfig = {
+            memodir: process.env.MEMODIR == undefined ? path.normalize(path.join(confDir, "_post")) : process.env.MEMODIR,
+            editor: process.env.EDITOR == undefined ? "code" : process.env.EDITOR, 
+            column: 20,
+            selectcmd: "peco",
+            grepcmd: (process.platform == "win32") ? "grep -nH ${PATTERN} ${FILES}" : path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg").replace(/\s/g, '\\ ')) + ' -n --no-heading -S ${PATTERN} ${FILES}', 
+            assetsdir: "",
+            pluginsdir: path.normalize(path.join(confDir, "plugins")), 
+            templatedirfile: "",
+            templatebodyfile: "",
+        }
+    
+        return tomlify(config, function (key, value) {
+            let context = this;
+            let path = tomlify.toKey(context.path);
+            if (/^column/.test(path)) { 
+                return Math.floor(value).toString();
+            }
+            return false;
+        }, '  ');
+    }
+
+    /**
+     * rgPath
+     */
+    public rgPath() {
+        return path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
+    }
+
+    /**
+     * updateConfiguration
+     */
     public updateConfiguration() {
         this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');

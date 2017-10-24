@@ -2,7 +2,7 @@
   "name": "vscode-memo-life-for-you",
   "displayName": "vscode-memo-life-for-you",
   "description": "This extension is for executing some commands of memo (Memo Life For You) from VS Code.",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "publisher": "satokaz",
   "engines": {
     "vscode": "^1.17.0"
@@ -60,11 +60,13 @@
       "properties": {
         "memo-life-for-you.memoPath": {
           "type": "string",
-          "default": ""
+          "default": "",
+          "description": ""
         },
         "memo-life-for-you.serve-addr": {
           "type": "string",
-          "default": "8080"
+          "default": "8080",
+          "description": "Specify port number to Memo: Serve"
         },
         "memo-life-for-you.dateFormat": {
           "type": "string",
@@ -73,11 +75,13 @@
         },
         "memo-life-for-you.insertISOWeek": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": ""
         },
         "memo-life-for-you.insertEmoji": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": ""
         }
       }
     }
@@ -90,14 +94,17 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "typescript": "^2.5.2",
-    "vscode": "^1.1.5",
-    "mocha": "^3.5.0",
+    "@types/mocha": "^2.2.42",
     "@types/node": "^7.0.43",
-    "@types/mocha": "^2.2.42"
+    "mocha": "^3.5.0",
+    "tslint": "^5.8.0",
+    "typescript": "^2.5.2",
+    "vscode": "^1.1.5"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
-    "random-emoji": "^1.0.2"
+    "fs-extra": "^4.0.2",
+    "random-emoji": "^1.0.2",
+    "tomlify-j0.4": "^2.2.1"
   }
 }
