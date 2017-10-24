@@ -335,7 +335,7 @@ class Memo {
                     }
 
                     let vsplit = list[index].split(":");
-                    console.log(vsplit);
+                    // console.log(vsplit);
                     // console.log(list[index].replace(/^:/gm, '').replace(/^(.*?)(?=:)/gm, '').toString());
 
                     items.push({
