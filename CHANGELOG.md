@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.2.1
+
+* Pass the selected text on the editor to the value of QuickInput
+
 ## 0.2.0
 
 * Changed to implementation that does not depend on memo command (except for Serve)

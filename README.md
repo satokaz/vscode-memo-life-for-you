@@ -27,6 +27,7 @@ Unique command:
 
 * Create a file with the entered value as `title` and `filename`.
 * When you press enter with empty, create a file with `YY-MM-DD.md`. If a file with the same name already exists, it opens the file without overwriting it. 
+* When text is selected on the editor and the command is executed, it can be used for title and file name.
 * The file is opened to the VS Code instance that executed the `Memo: Edit` command.
 
 ### Memo: Today's quick Memo
@@ -34,6 +35,7 @@ Unique command:
 * Open the `YY-MM-DD.md` file if it exists. If it does not exist, create it and open.
 * Every time you open, add a timestamp on the bottom line. example: `## 2017-10-19 Thu 06:38`
 * You can insert ISOweek and random-Emoji into the timestamp. example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
+* When text is selected on the editor and the command is executed, it can be used for title name.
 
 ### Memo: Edit
 
