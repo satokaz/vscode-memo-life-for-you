@@ -106,9 +106,13 @@ class Memo {
         let file: string;
         let dateFormat = this.memoDateFormat;
 
+        // 選択されているテキストを取得
+        let selectString: String = vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection);
+    
         vscode.window.showInputBox({
             placeHolder: 'Please Enter a Filename',
             // prompt: "",
+            value: `${selectString.substr(0,49)}`,
             ignoreFocusOut: true
         }).then(
                 (title) => {
@@ -168,7 +172,7 @@ class Memo {
         let getEmoji = this.memoEmoji == true ? randomEmoji.random({count: 1})[0].character + " " : "";
         // console.log(getISOWeek);
         // console.log(getEmoji);
-
+        
         file = dateFns.format(new Date(), 'YYYY-MM-DD') + ".md";
         file = path.normalize(path.join(this.memodir, file));
 
@@ -177,7 +181,8 @@ class Memo {
         } catch(err) {
             fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
         }
-
+        let selectString: String = vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection);
+        
         vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
@@ -188,11 +193,13 @@ class Memo {
                 var newPosition = position.with(editor.document.lineCount + 1 , 0);
                 editor.selection = new vscode.Selection(newPosition, newPosition);
                     vscode.window.activeTextEditor.edit(function (edit) {
+                        
                         edit.insert(newPosition,
                             "\n" + "## "
                             + getISOWeek
                             + getEmoji
                             + dateFns.format(new Date(), `${dateFormat}`)
+                            + " " + `${selectString.substr(0,49)}`
                             + "\n\n");
                     });
                 editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
