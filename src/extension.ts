@@ -115,49 +115,48 @@ class Memo {
             value: `${selectString.substr(0,49)}`,
             ignoreFocusOut: true
         }).then(
-                (title) => {
-                    if (title == undefined) {
-                        return void 0;
-                    }
-
-                    if (title == "") {
-                        // file = dateFormat + ".md";
-                        file = dateFns.format(new Date(), 'YYYY-MM-DD') + ".md";
-                    } else {
-                        file = dateFns.format(new Date(), 'YYYY-MM-DD') + '-' + title
-                        .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
-                        .replace(/--+/g ,'') + ".md";
-                    }
-                    file = path.normalize(path.join(this.memodir, file));
-
-                    try {
-                        fs.statSync(file);
-                    } catch(err) {
-                        fs.writeFileSync(file, "# " + dateFns.format(new Date(), 'YYYY-MM-DD') + " " + `${title}` + "\n\n");
-                    }
-
-                    vscode.workspace.openTextDocument(file).then(document=>{
-                            vscode.window.showTextDocument(document, {
-                                viewColumn: 1,
-                                preserveFocus: false,
-                                preview: true
-                            }).then(document => {
-                                // カーソルを目的の行に移動させて表示する為の処理
-                                const editor = vscode.window.activeTextEditor;
-                                const position = editor.selection.active;
-                                var newPosition = position.with(editor.document.lineCount + 1 , 0);
-                                // カーソルで選択 (ここでは、まだエディタ上で見えない)
-                                editor.selection = new vscode.Selection(newPosition, newPosition);
-                                    // vscode.window.activeTextEditor.edit(function (edit) {
-                                    //     edit.insert(newPosition, "## " + date + "\n");
-                                    // });
-                                // カーソル位置までスクロール
-                                editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
-                            });
-                    });
-                    // }
+            (title) => {
+                if (title == undefined) {
+                    return void 0;
                 }
-            );
+
+                if (title == "") {
+                    // file = dateFormat + ".md";
+                    file = dateFns.format(new Date(), 'YYYY-MM-DD') + ".md";
+                } else {
+                    file = dateFns.format(new Date(), 'YYYY-MM-DD') + '-' + title
+                    .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
+                    .replace(/--+/g ,'') + ".md";
+                }
+                file = path.normalize(path.join(this.memodir, file));
+
+                try {
+                    fs.statSync(file);
+                } catch(err) {
+                    fs.writeFileSync(file, "# " + dateFns.format(new Date(), 'YYYY-MM-DD') + " " + `${title}` + "\n\n");
+                }
+
+                vscode.workspace.openTextDocument(file).then(document=>{
+                        vscode.window.showTextDocument(document, {
+                            viewColumn: 1,
+                            preserveFocus: false,
+                            preview: true
+                        }).then(document => {
+                            // カーソルを目的の行に移動させて表示する為の処理
+                            const editor = vscode.window.activeTextEditor;
+                            const position = editor.selection.active;
+                            var newPosition = position.with(editor.document.lineCount + 1 , 0);
+                            // カーソルで選択 (ここでは、まだエディタ上で見えない)
+                            editor.selection = new vscode.Selection(newPosition, newPosition);
+                                // vscode.window.activeTextEditor.edit(function (edit) {
+                                //     edit.insert(newPosition, "## " + date + "\n");
+                                // });
+                            // カーソル位置までスクロール
+                            editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
+                        });
+                });
+            }
+        );
     }
 
     /**
@@ -330,7 +329,7 @@ class Memo {
                     }).toString().split('\n');
                 } catch(err) {
                     // console.log(err);
-                    vscode.window.showErrorMessage("memo: pattern required");
+                    vscode.window.showErrorMessage("pattern required");
                     return void 0;
                 }
                 // console.log('list =', list);
