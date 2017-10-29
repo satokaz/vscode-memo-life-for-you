@@ -1,5 +1,7 @@
 # vscode-memo-life-for-you README
 
+[Japanese README is here](https://github.com/satokaz/vscode-memo-life-for-you/blob/master/README_ja.md)
+
 This extension is for writing notes on VS Code.
 
 * Compatibility of memo command configuration file `config.toml` and placement directory
