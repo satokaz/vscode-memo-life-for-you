@@ -72,6 +72,17 @@ You do not need to install it separately to use ripgrep that ships with VS Code.
 If configuration files and directories do not exist, they are automatically created for the first time.
 This file can also be used as it is with the memo command.
 
+```yaml
+memodir - Destination directory of memo file (Required for this extension)
+editor - editor command (not used by this extension)
+column - Number of display columns (not used by this extension)
+selectcmd - selector command (not used by this extension)
+grepcmd - grep command (not used by this extension)
+assetsdir - (not used by this extension)
+pluginsdir - (not used by this extension)
+templatedirfile - (not used by this extension)
+```
+
 default configuration:
 
 macOS:
