@@ -90,7 +90,7 @@ default configuration:
 macOS:
 
 ```yaml
-memodir = "/Users/satokaz/.config/memo/_post"
+memodir = "/Users/satokaz/.config/memo/_posts"
 editor = "code"
 column = 20
 selectcmd = "peco"
@@ -103,7 +103,7 @@ templatedirfile = ""
 Windows: 
 
 ```yaml
-memodir = "C:\\Users\\Sato\\AppData\\Roaming\\memo\\_post"
+memodir = "C:\\Users\\Sato\\AppData\\Roaming\\memo\\_posts"
 editor = "code"
 column = 20
 selectcmd = "peco"

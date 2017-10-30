@@ -468,9 +468,9 @@ class Memo {
     public createConfig() {
         fse.pathExists(this.memoconfdir, (err, exists) => {
             if (!exists) {
-                // memo ディレクトリが存在しているか確認しなければ、memo dir, _post dir と plugins dir を作成
+                // memo ディレクトリが存在しているか確認しなければ、memo dir, _posts dir と plugins dir を作成
                 fse.mkdirpSync(this.memoconfdir, {mode: 0o700});
-                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, '_post')), {mode: 0o700});
+                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, '_posts')), {mode: 0o700});
                 fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, 'plugins')), {mode: 0o700});
                 fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir), {mode: 0o600});
                 vscode.window.showInformationMessage("vscode memo life for you: " + `${this.memoconfdir}` + " directory created");;
