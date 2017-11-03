@@ -48,9 +48,9 @@ Unique command:
 
 ### Memo: Grep
 
-* Use ripgrep included in VS Code distribution.
+* Use `ripgrep` included in VS Code distribution.
 * By entering keyword, the search results are displayed on Quick Picker.
-* Open by selecting a file and move the cursor to the corresponding line
+* Open by selecting a file and move the cursor to the corresponding line and column
 * selected file will be opened in the VS Code instance that executed the `Memo: Grep` command
 * At the same time, generate `Memo Grep` output panel which outputs file list.
 
@@ -59,6 +59,13 @@ Unique command:
 Picker Items is created from the output of `ripgrep` command. Therefore, picker items may not be generated correctly depending on the output. 
 
 You do not need to install it separately to use ripgrep that ships with VS Code.
+
+Options to use:
+
+* `--vimgrep` -- Show results with every match on its own line, including line numbers and column numbers.
+* `--color never` -- Do not use color in output.
+* `-g *.md` -- Include *.md files for searching that match the given glob. 
+* `-S` -- Search case insensitively if the pattern is all lowercase.
 
 ### Memo: Config
 
@@ -119,7 +126,7 @@ templatebodyfile = ""
 
 ### About the memo command
 
-This extension requires the memo command to work correctly.
+If you use Serve command. This extension requires the memo command to work correctly.
 
 * `memo` should be installed already
    * [memo (Memo Life For You)](https://github.com/mattn/memo)

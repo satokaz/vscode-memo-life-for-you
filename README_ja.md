@@ -40,16 +40,16 @@
 
 ### Memo: Edit
 
-* List the file name and the first line of the file as `memo list` or ` memo edit`.
 * このコマンドを実行すると、ファイル名とそのファイルの最初の 1 行をリストして表示します。これは、memo コマンドの `memo list` または `memo edit` に似ています
 * QuickInput にキーワードを入力することでリストをフィルタすることが可能です
-* 選択されたファイルは、`Memo: Edit` コマンドを実行した VS Code インスタンス上で開きます
+* 選択されたファイルは、`Memo: Edit` コマンドを実行した VS Code インスタンス上で開きます* また、同時に `Memo Grep` 出力パネルを生成し検索結果を出力します
+* また、同時に `Memo List` 出力パネルを生成し一覧を出力します
 
 ### Memo: Grep
 
 * VS Code に含まれる ripgrep を利用します
-* QuickImput にキーワードを入力することで、検索結果を QuickPicker に表示し選択で開くことができますし
-* 選択されたファイルを開くと、検索結果の該当行を表示しカーソルを移動させます
+* QuickImput にキーワードを入力することで、検索結果を QuickPicker に表示し選択で開くことができます
+* 選択されたファイルを開くと、検索結果の該当行と列にカーソルを移動させます
 * 選択されたファイルは、`Memo: Grep` コマンドを実行した VS Code インスタンス上で開きます
 * また、同時に `Memo Grep` 出力パネルを生成し検索結果を出力します
 
@@ -57,6 +57,13 @@
 
 QuickPicker 項目は `ripgrep` コマンドの出力から作成されます。 
 VS Code に同梱されている `ripgrep` を使用するため、別途インストールする必要はありません。
+
+利用するオプション:
+
+* `--vimgrep` -- Show results with every match on its own line, including line numbers and column numbers.
+* `--color never` -- Do not use color in output.
+* `-g *.md` -- Include *.md files for searching that match the given glob. 
+* `-S` -- Search case insensitively if the pattern is all lowercase.
 
 ### Memo: Config
 
