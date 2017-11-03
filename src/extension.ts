@@ -7,8 +7,7 @@ import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
-import * as http from 'http';
-import * as  tomlify from 'tomlify-j0.4';
+import * as tomlify from 'tomlify-j0.4';
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
@@ -60,6 +59,12 @@ interface IMemoConfig {
     templatebodyfile: string;
 }
 
+// vscode.QuickPickItem に ln, col を追加した items を interface で作成
+interface items extends vscode.QuickPickItem {
+    ln: string;
+    col: string;
+}
+
 class Memo {
     private memoListChannel: vscode.OutputChannel;
     private memoGrepChannel: vscode.OutputChannel;
@@ -70,7 +75,7 @@ class Memo {
     private memoDateFormat: string;
     private memoISOWeek: boolean;
     private memoEmoji: boolean;
-    private memoConfig = [];
+    private memoConfig = [];    
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -83,7 +88,7 @@ class Memo {
         encoding: 'utf8',
         maxBuffer: 1024 * 1024
     }
-
+    
     constructor() {
         this.init(); // 初期化を同期にしたいので async/await で実行する
         this.memoListChannel = vscode.window.createOutputChannel("Memo List");
@@ -148,9 +153,6 @@ class Memo {
                             var newPosition = position.with(editor.document.lineCount + 1 , 0);
                             // カーソルで選択 (ここでは、まだエディタ上で見えない)
                             editor.selection = new vscode.Selection(newPosition, newPosition);
-                                // vscode.window.activeTextEditor.edit(function (edit) {
-                                //     edit.insert(newPosition, "## " + date + "\n");
-                                // });
                             // カーソル位置までスクロール
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                         });
@@ -297,11 +299,14 @@ class Memo {
      * win32:
      * Linux:
     */
+
     public Grep() {
+        let items: items[] = [];
+        let dimDecoration: vscode.TextEditorDecorationType;
+        
         this.readConfig(); 
-        let items: vscode.QuickPickItem[] = [];
+        
         let list: string[];
-        let list2;
 
         vscode.window.showInputBox({
             placeHolder: 'Please enter a keyword',
@@ -323,70 +328,107 @@ class Memo {
                     const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
 
                     // rg は tty で実行された時だけ行番号を出力するオプションがデフォルトで設定される
-                    list = cp.execFileSync(rgPath, ['--color', 'never', '-g', '*.md', '-n', '-S', `${keyword}`, `${this.memodir}`], {
+                    list = cp.execFileSync(rgPath, ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', `${keyword}`, `${this.memodir}`], {
                         maxBuffer: 1024 * 1024,
                         stdio: ['inherit']
                     }).toString().split('\n');
                 } catch(err) {
                     // console.log(err);
-                    vscode.window.showErrorMessage("pattern required");
+                    vscode.window.showErrorMessage("There is no result.");
                     return void 0;
                 }
+
                 // console.log('list =', list);
                 
-                // Picker Item の作成
-                for (let index = 0; index < list.length; index++) {
-                    if (list[index] == '') {
-                        break;
+                list.forEach((vlist, index) => {
+                    if (vlist == '') {
+                        return;
                     }
+                    // console.log(vlist);
 
-                    let vsplit = list[index].split(":");
-                    // console.log(vsplit);
-                    // console.log(list[index].replace(/^:/gm, '').replace(/^(.*?)(?=:)/gm, '').toString());
+                    let filename: string = vlist.match((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm).toString();;
+                    // console.log("filename =", filename);
 
+                    let line: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
+                    .replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();
+                    // console.log("line =", line);
+                    
+                    let col: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
+                    .replace(/^:/gm, "").replace(/^(.*?)(?=:)/gm, "").replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();;
+                    // console.log("col =", col);
+                    
+                    let result = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm : /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm, "").toString();
+                    // console.log("result =", result);
+                    
                     items.push({
-                        "label": (process.platform == "win32") ? vsplit[2] + ":" + vsplit[3] : vsplit[1] + ":" + vsplit[2],
+                        "label": 'Ln: ' + line + ", Col: " + col + " " + result,
                         "description": "",
-                        "detail": (process.platform == "win32") ? path.normalize(path.join(vsplit[0] + ":", vsplit[1])) : vsplit[0]
+                        "detail": filename,
+                        "ln": line,
+                        "col": col
                     });
 
-                    this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + vsplit[0] + (process.platform == 'linux' ? ":" : "#") + vsplit[1]);
-                    this.memoGrepChannel.appendLine(list[index].replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
+                    this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + result);
+                    this.memoGrepChannel.appendLine(vlist.replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                     this.memoGrepChannel.appendLine('');
-                }
-                // console.log(items);
+                });
                 
                 vscode.window.showQuickPick(items, {
                     ignoreFocusOut: true,
                     matchOnDescription: true,
                     matchOnDetail: true,
                     placeHolder: 'grep Result: ' + `${keyword} ... (Number of results: ${items.length})`,
-                    onDidSelectItem: async (selected:vscode.QuickPickItem) => {
+                    onDidSelectItem: async (selected: items) => {
                         if (selected == null || "") {
                             return void 0;
                         }
-                        // console.log(selected.label);
-                        // console.log(selected.label.split(':')[1]);
+                        // console.log('selected.label =', selected.label);
+                        // console.log('selected =', selected)
 
                         vscode.workspace.openTextDocument(selected.detail).then(document => {
                             vscode.window.showTextDocument(document, {
                                 viewColumn: 1,
                                 preserveFocus: true,
                                 preview: true
-                            }).then(document => {
+                            }).then(async document => {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
-                                var newPosition = position.with(Number(selected.label.split(':')[0]) - 1 , 0);
+                                // var newPosition = position.with(Number(selected.label.split(':')[0]) - 1 , 0);
+                                const newPosition = position.with(Number(selected.ln) - 1 , Number(selected.col) -1);
                                 // カーソルで選択 (ここでは、まだエディタ上で見えない)
                                 editor.selection = new vscode.Selection(newPosition, newPosition);
+
+                                // highlight decoration
+                                if (dimDecoration) {
+                                    dimDecoration.dispose();
+                                }
+                                let startPosition = new vscode.Position(Number(selected.ln) - 1 , 0);
+                                let endPosition = new vscode.Position(Number(selected.ln), 0);
+                                dimDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
+                                    isWholeLine: true,
+                                    // outline: 'solid',
+                                    // outlineWidth: '1px',
+                                    // outlineColor: "invert",
+                                    // outlineStyle: "",
+                                    border: 'solid',
+                                    borderWidth: '1px',
+                                    // borderStyle: 'outset',
+                                    borderColor: 'rgba(244, 155, 66, 0.8)',
+                                    gutterIconPath: path.join(__filename, '..', '..', '..', 'resources', 'sun.svg'),
+                                    gutterIconSize: '90%',
+                                    backgroundColor: "rgba(244, 155, 66, 0.5)"
+                                }); 
+                                editor.setDecorations(dimDecoration, [new vscode.Range(startPosition, startPosition)]);
+
                                 // カーソル位置までスクロール
                                 editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                             });
                         });
                     }
-                }).then(function (selected) {   // When selected with the mouse
-                    if (selected == null) {
+                }).then((selected) => {   // When selected with the mouse
+                    if (selected == undefined || null) {
+                        dimDecoration.dispose();
                         return void 0;
                     }
                     vscode.workspace.openTextDocument(selected.detail).then(document => {
@@ -398,13 +440,15 @@ class Memo {
                             // カーソルを目的の行に移動させて表示する為の処理
                             const editor = vscode.window.activeTextEditor;
                             const position = editor.selection.active;
-                            var newPosition = position.with(Number(selected.label.split(':')[1]) - 1 , 0);
+                            const newPosition = position.with(Number(selected.ln) - 1 , Number(selected.col) -1);
                             // カーソルで選択 (ここでは、まだエディタ上で見えない)
                             editor.selection = new vscode.Selection(newPosition, newPosition);
                             // カーソル位置までスクロール
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                         });
                     });
+                    // ファイルを選択した後に、decoration を消す
+                    dimDecoration.dispose();
                 });
             });
     }
