@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.2.2 
+
+* default memodir was wrong. Correctly `_posts` 
+* Supports column and result highlights with "Memo: Grep"
+
 ## 0.2.1
 
 * Pass the selected text on the editor to the value of QuickInput
