@@ -2,6 +2,13 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.2.5
+
+* Fixed that "Memo: New/Quick Memo" will get an error if activeTextEditor does not exist
+
+# 0.2.4
+
+* 2nd Try! default memodir was wrong. Fix from _post to _posts.
 # 0.2.3
 
 * Fixed a problem that memo directory can not be created correctly due to upgrade of tomlify-j0.4. revert to 2.2.1
