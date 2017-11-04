@@ -112,7 +112,8 @@ class Memo {
         let dateFormat = this.memoDateFormat;
 
         // 選択されているテキストを取得
-        let selectString: String = vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection);
+        // エディタが一つも無い場合は、エラーになるので対処しておく
+        let selectString: String = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection) : "";
     
         vscode.window.showInputBox({
             placeHolder: 'Please Enter a Filename',
@@ -182,7 +183,10 @@ class Memo {
         } catch(err) {
             fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
         }
-        let selectString: String = vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection);
+        
+        // 選択されているテキストを取得
+        // エディタが一つも無い場合は、エラーになるので対処しておく
+        let selectString: String = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection) : "";
         
         vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
