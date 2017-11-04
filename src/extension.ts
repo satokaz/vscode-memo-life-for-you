@@ -560,7 +560,7 @@ class Memo {
      */
     public cfgtoml(confDir) {
         let config: IMemoConfig = {
-            memodir: process.env.MEMODIR == undefined ? path.normalize(path.join(confDir, "_post")) : process.env.MEMODIR,
+            memodir: process.env.MEMODIR == undefined ? path.normalize(path.join(confDir, "_posts")) : process.env.MEMODIR,
             editor: process.env.EDITOR == undefined ? "code" : process.env.EDITOR, 
             column: 20,
             selectcmd: "peco",
