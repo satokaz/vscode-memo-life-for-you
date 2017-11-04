@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.2.6
+
+* Sorry to update frequently!
+* Memo: Edit/Grep: If you cancel with the `ESC` key, close the editor opened by the search result
+
 # 0.2.5
 
 * Fixed that "Memo: New/Quick Memo" will get an error if activeTextEditor does not exist
