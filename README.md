@@ -4,6 +4,8 @@
 
 This extension is for writing notes on VS Code.
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
+
 * Compatibility of memo command configuration file `config.toml` and placement directory
 * Memo: New/Edit/Grep/Config does not require the memo command.
 * If you use Memo: Serve, you need to install memo command.
@@ -11,7 +13,7 @@ This extension is for writing notes on VS Code.
 
 ## Features
 
-![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/media/media/vscode-memo-new.gif)
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_commands.png)
 
 The following commands are supported.
 
@@ -48,6 +50,8 @@ Unique command:
 
 ### Memo: Grep
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_grep_demo.gif)
+
 * Use `ripgrep` included in VS Code distribution.
 * By entering keyword, the search results are displayed on Quick Picker.
 * Open by selecting a file and move the cursor to the corresponding line and column
@@ -79,6 +83,10 @@ Options to use:
 ## About the configuration file
 
 If configuration files and directories do not exist, they are automatically created for the first time.
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_Initialize.png)
+
+
 This file can also be used as it is with the memo command.
 
 ```yaml
