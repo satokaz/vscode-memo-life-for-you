@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.2.3
+
+* Fixed a problem that memo directory can not be created correctly due to upgrade of tomlify-j0.4. revert to 2.2.1
+
 # 0.2.2 
 
 * default memodir was wrong. Correctly `_posts` 
