@@ -284,6 +284,7 @@ class Memo {
             }
         }).then(function (selected) {   // When selected with the mouse
             if (selected == null) {
+                vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
             vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document => {
@@ -433,6 +434,7 @@ class Memo {
                 }).then((selected) => {   // When selected with the mouse
                     if (selected == undefined || null) {
                         dimDecoration.dispose();
+                        vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                         return void 0;
                     }
                     vscode.workspace.openTextDocument(selected.detail).then(document => {
