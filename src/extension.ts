@@ -250,12 +250,17 @@ class Memo {
                 break;
             }
 
-            let array = fs.readFileSync(path.normalize(path.join(this.memodir, list[index]))).toString().split("\n");
+            let filename = path.normalize(path.join(this.memodir, list[index]));
+
+            let statBirthtime = dateFns.format(fs.statSync(filename).birthtime, 'MMM DD HH:mm, YYYY ');
+            // console.log('birthtime =', statBirthtime);
+
+            let array = fs.readFileSync(filename).toString().split("\n");
 
             items.push({
                 "label": list[index],
                 "description": array[0],
-                "detail": "" });
+                "detail": statBirthtime });
 
             this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
