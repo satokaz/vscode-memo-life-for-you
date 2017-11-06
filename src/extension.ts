@@ -31,19 +31,6 @@ export function activate(context: vscode.ExtensionContext) {
 export function deactivate() {
 }
 
-// unused
-export enum MemoConfig {
-    MemoDir = "memodir",
-	Editor = "editor",
-	Column = "column",
-	SelectCmd = "selectcmd",
-	GrepCmd = "grepcmd",
-	AssetsDir = "assetsdir",
-	PluginsDir = "pluginsdir",
-	TemplateDirFile = "templatedirfile",
-	TemplateBodyFile = "templatebodyfile"
-};
-
 /**
  * config.toml を作るための interface
  */
@@ -113,7 +100,8 @@ class Memo {
 
         // 選択されているテキストを取得
         // エディタが一つも無い場合は、エラーになるので対処しておく
-        let selectString: String = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection) : "";
+        let editor = vscode.window.activeTextEditor;
+        let selectString: String = editor ? editor.document.getText(editor.selection) : "";
     
         vscode.window.showInputBox({
             placeHolder: 'Please Enter a Filename',
@@ -186,7 +174,8 @@ class Memo {
         
         // 選択されているテキストを取得
         // エディタが一つも無い場合は、エラーになるので対処しておく
-        let selectString: String = vscode.window.activeTextEditor ? vscode.window.activeTextEditor.document.getText(vscode.window.activeTextEditor.selection) : "";
+        let editor = vscode.window.activeTextEditor;
+        let selectString: String = editor ? editor.document.getText(editor.selection) : "";
         
         vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
@@ -224,7 +213,6 @@ class Memo {
 
         this.memoListChannel.clear();
         try {
-            // list = cp.execSync(`${this.memopath} list`, this.cp_options).toString().split('\n');
             list = fs.readdirSync(this.memodir, this.cp_options);
         } catch(err) {
             console.log(err);
@@ -236,7 +224,7 @@ class Memo {
         });
         
         // 新しいものを先頭にするための sort  
-        list.sort(function(a,b) {
+        list = list.sort(function(a,b) {
             return (a < b ? 1 : -1);
         });
                 
@@ -279,7 +267,8 @@ class Memo {
                     return void 0;
                 }
                 // console.log(selected.label);
-                vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document=>{
+                let filename = path.normalize(path.join(memodir, selected.label));
+                vscode.workspace.openTextDocument(filename).then(document=>{
                     vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
@@ -312,7 +301,7 @@ class Memo {
 
     public Grep() {
         let items: items[] = [];
-        let dimDecoration: vscode.TextEditorDecorationType;
+        let grepDecoration: vscode.TextEditorDecorationType;
         
         this.readConfig(); 
         
@@ -410,12 +399,12 @@ class Memo {
                                 editor.selection = new vscode.Selection(newPosition, newPosition);
 
                                 // highlight decoration
-                                if (dimDecoration) {
-                                    dimDecoration.dispose();
+                                if (grepDecoration) {
+                                    grepDecoration.dispose();
                                 }
                                 let startPosition = new vscode.Position(Number(selected.ln) - 1 , 0);
                                 let endPosition = new vscode.Position(Number(selected.ln), 0);
-                                dimDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
+                                grepDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
                                     isWholeLine: true,
                                     // outline: 'solid',
                                     // outlineWidth: '1px',
@@ -429,7 +418,7 @@ class Memo {
                                     gutterIconSize: '90%',
                                     backgroundColor: "rgba(244, 155, 66, 0.5)"
                                 }); 
-                                editor.setDecorations(dimDecoration, [new vscode.Range(startPosition, startPosition)]);
+                                editor.setDecorations(grepDecoration, [new vscode.Range(startPosition, startPosition)]);
 
                                 // カーソル位置までスクロール
                                 editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
@@ -438,7 +427,7 @@ class Memo {
                     }
                 }).then((selected) => {   // When selected with the mouse
                     if (selected == undefined || null) {
-                        dimDecoration.dispose();
+                        grepDecoration.dispose();
                         vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                         return void 0;
                     }
@@ -459,7 +448,7 @@ class Memo {
                         });
                     });
                     // ファイルを選択した後に、decoration を消す
-                    dimDecoration.dispose();
+                    grepDecoration.dispose();
                 });
             });
     }
