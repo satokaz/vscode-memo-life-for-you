@@ -63,6 +63,7 @@ class Memo {
     private memoISOWeek: boolean;
     private memoEmoji: boolean;
     private memoConfig = [];    
+    private memoEditDispBtime: boolean = false;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -240,7 +241,7 @@ class Memo {
 
             let filename = path.normalize(path.join(this.memodir, list[index]));
 
-            let statBirthtime = dateFns.format(fs.statSync(filename).birthtime, 'MMM DD HH:mm, YYYY ');
+            let statBirthtime = this.memoEditDispBtime ? dateFns.format(fs.statSync(filename).birthtime, 'MMM DD HH:mm, YYYY ') : "";
             // console.log('birthtime =', statBirthtime);
 
             let array = fs.readFileSync(filename).toString().split("\n");
@@ -597,5 +598,6 @@ class Memo {
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');
         this.memoEmoji = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertEmoji');
+        this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('diplayFileBirthTime');
     }
 }
