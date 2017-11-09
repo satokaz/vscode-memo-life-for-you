@@ -50,6 +50,7 @@ interface IMemoConfig {
 interface items extends vscode.QuickPickItem {
     ln: string;
     col: string;
+    index: number;
 }
 
 class Memo {
@@ -60,8 +61,8 @@ class Memo {
     public  memodir: string;
     private memoconfdir: string;
     private memoDateFormat: string;
-    private memoISOWeek: boolean;
-    private memoEmoji: boolean;
+    private memoISOWeek: boolean = false;
+    private memoEmoji: boolean = false;
     private memoConfig = [];    
     private memoEditDispBtime: boolean = false;
 
@@ -365,7 +366,8 @@ class Memo {
                         "description": "",
                         "detail": filename,
                         "ln": line,
-                        "col": col
+                        "col": col,
+                        "index": index
                     });
 
                     this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + result);
@@ -598,6 +600,6 @@ class Memo {
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');
         this.memoEmoji = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertEmoji');
-        this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('diplayFileBirthTime');
+        this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
     }
 }
