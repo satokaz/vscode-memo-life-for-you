@@ -44,8 +44,10 @@
       },
       {
         "command": "extension.memoServe",
-        "title": "Serve",
-        "category": "Memo"
+      {
+        "command": "extension.memoReDate",
+        "title": "%extension.memoReDate.title%"
+      }
       },
       {
         "command": "extension.memoQuick",
