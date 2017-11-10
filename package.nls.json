@@ -1,0 +1,18 @@
+{
+    "extension.memoNew.title": "Memo: New",
+    "extension.memoEdit.title": "Memo: List/Edit",
+    "extension.memoQuick.title": "Memo: Today's quick Memo",
+    "extension.memoGrep.title": "Memo: Grep",
+    "extension.memoServe.title": "Memo: Serve",
+    "extension.memoConfig.title": "Memo: Config",    
+    "extension.memoReDate.title": "Memo: Re:Date",
+    "memoPath.desc": "Absolute path to the memo command",
+    "serve-addr.desc": "Specify port number to `Memo: Serve`",
+    "dateFormat.desc": "Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format",
+    "insertISOWeek.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts ISO Week number in the title",
+    "insertEmoji.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts random-emoji in the title",
+    "gutterIconPath.desc": "When executing `Memo: Grep`, the PATH to the icon displayed in the gutter",
+    "gutterIconSize.desc": "When executing `Memo: Grep`, the size of icon displayed in gutter (default: 100%)",
+    "displayFileBirthTime.desc": "Display birthtime of file in `Memo: Edit` additionally",
+    "enterFilename": "Please Enter a Filename"
+}
