@@ -24,65 +24,106 @@
     "commands": [
       {
         "command": "extension.memoNew",
-        "title": "New",
-        "category": "Memo"
+        "title": "%extension.memoNew.title%"
       },
       {
         "command": "extension.memoEdit",
-        "title": "Edit",
-        "category": "Memo"
+        "title": "%extension.memoEdit.title%"
+      },
+      {
+        "command": "extension.memoQuick",
+        "title": "%extension.memoQuick.title%"
       },
       {
         "command": "extension.memoGrep",
-        "title": "Grep",
-        "category": "Memo"
+        "title": "%extension.memoGrep.title%"
       },
       {
         "command": "extension.memoConfig",
-        "title": "Config",
-        "category": "Memo"
+        "title": "%extension.memoConfig.title%"
       },
       {
+        "when": "!config.memo-life-for-you.memoPath",
         "command": "extension.memoServe",
+        "title": "%extension.memoServe.title%"
+      },
       {
         "command": "extension.memoReDate",
         "title": "%extension.memoReDate.title%"
       }
+    ],
+    "menus": {
+      "editor/title": [
+        {
+          "command": "extension.memoGrep",
+          "group": "navigation@1120"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "extension.memoNew",
+          "title": "Memo: New",
+          "group": "memo@1"
+        },
+        {
+          "command": "extension.memoEdit",
+          "group": "memo@2"
       },
       {
         "command": "extension.memoQuick",
-        "title": "Today's quick Memo",
-        "category": "Memo"
+          "group": "memo@3"
+        },
+        {
+          "command": "extension.memoGrep",
+          "group": "memo@4"
+        },
+        {
+          "command": "extension.memoServe",
+          "group": "memo@5"
       }
-    ],
+      ]
+    },
     "configuration": {
-      "type": "object",
       "title": "memo-life-for-you",
-      "order": 20,
       "properties": {
         "memo-life-for-you.memoPath": {
           "type": "string",
           "default": "",
-          "description": ""
+          "description": "%memoPath.desc%"
         },
         "memo-life-for-you.serve-addr": {
           "type": "string",
           "default": "8080",
-          "description": "Specify port number to Memo: Serve"
+          "description": "%serve-addr.desc%"
         },
         "memo-life-for-you.dateFormat": {
           "type": "string",
           "default": "YYYY-MM-DD ddd HH:mm",
-          "description": "Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format"
+          "description": "%dateFormat.desc%"
         },
         "memo-life-for-you.insertISOWeek": {
           "type": "boolean",
           "default": false,
-          "description": ""
+          "description": "%insertISOWeek.desc%"
         },
         "memo-life-for-you.insertEmoji": {
           "type": "boolean",
           "default": false,
+          "description": "%insertEmoji.desc%"
+        },
+        "memo-life-for-you.displayFileBirthTime": {
+          "type": "boolean",
+          "default": false,
+          "description": "%displayFileBirthTime.desc%"
+        },
+        "memo-life-for-you.grepLineBackgroundColor": {
+          "type": "string",
+          "default": "#224C5F",
+          "description": ""
+        },
+        "memo-life-for-you.grepKeywordBackgroundColor": {
+          "type": "string",
+          "default": "#0066ff",
           "description": ""
         }
       }
@@ -96,17 +137,26 @@
     "test": "npm run compile && node ./node_modules/vscode/bin/test"
   },
   "devDependencies": {
-    "@types/mocha": "^2.2.42",
+    "@types/mocha": "^2.2.44",
     "@types/node": "^7.0.43",
-    "mocha": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-typescript": "^3.2.3",
+    "mocha": "^4.0.1",
     "tslint": "^5.8.0",
-    "typescript": "^2.5.2",
-    "vscode": "^1.1.6"
+    "typescript": "^2.6.1",
+    "vscode": "^1.1.6",
+    "vscode-nls-dev": "^2.1.5",
+    "del": "^3.0.0",
+    "event-stream": "^3.3.4",
+    "gulp-filter": "^5.0.1",
+    "run-sequence": "^2.2.0",
+    "vsce": "^1.32.0"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
     "fs-extra": "^4.0.2",
     "random-emoji": "^1.0.2",
-    "tomlify-j0.4": "^2.2.1"
+    "tomlify-j0.4": "^2.2.1",
+    "vscode-nls": "^2.0.2"
   }
 }
