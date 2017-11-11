@@ -101,6 +101,10 @@ class Memo {
         let file: string;
         let dateFormat = this.memoDateFormat;
 
+        if(this.memopath == "") {
+            return;
+        }
+
         // 選択されているテキストを取得
         // エディタが一つも無い場合は、エラーになるので対処しておく
         let editor = vscode.window.activeTextEditor;
