@@ -2,7 +2,7 @@
 
 [Japanese README is here](https://github.com/satokaz/vscode-memo-life-for-you/blob/master/README_ja.md)
 
-This extension is for writing notes on VS Code.
+This extension is for writing notes in the markdown format to the VS code.
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
 
@@ -23,9 +23,10 @@ The following commands are supported.
 * `Memo: Config` - configure (memo command is not necessary)
 * `Memo: Serve` - start http server (Requires memo command)
 
-Unique command:
+Unique command (memo command is not necessary):
 
-* `Memo: Today's quick Memo` (memo command is not necessary)
+* `Memo: Today's quick Memo` - Append to the file of today's date
+* `Memo: Re:Date` - Change the date included in the file name to today's date
 
 ### Memo: New
 
@@ -33,6 +34,7 @@ Unique command:
 * When you press enter with empty, create a file with `YY-MM-DD.md`. If a file with the same name already exists, it opens the file without overwriting it. 
 * When text is selected on the editor and the command is executed, it can be used for title and file name.
 * The file is opened to the VS Code instance that executed the `Memo: Edit` command.
+* Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`
 
 ### Memo: Today's quick Memo
 
@@ -86,7 +88,6 @@ If configuration files and directories do not exist, they are automatically crea
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_Initialize.png)
 
-
 This file can also be used as it is with the memo command.
 
 ```yaml
@@ -129,12 +130,14 @@ templatedirfile = ""
 templatebodyfile = ""
 ```
 
+[Better&#32;TOML&#32;-&#32;Visual&#32;Studio&#32;Marketplace](https://marketplace.visualstudio.com/items?itemName=bungcip.better-toml): Recommend to handle TOML file Extension
+
 > **For windows:** From the memo command, I do not know how to write the path to execute ripgrep that is included in VS Code. Therefore, it is necessary to set the grep command individually in Windows environment.
 (ripgrep command path: `c:\Program Files\Microsoft VS Code Insiders\resources\app\node_modules\vscode-ripgrep\bin\rg`)
 
 ### About the memo command
 
-If you use Serve command. This extension requires the memo command to work correctly.
+If you use Serve command, This extension requires the memo command to work correctly.
 
 * `memo` should be installed already
    * [memo (Memo Life For You)](https://github.com/mattn/memo)
@@ -151,6 +154,10 @@ This extension contributes the following settings:
 * `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
+* `memo-life-for-you.displayFileBirthTime`: Display birthtime of file in `Memo: Edit` additionally (default: false)
+* `memo-life-for-you.grepLineBackgroundColor`: Search results show keyword background color
+* `memo-life-for-you.grepKeywordBackgroundColor`: Search results show line background color
+* `memo-life-for-you.openMarkdownPreview`: Open Markdown Preview at the same time as opening the file in the editor (default: false)
 
 ## Known Issues
 
