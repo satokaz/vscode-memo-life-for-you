@@ -9,7 +9,7 @@ import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
 import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
-import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
+// import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
@@ -34,33 +34,33 @@ export function activate(context: vscode.ExtensionContext) {
     }));
 
     //Markdown
-	let provider = new MDDocumentContentProvider(context);
-    let registration = vscode.workspace.registerTextDocumentContentProvider('markdown', provider);
+// 	let provider = new MDDocumentContentProvider(context);
+//     let registration = vscode.workspace.registerTextDocumentContentProvider('markdown', provider);
 
-    context.subscriptions.push(vscode.commands.registerCommand('extension.MemoshowPreviewToSide', uri => showPreview(uri, true)));
+//     context.subscriptions.push(vscode.commands.registerCommand('extension.MemoshowPreviewToSide', uri => showPreview(uri, true)));
 
-    vscode.workspace.onDidSaveTextDocument(document => {
-		if (isMarkdownFile(document)) {
-			const uri = getMarkdownUri(document.uri);
-			provider.update(uri);
-}
-    });
-    vscode.workspace.onDidChangeTextDocument(event => {
-		if (isMarkdownFile(event.document)) {
-			const uri = getMarkdownUri(event.document.uri);
-			provider.update(uri);
+//     vscode.workspace.onDidSaveTextDocument(document => {
+// 		if (isMarkdownFile(document)) {
+// 			const uri = getMarkdownUri(document.uri);
+// 			provider.update(uri);
+// }
+//     });
+//     vscode.workspace.onDidChangeTextDocument(event => {
+// 		if (isMarkdownFile(event.document)) {
+// 			const uri = getMarkdownUri(event.document.uri);
+// 			provider.update(uri);
 
-		}
-	});
+// 		}
+// 	});
 
-	vscode.workspace.onDidChangeConfiguration(() => {
-		vscode.workspace.textDocuments.forEach(document => {
-			if (document.uri.scheme === 'markdown') {
-				// update all generated md documents
-				provider.update(document.uri);
-			}
-		});
-	});
+// 	vscode.workspace.onDidChangeConfiguration(() => {
+// 		vscode.workspace.textDocuments.forEach(document => {
+// 			if (document.uri.scheme === 'markdown') {
+// 				// update all generated md documents
+// 				provider.update(document.uri);
+// 			}
+// 		});
+// 	});
     // Markdown
 }
 
@@ -319,7 +319,7 @@ class Memo {
             items.push({
                 "label": list[index],
                 "description": array[0],
-                "detail": localize('editBirthTime', 'Create date: {0}', statBirthtime)
+                "detail": this.memoEditDispBtime ? localize('editBirthTime', 'Create date: {0}', statBirthtime) : ""
              });
 
             this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
