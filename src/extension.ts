@@ -526,6 +526,14 @@ class Memo {
      * Serve
      */
     public Serve() {
+        // memopath に設定されたコマンドが実行可能かチェック
+        try{
+            cp.execSync(this.memopath);
+        } catch(err) {
+            // console.log(err);
+            vscode.window.showErrorMessage(localize('serveCheck', 'memo command can not be executed'));
+            return;
+        }
         // console.log(`serve --addr :` + `${this.memoaddr}`);
         let proc = cp.spawn(`${this.memopath}`, ['serve', '--addr', `:${this.memoaddr}`], {
             stdio: ['inherit'],
