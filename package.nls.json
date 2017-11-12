@@ -14,5 +14,7 @@
     "gutterIconPath.desc": "When executing `Memo: Grep`, the PATH to the icon displayed in the gutter",
     "gutterIconSize.desc": "When executing `Memo: Grep`, the size of icon displayed in gutter (default: 100%)",
     "displayFileBirthTime.desc": "Display birthtime of file in `Memo: Edit` additionally",
-    "enterFilename": "Please Enter a Filename"
+    "withRespectMode.desc": "Change appearance of search results. © 2011 Microsoft Corporation All Rights Reserved.」",
+    "grepLineBackgroundColor.desc": "Background color of search result keywords",
+    "grepKeywordBackgroundColor.desc": "Background color of line containing search result keywords"
 }

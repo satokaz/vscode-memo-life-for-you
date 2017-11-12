@@ -283,7 +283,8 @@ class Memo {
             items.push({
                 "label": list[index],
                 "description": array[0],
-                "detail": statBirthtime });
+                "detail": localize('editBirthTime', 'Create date: {0}', statBirthtime)
+             });
 
             this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
@@ -668,7 +669,7 @@ class Memo {
                 fse.pathExists(path.normalize(path.join(this.memoconfdir, "config.toml")), (err, exists) => {
                     if (!exists) {
                         fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir));
-                        vscode.window.showInformationMessage(localize('createConfigFile', "vscode memo life for you: " + `${path.normalize(path.join(this.memoconfdir, "config.toml"))}` + " created"));
+                        vscode.window.showInformationMessage(localize('createConfigFile', "vscode memo life for you: {0} created", path.normalize(path.join(this.memoconfdir, "config.toml"))));
                     }
                 });
             }

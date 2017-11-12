@@ -140,17 +140,18 @@
         },
         "memo-life-for-you.withRespectMode": {
           "type": "boolean",
-          "default": false
+          "default": false,
+          "description": "%withRespectMode.desc%"
         },
         "memo-life-for-you.grepLineBackgroundColor": {
           "type": "string",
           "default": "#224C5F",
-          "description": ""
+          "description": "%grepLineBackgroundColor.desc%"
         },
         "memo-life-for-you.grepKeywordBackgroundColor": {
           "type": "string",
           "default": "#0066ff",
-          "description": ""
+          "description": "%grepKeywordBackgroundColor.desc%"
         }
       }
     }
