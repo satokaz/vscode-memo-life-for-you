@@ -1,0 +1,18 @@
+{
+    "extension.memoNew.title": "Memo: 新規作成",
+    "extension.memoEdit.title": "Memo:リスト/編集",
+    "extension.memoQuick.title": "Memo: 今日のメモ",
+    "extension.memoGrep.title": "Memo: 検索",
+    "extension.memoServe.title": "Memo: サーブ",
+    "extension.memoConfig.title": "Memo: 設定",
+    "extension.memoReDate.title": "Memo: ファイル名の日付を最新に変更",
+    "memoPath.desc": "Absolute path to the memo command",
+    "serve-addr.desc": "Specify port number to `Memo: Serve`",
+    "dateFormat.desc": "Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format",
+    "insertISOWeek.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts ISO Week number in the title",
+    "insertEmoji.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts random-emoji in the title",
+    "gutterIconPath.desc": "When executing `Memo: Grep`, the PATH to the icon displayed in the gutter",
+    "gutterIconSize.desc": "When executing `Memo: Grep`, the size of icon displayed in gutter (default: 100%)",
+    "displayFileBirthTime.desc": "Display birthtime of file in `Memo: Edit` additionally",
+    "enterFilename": "ファイル名を入力してください Please Enter a Filename"
+}

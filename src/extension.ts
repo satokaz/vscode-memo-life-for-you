@@ -8,7 +8,9 @@ import * as path from 'path';
 import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
 import * as tomlify from 'tomlify-j0.4';
+import * as nls from 'vscode-nls';
 
+const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
     // console.log(vscode.env);
@@ -108,7 +110,17 @@ class Memo {
         let file: string;
         let dateFormat = this.memoDateFormat;
 
-        if(this.memopath == "") {
+        if(!this.memodir) {
+            vscode.window.showErrorMessage(localize('memodirCheck', 'memodir is not set in config.toml'));
+            return;
+        }
+
+        // memodir に設定されたディレクトりが実際に存在するかチェック
+        try{
+            fs.statSync(this.memodir);
+        } catch(err) {
+            // console.log(err);
+            vscode.window.showErrorMessage(localize('memodirAccessCheck', 'The directory set in memodir does not exist'));
             return;
         }
 
@@ -118,7 +130,7 @@ class Memo {
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
     
         vscode.window.showInputBox({
-            placeHolder: 'Please Enter a Filename',
+            placeHolder: localize('enterFileanme', 'Please Enter a Filename'),
             // prompt: "",
             value: `${selectString.substr(0,49)}`,
             ignoreFocusOut: true
@@ -246,7 +258,6 @@ class Memo {
         });
                 
         // console.log('list =', list);
-        let items: vscode.QuickPickItem[] = [];
 
         for (let index = 0; index < list.length; index++) {
             let v = list[index];
@@ -278,7 +289,7 @@ class Memo {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
-            placeHolder: 'Please select or enter a filename...' + `(All items: ${items.length})`,
+            placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Todya\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
             onDidSelectItem: async (selected:vscode.QuickPickItem) => {
                 if (selected == null) {
                     return void 0;
@@ -325,10 +336,8 @@ class Memo {
         
         this.readConfig(); 
         
-        let list: string[];
-
         vscode.window.showInputBox({
-            placeHolder: 'Please enter a keyword',
+            placeHolder: localize('grepEnterKeyword', 'Please enter a keyword'),
             // prompt: "",
             ignoreFocusOut: true
         }).then((keyword) => {
@@ -351,9 +360,7 @@ class Memo {
                         stdio: ['inherit']
                     }).toString().split('\n');
                 } catch(err) {
-                    // console.log(err);
-                    vscode.window.showErrorMessage("There is no result.");
-                    return void 0;
+                                vscode.window.showErrorMessage(localize('grepNoResult', 'There is no result.'));
                 }
 
                 // console.log('list =', list);
@@ -397,7 +404,7 @@ class Memo {
                     ignoreFocusOut: true,
                     matchOnDescription: true,
                     matchOnDetail: true,
-                    placeHolder: 'grep Result: ' + `${keyword} ... (Number of results: ${items.length})`,
+                    placeHolder: localize('grepResult', 'grep Result: {0} ... (Number of results: {1})', keyword, items.length),
                     onDidSelectItem: async (selected: items) => {
                         if (selected == null || "") {
                             return void 0;
@@ -601,7 +608,7 @@ class Memo {
 
                     vscode.window.showInformationMessage(localize('reDateUpdateToda', 'Updated file name to today\'s date: {0}', newFilename), { modal: true },
                     {
-                        title: localize('close', '閉じる'),
+                        title: localize('close', 'Close'),
                         isCloseAffordance: true
                     });
                 break;
@@ -636,13 +643,13 @@ class Memo {
                 fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, '_posts')), {mode: 0o700});
                 fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, 'plugins')), {mode: 0o700});
                 fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir), {mode: 0o600});
-                vscode.window.showInformationMessage("vscode memo life for you: " + `${this.memoconfdir}` + " directory created");;
+                vscode.window.showInformationMessage(localize('createConfig', 'vscode memo life for you: {0} directory created', this.memoconfdir));
             } else {
                 // config.toml が存在しているかチェック
                 fse.pathExists(path.normalize(path.join(this.memoconfdir, "config.toml")), (err, exists) => {
                     if (!exists) {
                         fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir));
-                        vscode.window.showInformationMessage("vscode memo life for you: " + `${path.normalize(path.join(this.memoconfdir, "config.toml"))}` + " created");
+                        vscode.window.showInformationMessage(localize('createConfigFile', "vscode memo life for you: " + `${path.normalize(path.join(this.memoconfdir, "config.toml"))}` + " created"));
                     }
                 });
             }
