@@ -79,9 +79,9 @@
         {
           "command": "extension.memoEdit",
           "group": "memo@2"
-      },
-      {
-        "command": "extension.memoQuick",
+        },
+        {
+          "command": "extension.memoQuick",
           "group": "memo@3"
         },
         {
@@ -92,7 +92,7 @@
         {
           "command": "extension.memoServe",
           "group": "memo@5"
-      }
+        }
       ]
     },
     "configuration": {
