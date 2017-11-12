@@ -16,5 +16,6 @@
     "displayFileBirthTime.desc": "`Memo:リスト/編集` の情報にファイル作成日を追加表示します。",
     "withRespectMode.desc": "検索結果のアイコンを敬意を込めたアイコンへ変更します。© 2011 Microsoft Corporation All Rights Reserved.」",
     "grepLineBackgroundColor.desc": "検索結果のキーワードの背景色",
-    "grepKeywordBackgroundColor.desc": "検索結果のキーワードを含む行の背景色"
+    "grepKeywordBackgroundColor.desc": "検索結果のキーワードを含む行の背景色",
+    "openMarkdownPreview.desc": "エディタでファイル開くと同時に Markdown Preview を開きます"
 }

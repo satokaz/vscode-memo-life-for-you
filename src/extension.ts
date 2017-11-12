@@ -76,6 +76,7 @@ class Memo {
     private memoEditDispBtime: boolean = false;
     private memoGrepLineBackgroundColor: string;
     private memoGrepKeywordBackgroundColor: string;
+    private memoEditOpenMarkdown: boolean;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -293,6 +294,7 @@ class Memo {
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
 
+        let mdPreview = this.memoEditOpenMarkdown;
         vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
@@ -322,6 +324,12 @@ class Memo {
                         viewColumn: 1,
                         preserveFocus: true,
                         preview: true
+                    }).then(editor => {
+                        if (mdPreview) {
+                            // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
+                                vscode.commands.executeCommand('markdown.showPreviewToSide');
+                            // });
+                        }
                     });
             });
         });
@@ -757,6 +765,7 @@ class Memo {
         this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
         this.memoGrepLineBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepLineBackgroundColor');
         this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
+        this.memoEditOpenMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreview');
     }
 
     get onDidChange() {

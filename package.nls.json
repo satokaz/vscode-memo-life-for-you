@@ -16,5 +16,6 @@
     "displayFileBirthTime.desc": "Display birthtime of file in `Memo: Edit` additionally",
     "withRespectMode.desc": "Change appearance of search results. © 2011 Microsoft Corporation All Rights Reserved.」",
     "grepLineBackgroundColor.desc": "Background color of search result keywords",
-    "grepKeywordBackgroundColor.desc": "Background color of line containing search result keywords"
+    "grepKeywordBackgroundColor.desc": "Background color of line containing search result keywords",
+    "openMarkdownPreview.desc": "Open Markdown Preview at the same time as opening the file in the editor"
 }

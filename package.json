@@ -145,13 +145,18 @@
         },
         "memo-life-for-you.grepLineBackgroundColor": {
           "type": "string",
-          "default": "#224C5F",
+          "default": "rgba(244, 65, 92, 0.6)",
           "description": "%grepLineBackgroundColor.desc%"
         },
         "memo-life-for-you.grepKeywordBackgroundColor": {
           "type": "string",
-          "default": "#0066ff",
+          "default": "rgba(255, 225, 0, 0.7)",
           "description": "%grepKeywordBackgroundColor.desc%"
+        },
+        "memo-life-for-you.openMarkdownPreview": {
+          "type": "boolean",
+          "default": false,
+          "description": "%openMarkdownPreview.desc%"
         }
       }
     }
