@@ -22,6 +22,7 @@
 ユニークなコマンド:
 
 * `Memo: Today's quick Memo` - `YY-MM-DD.md` ファイルに追記 (memo command is not necessary)
+* `Memo: Re:Date` - ファイル名に含まれた日付 (YY-MM-DD) を今日の日付に変更する
 
 ### Memo: New
 
@@ -29,6 +30,7 @@
 * QuickInput に何も入力せずに Enter を押した場合、日付をベースにした `YY-MM-DD.md` ファイルが作成されます。もし、同じ日付けのファイル名がすでに存在している場合は、上書きせずにそのファイルを開きます
 * また、エディタ上で文字列を選択してから、このコマンドを実行すると、選択された文字列がタイトルとファイル名に利用されます
 * ファイルは、`Memo: New` コマンドを実行した VS Code インスタンス上で開きます
+* オプション `memo-life-for-you.openMarkdownPreview` を設定することで Markdown Preview を同時に表示することも可能
 
 ### Memo: Today's quick Memo
 
@@ -137,6 +139,10 @@ templatebodyfile = ""
 * `"memo-life-for-you.dateFormat"`: date-fns のフォーマット形式 See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: "Memo: Today's quick Memo" コマンド実行時に挿入されるタイトルに ISO Week を追加します
 * `memo-life-for-you.insertEmoji`: "Memo: Today's quick Memo" コマンド実行時に挿入されるタイトルに random-Emoji を追加します
+* `memo-life-for-you.displayFileBirthTime`: `Memo:リスト/編集` の情報に、ファイル作成日を追加表示します。(default: false)
+* `memo-life-for-you.grepLineBackgroundColor`: 検索結果のキーワードの背景色
+* `memo-life-for-you.grepKeywordBackgroundColor`: 検索結果のキーワードを含む行の背景色
+* `memo-life-for-you.openMarkdownPreview`: エディタでファイル開くと同時に Markdown Preview を開きます (default: false)
 
 ## Known Issues
 
