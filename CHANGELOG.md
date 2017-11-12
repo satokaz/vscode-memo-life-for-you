@@ -2,6 +2,19 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.2.7
+
+* `Memo: Re:Date` - Added command to update old date filename to latest date filename
+* `Memo: Edit` - Change command name to `Memo: List/Edit`
+* Display file creation date in `memo: List/Edit`
+* Add menu localization (Japanese only)
+* `Memo: Edit` - Display birthtime of file 
+* Add `Memo Re:Date` command
+* Add message localization
+* Add specify gutter icon path and size when displaying search results
+* Add withRespect mode
+* Add option to display Markdown Preview when selecting and opening a file
+
 # 0.2.6
 
 * Sorry to update frequently!
