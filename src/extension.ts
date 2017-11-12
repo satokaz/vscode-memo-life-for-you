@@ -52,6 +52,7 @@ interface items extends vscode.QuickPickItem {
     ln: string;
     col: string;
     index: number;
+    filename: string;
 }
 
 class Memo {
@@ -65,7 +66,12 @@ class Memo {
     private memoISOWeek: boolean = false;
     private memoEmoji: boolean = false;
     private memoConfig = [];    
+    private memoGutterIconPath: string;
+    private memoGutterIconSize: string;
+    private memoWithRespectMode: boolean = false;
     private memoEditDispBtime: boolean = false;
+    private memoGrepLineBackgroundColor: string;
+    private memoGrepKeywordBackgroundColor: string;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -98,6 +104,7 @@ class Memo {
      */
     public New() {
         this.readConfig(); 
+
         let file: string;
         let dateFormat = this.memoDateFormat;
 
@@ -117,15 +124,16 @@ class Memo {
             ignoreFocusOut: true
         }).then(
             (title) => {
-                if (title == undefined) {
+                if (title == undefined) { // キャンセル処理: ESC を押した時に undefined になる
                     return void 0;
                 }
 
+                let dateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
+
                 if (title == "") {
-                    // file = dateFormat + ".md";
-                    file = dateFns.format(new Date(), 'YYYY-MM-DD') + ".md";
+                    file = dateFormat + ".md";
                 } else {
-                    file = dateFns.format(new Date(), 'YYYY-MM-DD') + '-' + title
+                    file = dateFormat + '-' + title
                     .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                     .replace(/--+/g ,'') + ".md";
                 }
@@ -134,13 +142,13 @@ class Memo {
                 try {
                     fs.statSync(file);
                 } catch(err) {
-                    fs.writeFileSync(file, "# " + dateFns.format(new Date(), 'YYYY-MM-DD') + " " + `${title}` + "\n\n");
+                    fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + "\n\n");
                 }
 
                 vscode.workspace.openTextDocument(file).then(document=>{
                         vscode.window.showTextDocument(document, {
                             viewColumn: 1,
-                            preserveFocus: false,
+                            preserveFocus: false, // focus を開いたエディタへ移行させるために false を設定
                             preview: true
                         }).then(document => {
                             // カーソルを目的の行に移動させて表示する為の処理
@@ -162,6 +170,7 @@ class Memo {
      */
     public QuickNew() {
         this.readConfig(); 
+
         let file: string;
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
@@ -170,8 +179,7 @@ class Memo {
         // console.log(getISOWeek);
         // console.log(getEmoji);
         
-        file = dateFns.format(new Date(), 'YYYY-MM-DD') + ".md";
-        file = path.normalize(path.join(this.memodir, file));
+        file = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'YYYY-MM-DD') + ".md"));
 
         try {
             fs.statSync(file);
@@ -194,7 +202,6 @@ class Memo {
                 var newPosition = position.with(editor.document.lineCount + 1 , 0);
                 editor.selection = new vscode.Selection(newPosition, newPosition);
                     vscode.window.activeTextEditor.edit(function (edit) {
-                        
                         edit.insert(newPosition,
                             "\n" + "## "
                             + getISOWeek
@@ -202,9 +209,10 @@ class Memo {
                             + dateFns.format(new Date(), `${dateFormat}`)
                             + " " + `${selectString.substr(0,49)}`
                             + "\n\n");
-                    });
+                    }).then(() => {
                 editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
             });
+        });
         });
     }
 
@@ -216,9 +224,11 @@ class Memo {
         let memopath = this.memopath;
         let memodir = this.memodir;
         let list: string[];
+        let items: vscode.QuickPickItem[] = [];
         // console.log("memodir = ", memodir)
 
         this.memoListChannel.clear();
+
         try {
             list = fs.readdirSync(this.memodir, this.cp_options);
         } catch(err) {
@@ -308,7 +318,10 @@ class Memo {
 
     public Grep() {
         let items: items[] = [];
-        let grepDecoration: vscode.TextEditorDecorationType;
+        let list: string[] = [];
+        let grepLineDecoration: vscode.TextEditorDecorationType;
+        let grepKeywordDecoration: vscode.TextEditorDecorationType;
+        const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
         
         this.readConfig(); 
         
@@ -318,8 +331,7 @@ class Memo {
             placeHolder: 'Please enter a keyword',
             // prompt: "",
             ignoreFocusOut: true
-        }).then(
-            (keyword) => {
+        }).then((keyword) => {
                 if(keyword == undefined || "") {
                     return void 0;
                 }
@@ -367,12 +379,13 @@ class Memo {
                     // console.log("result =", result);
                     
                     items.push({
-                        "label": 'Ln: ' + line + ", Col: " + col + " " + result,
-                        "description": "",
-                        "detail": filename,
+                        "label": localize('grepResultLabel', '{0} - Ln:{1} Col:{2}', index, line, col),
+                        "description": result,
+                        "detail": path.basename(filename),
                         "ln": line,
                         "col": col,
-                        "index": index
+                        "index": index,
+                        "filename": filename
                     });
 
                     this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + result);
@@ -380,7 +393,7 @@ class Memo {
                     this.memoGrepChannel.appendLine('');
                 });
                 
-                vscode.window.showQuickPick(items, {
+                vscode.window.showQuickPick<items>(items, {
                     ignoreFocusOut: true,
                     matchOnDescription: true,
                     matchOnDetail: true,
@@ -392,12 +405,12 @@ class Memo {
                         // console.log('selected.label =', selected.label);
                         // console.log('selected =', selected)
 
-                        vscode.workspace.openTextDocument(selected.detail).then(document => {
+                        vscode.workspace.openTextDocument(selected.filename).then(document => {
                             vscode.window.showTextDocument(document, {
                                 viewColumn: 1,
                                 preserveFocus: true,
                                 preview: true
-                            }).then(async document => {
+                            }).then(document => {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
@@ -407,26 +420,32 @@ class Memo {
                                 editor.selection = new vscode.Selection(newPosition, newPosition);
 
                                 // highlight decoration
-                                if (grepDecoration) {
-                                    grepDecoration.dispose();
+                                if (grepLineDecoration && grepKeywordDecoration) {
+                                    grepLineDecoration.dispose();
+                                    grepKeywordDecoration.dispose();
                                 }
+
                                 let startPosition = new vscode.Position(Number(selected.ln) - 1 , 0);
                                 let endPosition = new vscode.Position(Number(selected.ln), 0);
-                                grepDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
+
+                                // Line Decoration
+                                grepLineDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
                                     isWholeLine: true,
-                                    // outline: 'solid',
-                                    // outlineWidth: '1px',
-                                    // outlineColor: "invert",
-                                    // outlineStyle: "",
-                                    border: 'solid',
-                                    borderWidth: '1px',
-                                    // borderStyle: 'outset',
-                                    borderColor: 'rgba(244, 155, 66, 0.8)',
-                                    gutterIconPath: path.join(__filename, '..', '..', '..', 'resources', 'sun.svg'),
-                                    gutterIconSize: '90%',
-                                    backgroundColor: "rgba(244, 155, 66, 0.5)"
+                                    gutterIconPath: this.memoWithRespectMode == true ? path.join(__filename, '..', '..', '..', 'resources', 'Q2xhdWRpYVNEM3gxNjA=.png')
+                                        : (this.memoGutterIconPath ? this.memoGutterIconPath
+                                        : path.join(__filename, '..', '..', '..', 'resources', 'sun.svg')),
+                                    gutterIconSize: this.memoGutterIconSize ? this.memoGutterIconSize : '100% auto',
+                                    backgroundColor: this.memoGrepLineBackgroundColor
+                                });
+                                // Keyword Decoration
+                                let startKeywordPosition = new vscode.Position(Number(selected.ln) - 1, Number(selected.col) - 1);
+                                let endKeywordPosition = new vscode.Position(Number(selected.ln) -1, Number(selected.col) + keyword.length - 1);
+                                grepKeywordDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
+                                    isWholeLine: false,
+                                    backgroundColor: this.memoGrepKeywordBackgroundColor
                                 }); 
-                                editor.setDecorations(grepDecoration, [new vscode.Range(startPosition, startPosition)]);
+                                editor.setDecorations(grepLineDecoration, [new vscode.Range(startPosition, startPosition)]);
+                                editor.setDecorations(grepKeywordDecoration, [new vscode.Range(startKeywordPosition, endKeywordPosition)]);
 
                                 // カーソル位置までスクロール
                                 editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
@@ -435,7 +454,8 @@ class Memo {
                     }
                 }).then((selected) => {   // When selected with the mouse
                     if (selected == undefined || null) {
-                        grepDecoration.dispose();
+                        grepLineDecoration.dispose();
+                        grepKeywordDecoration.dispose();
                         vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                         return void 0;
                     }
@@ -456,7 +476,8 @@ class Memo {
                         });
                     });
                     // ファイルを選択した後に、decoration を消す
-                    grepDecoration.dispose();
+                    grepLineDecoration.dispose();
+                    grepKeywordDecoration.dispose();
                 });
             });
     }
@@ -695,6 +716,11 @@ class Memo {
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');
         this.memoEmoji = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertEmoji');
+        this.memoGutterIconPath = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('gutterIconPath');
+        this.memoGutterIconSize = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('gutterIconSize');
+        this.memoWithRespectMode = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('withRespectMode');
         this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
+        this.memoGrepLineBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepLineBackgroundColor');
+        this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
     }
 }

@@ -111,6 +111,16 @@
           "default": false,
           "description": "%insertEmoji.desc%"
         },
+        "memo-life-for-you.gutterIconPath": {
+          "type": "string",
+          "default": "",
+          "description": "%gutterIconPath.desc%"
+        },
+        "memo-life-for-you.gutterIconSize": {
+          "type": "string",
+          "default": "100%",
+          "description": "%gutterIconSize.desc%"
+        },
         "memo-life-for-you.displayFileBirthTime": {
           "type": "boolean",
           "default": false,
