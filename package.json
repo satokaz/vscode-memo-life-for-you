@@ -35,8 +35,18 @@
         "title": "%extension.memoQuick.title%"
       },
       {
+        "when": "!config.memo-life-for-you.withRespectMode",
         "command": "extension.memoGrep",
         "title": "%extension.memoGrep.title%"
+      },
+      {
+        "when": "config.memo-life-for-you.withRespectMode",
+        "command": "extension.memoGrep",
+        "title": "%extension.memoGrep.title%",
+        "icon": {
+          "light": "./resources/Q2xhdWRpYV8x.png",
+          "dark": "./resources/Q2xhdWRpYV8x.png"
+        }
       },
       {
         "command": "extension.memoConfig",
@@ -55,6 +65,7 @@
     "menus": {
       "editor/title": [
         {
+          "when": "config.memo-life-for-you.withRespectMode",
           "command": "extension.memoGrep",
           "group": "navigation@1120"
         }
@@ -74,6 +85,7 @@
           "group": "memo@3"
         },
         {
+          "when": "!config.memo-life-for-you.withRespectMode",
           "command": "extension.memoGrep",
           "group": "memo@4"
         },
@@ -125,6 +137,10 @@
           "type": "boolean",
           "default": false,
           "description": "%displayFileBirthTime.desc%"
+        },
+        "memo-life-for-you.withRespectMode": {
+          "type": "boolean",
+          "default": false
         },
         "memo-life-for-you.grepLineBackgroundColor": {
           "type": "string",
