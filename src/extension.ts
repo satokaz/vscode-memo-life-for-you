@@ -624,7 +624,8 @@ class Memo {
         let activeFilename = vscode.Uri.file(vscode.window.activeTextEditor.document.fileName);
         // console.log(activeFilename.fsPath);
 
-        if (path.dirname(activeFilename.fsPath) !== this.memodir){
+        // vscode.Uri.fsPath は lowercase で、Node.js は Upercase でドライブ名を返してくるので、lowercase に変換して比較する
+        if ((process.platform == "win32" ? path.dirname(activeFilename.fsPath).toLowerCase() : path.dirname(activeFilename.fsPath)) !== (process.platform == "win32" ? path.normalize(this.memodir).toLowerCase() : path.normalize(this.memodir))) {
             vscode.window.showInformationMessage(localize('reDateNotMemodir', "There are no files in memodir to apply changes"), modal_options, modal_items);
             return;
         }
@@ -651,7 +652,7 @@ class Memo {
                     // console.log('tempfilename =', tempfilename);
 
                     if(!path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm) || tempfilename == ".md"){
-                        vscode.window.showInformationMessage(localize('reDateNotUpdateFilename', "This file can not be updated"), modal_options, modal_items);
+                        vscode.window.showInformationMessage(localize('reDateNotUpdateFilename', "Since the file name is only date, it will not be updated. Only the file name of 'YY-MM-DD -xxxx.md' format can be changed."), modal_options, modal_items);
                         return;
                     }
 
