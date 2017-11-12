@@ -58,6 +58,8 @@ interface items extends vscode.QuickPickItem {
 }
 
 class Memo {
+    private _onDidChange = new vscode.EventEmitter<vscode.Uri>();
+    private _waiting : boolean;
     private memoListChannel: vscode.OutputChannel;
     private memoGrepChannel: vscode.OutputChannel;
     private memopath: string;
@@ -92,6 +94,11 @@ class Memo {
         this.memoListChannel = vscode.window.createOutputChannel("Memo List");
         this.memoGrepChannel = vscode.window.createOutputChannel("Memo Grep");
         this.updateConfiguration();
+        this._waiting = false;
+
+        fs.watchFile(path.normalize(path.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
+            console.log(curr);
+        });
     }
 
     async init(){
@@ -349,18 +356,30 @@ class Memo {
                 keyword = keyword.replace(/\s/g, '\ ');
                 // console.log('name =', keyword);
 
+                vscode.window.withProgress({
+                        location: vscode.ProgressLocation.Window,
+                        title: 'Searching Memo...'
+                    }, progress => {
+                        return new Promise((resolve, reject) => {
+                            progress.report({ message: localize('grepProgress', "Searching Memo...")});
+                            console.time("test");
                 try {
                     // list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
 
                     const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
 
-                    // rg は tty で実行された時だけ行番号を出力するオプションがデフォルトで設定される
-                    list = cp.execFileSync(rgPath, ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', `${keyword}`, `${this.memodir}`], {
-                        maxBuffer: 1024 * 1024,
+                                list = cp.spawnSync(rgPath, ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', `${keyword}`, `${this.memodir}`], {
                         stdio: ['inherit']
-                    }).toString().split('\n');
+                                }).stdout.toString().split('\n');
                 } catch(err) {
                                 vscode.window.showErrorMessage(localize('grepNoResult', 'There is no result.'));
+                                reject (err);
+                            } finally {
+                                // statusBarItem.dispose();
+                                resolve ();
+                            }
+                            console.timeEnd("test");
+                        });
                 }
 
                 // console.log('list =', list);
@@ -729,5 +748,19 @@ class Memo {
         this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
         this.memoGrepLineBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepLineBackgroundColor');
         this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
+    }
+
+    get onDidChange() {
+        return this._onDidChange.event;
+    }
+
+    update(uri) {
+        if (!this._waiting) {
+            this._waiting = true;
+            setTimeout(() => {
+                this._waiting = false;
+                this._onDidChange.fire(uri);
+            }, 300);
+        }
     }
 }
