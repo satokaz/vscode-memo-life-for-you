@@ -9,13 +9,16 @@ import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
 import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
+import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
     // console.log(vscode.env);
 
     // console.log(path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg")));
+    // console.log('vscode.Markdown =', vscode.extensions.getExtension("Microsoft.vscode-markdown").extensionPath);
 
     let memo = new Memo();
 
@@ -29,6 +32,36 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
         memo.updateConfiguration();
     }));
+
+    //Markdown
+	let provider = new MDDocumentContentProvider(context);
+    let registration = vscode.workspace.registerTextDocumentContentProvider('markdown', provider);
+
+    context.subscriptions.push(vscode.commands.registerCommand('extension.MemoshowPreviewToSide', uri => showPreview(uri, true)));
+
+    vscode.workspace.onDidSaveTextDocument(document => {
+		if (isMarkdownFile(document)) {
+			const uri = getMarkdownUri(document.uri);
+			provider.update(uri);
+}
+    });
+    vscode.workspace.onDidChangeTextDocument(event => {
+		if (isMarkdownFile(event.document)) {
+			const uri = getMarkdownUri(event.document.uri);
+			provider.update(uri);
+
+		}
+	});
+
+	vscode.workspace.onDidChangeConfiguration(() => {
+		vscode.workspace.textDocuments.forEach(document => {
+			if (document.uri.scheme === 'markdown') {
+				// update all generated md documents
+				provider.update(document.uri);
+			}
+		});
+	});
+    // Markdown
 }
 
 export function deactivate() {
@@ -98,7 +131,8 @@ class Memo {
         this._waiting = false;
 
         fs.watchFile(path.normalize(path.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
-            console.log(curr);
+            // console.log(curr);
+            this.updateConfiguration();
         });
     }
 
@@ -160,6 +194,7 @@ class Memo {
                 file = path.normalize(path.join(this.memodir, file));
 
                 try {
+                    // fs.accessSync(this.memodir);
                     fs.statSync(file);
                 } catch(err) {
                     fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + "\n\n");
@@ -230,9 +265,9 @@ class Memo {
                             + " " + `${selectString.substr(0,49)}`
                             + "\n\n");
                     }).then(() => {
-                editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
+                        editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
+                    });
             });
-        });
         });
     }
 
@@ -311,8 +346,11 @@ class Memo {
                         viewColumn: 1,
                         preserveFocus: true,
                         preview: true
-                    });
-                });
+                    })
+                })
+                // .then(() => {
+                //     vscode.commands.executeCommand('extension.MemoshowPreviewToSide');
+                // });
             }
         }).then(function (selected) {   // When selected with the mouse
             if (selected == null) {
@@ -371,16 +409,14 @@ class Memo {
                     }, progress => {
                         return new Promise((resolve, reject) => {
                             progress.report({ message: localize('grepProgress', "Searching Memo...")});
-                            console.time("test");
+                // console.time("test");
                 try {
-                    // list = cp.execSync(`${this.memopath} grep ${keyword}`, this.cp_options).toString().split('\n');
-
-                    const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
-
-                                list = cp.spawnSync(rgPath, ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', `${keyword}`, `${this.memodir}`], {
+                        list = cp.spawnSync(rgPath, ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', `${keyword}`, `${this.memodir}`], {
                         stdio: ['inherit']
                                 }).stdout.toString().split('\n');
+                                // resolve (list);
                 } catch(err) {
+                                // console.log(err);
                                 vscode.window.showErrorMessage(localize('grepNoResult', 'There is no result.'));
                                 reject (err);
                             } finally {
@@ -390,9 +426,9 @@ class Memo {
                             console.timeEnd("test");
                         });
                 }
-
-                // console.log('list =', list);
+                );
                 
+                // console.time("test2");
                 list.forEach((vlist, index) => {
                     if (vlist == '') {
                         return;
@@ -427,6 +463,7 @@ class Memo {
                     this.memoGrepChannel.appendLine(vlist.replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                     this.memoGrepChannel.appendLine('');
                 });
+                // console.timeEnd("test2");
                 
                 vscode.window.showQuickPick<items>(items, {
                     ignoreFocusOut: true,
@@ -585,7 +622,7 @@ class Memo {
         } 
 
         let activeFilename = vscode.Uri.file(vscode.window.activeTextEditor.document.fileName);
-        console.log(activeFilename.fsPath);
+        // console.log(activeFilename.fsPath);
 
         if (path.dirname(activeFilename.fsPath) !== this.memodir){
             vscode.window.showInformationMessage(localize('reDateNotMemodir', "There are no files in memodir to apply changes"), modal_options, modal_items);
@@ -608,11 +645,10 @@ class Memo {
             }
             switch (selected.id) {
                 case 1:
-                    console.log(path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm));
-
-
+                    // console.log(path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm));
+                    
                     let tempfilename = path.basename(activeFilename.fsPath).replace(/^\d{4}-\d{1,2}-\d{1,2}/gm, '');
-                    console.log('tempfilename =', tempfilename);
+                    // console.log('tempfilename =', tempfilename);
 
                     if(!path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm) || tempfilename == ".md"){
                         vscode.window.showInformationMessage(localize('reDateNotUpdateFilename', "This file can not be updated"), modal_options, modal_items);
@@ -640,7 +676,7 @@ class Memo {
                     });
 
                     let newFilename = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'YYYY-MM-DD') + tempfilename);
-                    // await fs.unlinkSync(activeFilename.fsPath);
+                    fs.unlinkSync(activeFilename.fsPath);
 
                     vscode.window.showInformationMessage(localize('reDateUpdateToda', 'Updated file name to today\'s date: {0}', newFilename), { modal: true },
                     {
