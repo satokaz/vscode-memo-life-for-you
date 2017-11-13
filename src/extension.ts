@@ -531,7 +531,7 @@ class Memo {
                         vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                         return void 0;
                     }
-                    vscode.workspace.openTextDocument(selected.detail).then(document => {
+                    vscode.workspace.openTextDocument(selected.filename).then(document => {
                         vscode.window.showTextDocument(document, {
                             viewColumn: 1,
                             preserveFocus: true,
