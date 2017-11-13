@@ -109,6 +109,7 @@ class Memo {
     private memoEditDispBtime: boolean = false;
     private memoGrepLineBackgroundColor: string;
     private memoGrepKeywordBackgroundColor: string;
+    private memoEditPreviewMarkdown: boolean;
     private memoEditOpenMarkdown: boolean;
 
     public options: vscode.QuickPickOptions = {
@@ -274,15 +275,29 @@ class Memo {
     /**
      * Edit
      */
-    public Edit() {
+    public async Edit() {
         this.readConfig(); 
         let memopath = this.memopath;
         let memodir = this.memodir;
         let list: string[];
         let items: vscode.QuickPickItem[] = [];
+        let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
+        let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
+        let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
         // console.log("memodir = ", memodir)
 
         this.memoListChannel.clear();
+
+        //
+        // Markdown Preview Enhanced のチェック
+        //
+        if (listMarkdownPreview) {
+            try {
+                vscode.extensions.getExtension('shd101wyy.markdown-preview-enhanced').id;
+            } catch (err) {
+                listMarkdownPreview = false;
+            }
+        }
 
         try {
             list = fs.readdirSync(this.memodir, this.cp_options);
@@ -328,9 +343,7 @@ class Memo {
         // console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
-
-        let mdPreview = this.memoEditOpenMarkdown;
-        vscode.window.showQuickPick(items, {
+        await vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
@@ -339,34 +352,77 @@ class Memo {
                 if (selected == null) {
                     return void 0;
                 }
-                // console.log(selected.label);
                 let filename = path.normalize(path.join(memodir, selected.label));
-                vscode.workspace.openTextDocument(filename).then(document=>{
+                
+                // console.log(selected.label);
+                // console.log(isEnabled);
+
+                if (listMarkdownPreview) {
+                    if (isEnabled) {
+                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup').then(async () =>{
+                            // Markdown-enhance
+                            await vscode.commands.executeCommand('markdown-preview-enhanced.syncPreview');
+                            // Original
+                            // await vscode.commands.executeCommand('markdown.refreshPreview');
+
+                        });
+                        isEnabled = false;
+                    }
+                }
+
+                if (listMarkdownPreview) {
+                    // 選択時に markdown preview を開く場合。要 Markdown Preview Enhance 拡張機能
+                    await vscode.workspace.openTextDocument(filename).then(async document=>{
+                        await vscode.window.showTextDocument(document, {
+                            viewColumn: 1,
+                            preserveFocus: true,
+                            preview: true
+                        })
+                    }).then(async () => {
+                        await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(async () => {
+                            // markdown preview を open すること focus が移動するので、focus を quickopen に戻す作業 1 回目
+                            await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                        });
+                        // さらにもう一度実行して focus を維持する (なんでだろ? bug?)
+                        await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                    });
+                    // もう一回! (bug?)
+                    await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                    isEnabled = true;
+                } else { 
+                    // 選択時に markdown preview を開かない設定の場合
+                    vscode.workspace.openTextDocument(filename).then(async document=>{
                     vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
                         preview: true
                     })
                 })
-                // .then(() => {
-                //     vscode.commands.executeCommand('extension.MemoshowPreviewToSide');
-                // });
+                }
             }
-        }).then(function (selected) {   // When selected with the mouse
+        }).then(async function (selected) {   // When selected with the mouse
             if (selected == null) {
                 vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
-            vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document => {
-                    vscode.window.showTextDocument(document, {
+            await vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(async document => {
+                    await vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
                         preview: true
-                    }).then(editor => {
-                        if (mdPreview) {
+                    }).then(async editor => {
+                        if (listMarkdownPreview == true && openMarkdownPreview == true) {
                             // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
-                                vscode.commands.executeCommand('markdown.showPreviewToSide');
+                                // Markdown-Enhance
+                                // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
+                                await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
+                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                                });
                             // });
+                        } else if (openMarkdownPreview) {
+                            vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
+                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                            });
                         }
                     });
             });
@@ -802,6 +858,7 @@ class Memo {
         this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
         this.memoGrepLineBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepLineBackgroundColor');
         this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
+        this.memoEditPreviewMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('listMarkdownPreview');
         this.memoEditOpenMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreview');
     }
 
