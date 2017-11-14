@@ -411,7 +411,8 @@ class Memo {
                         preserveFocus: true,
                         preview: true
                     }).then(async editor => {
-                        if (listMarkdownPreview == true && openMarkdownPreview == true) {
+                        if (listMarkdownPreview) {
+                            if (openMarkdownPreview) {
                             // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
                                 // Markdown-Enhance
                                 // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
@@ -419,6 +420,9 @@ class Memo {
                                     vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
                                 });
                             // });
+                            } else {
+                                vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                            }
                         } else if (openMarkdownPreview) {
                             vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
                                 vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
