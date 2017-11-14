@@ -28,7 +28,11 @@
       },
       {
         "command": "extension.memoEdit",
-        "title": "%extension.memoEdit.title%"
+        "title": "%extension.memoEdit.title%",
+        "icon": {
+          "light": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png",
+          "dark": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png"
+        }
       },
       {
         "command": "extension.memoQuick",
@@ -66,7 +70,8 @@
       "editor/title": [
         {
           "when": "config.memo-life-for-you.withRespectMode",
-          "command": "extension.memoGrep",
+          "command": "extension.memoEdit",
+          "alt": "extension.memoGrep",
           "group": "navigation@1120"
         }
       ],
@@ -85,7 +90,6 @@
           "group": "memo@3"
         },
         {
-          "when": "!config.memo-life-for-you.withRespectMode",
           "command": "extension.memoGrep",
           "group": "memo@4"
         },
@@ -152,6 +156,11 @@
           "type": "string",
           "default": "rgba(255, 225, 0, 0.7)",
           "description": "%grepKeywordBackgroundColor.desc%"
+        },
+        "memo-life-for-you.listMarkdownPreview": {
+          "type": "boolean",
+          "default": false,
+          "description": "%openMarkdownPreview.desc%"
         },
         "memo-life-for-you.openMarkdownPreview": {
           "type": "boolean",

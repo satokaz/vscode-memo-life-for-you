@@ -75,9 +75,9 @@ interface IMemoConfig {
 	editor: string;
 	column: number;
     selectcmd: string;
-	grepcmd: string; 
+	grepcmd: string;
 	assetsdir: string;
-	pluginsdir: string; 
+	pluginsdir: string;
     templatedirfile: string;
     templatebodyfile: string;
 }
@@ -102,13 +102,14 @@ class Memo {
     private memoDateFormat: string;
     private memoISOWeek: boolean = false;
     private memoEmoji: boolean = false;
-    private memoConfig = [];    
+    private memoConfig = [];
     private memoGutterIconPath: string;
     private memoGutterIconSize: string;
     private memoWithRespectMode: boolean = false;
     private memoEditDispBtime: boolean = false;
     private memoGrepLineBackgroundColor: string;
     private memoGrepKeywordBackgroundColor: string;
+    private memoEditPreviewMarkdown: boolean;
     private memoEditOpenMarkdown: boolean;
 
     public options: vscode.QuickPickOptions = {
@@ -122,7 +123,7 @@ class Memo {
         encoding: 'utf8',
         maxBuffer: 1024 * 1024
     }
-    
+
     constructor() {
         this.init(); // 初期化を同期にしたいので async/await で実行する
         this.memoListChannel = vscode.window.createOutputChannel("Memo List");
@@ -147,7 +148,7 @@ class Memo {
      * New
      */
     public New() {
-        this.readConfig(); 
+        this.readConfig();
 
         let file: string;
         let dateFormat = this.memoDateFormat;
@@ -170,7 +171,7 @@ class Memo {
         // エディタが一つも無い場合は、エラーになるので対処しておく
         let editor = vscode.window.activeTextEditor;
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
-    
+
         vscode.window.showInputBox({
             placeHolder: localize('enterFileanme', 'Please Enter a Filename'),
             // prompt: "",
@@ -224,7 +225,7 @@ class Memo {
      * QuickNew
      */
     public QuickNew() {
-        this.readConfig(); 
+        this.readConfig();
 
         let file: string;
         let date: Date = new Date();
@@ -233,7 +234,7 @@ class Memo {
         let getEmoji = this.memoEmoji == true ? randomEmoji.random({count: 1})[0].character + " " : "";
         // console.log(getISOWeek);
         // console.log(getEmoji);
-        
+
         file = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'YYYY-MM-DD') + ".md"));
 
         try {
@@ -241,12 +242,12 @@ class Memo {
         } catch(err) {
             fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
         }
-        
+
         // 選択されているテキストを取得
         // エディタが一つも無い場合は、エラーになるので対処しておく
         let editor = vscode.window.activeTextEditor;
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
-        
+
         vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
@@ -274,15 +275,29 @@ class Memo {
     /**
      * Edit
      */
-    public Edit() {
-        this.readConfig(); 
+    public async Edit() {
+        this.readConfig();
         let memopath = this.memopath;
         let memodir = this.memodir;
         let list: string[];
         let items: vscode.QuickPickItem[] = [];
+        let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
+        let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
+        let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
         // console.log("memodir = ", memodir)
 
         this.memoListChannel.clear();
+
+        //
+        // Markdown Preview Enhanced のチェック
+        //
+        if (listMarkdownPreview) {
+            try {
+                vscode.extensions.getExtension('shd101wyy.markdown-preview-enhanced').id;
+            } catch (err) {
+                listMarkdownPreview = false;
+            }
+        }
 
         try {
             list = fs.readdirSync(this.memodir, this.cp_options);
@@ -294,12 +309,12 @@ class Memo {
         list = list.filter(function(v, i) {
             return (path.extname(v) == ".md");
         });
-        
-        // 新しいものを先頭にするための sort  
+
+        // 新しいものを先頭にするための sort
         list = list.sort(function(a,b) {
             return (a < b ? 1 : -1);
         });
-                
+
         // console.log('list =', list);
 
         for (let index = 0; index < list.length; index++) {
@@ -328,9 +343,7 @@ class Memo {
         // console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
-
-        let mdPreview = this.memoEditOpenMarkdown;
-        vscode.window.showQuickPick(items, {
+        await vscode.window.showQuickPick(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
@@ -339,34 +352,77 @@ class Memo {
                 if (selected == null) {
                     return void 0;
                 }
-                // console.log(selected.label);
                 let filename = path.normalize(path.join(memodir, selected.label));
-                vscode.workspace.openTextDocument(filename).then(document=>{
-                    vscode.window.showTextDocument(document, {
-                        viewColumn: 1,
-                        preserveFocus: true,
-                        preview: true
+
+                // console.log(selected.label);
+                // console.log(isEnabled);
+
+                if (listMarkdownPreview) {
+                    if (isEnabled) {
+                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup').then(async () =>{
+                            // Markdown-enhance
+                            await vscode.commands.executeCommand('markdown-preview-enhanced.syncPreview');
+                            // Original
+                            // await vscode.commands.executeCommand('markdown.refreshPreview');
+
+                        });
+                        isEnabled = false;
+                    }
+                }
+
+                if (listMarkdownPreview) {
+                    // 選択時に markdown preview を開く場合。要 Markdown Preview Enhance 拡張機能
+                    await vscode.workspace.openTextDocument(filename).then(async document=>{
+                        await vscode.window.showTextDocument(document, {
+                            viewColumn: 1,
+                            preserveFocus: true,
+                            preview: true
+                        })
+                    }).then(async () => {
+                        await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(async () => {
+                            // markdown preview を open すること focus が移動するので、focus を quickopen に戻す作業 1 回目
+                            await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                        });
+                        // さらにもう一度実行して focus を維持する (なんでだろ? bug?)
+                        await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                    });
+                    // もう一回! (bug?)
+                    await vscode.commands.executeCommand('workbench.action.focusQuickOpen');
+                    isEnabled = true;
+                } else {
+                    // 選択時に markdown preview を開かない設定の場合
+                    vscode.workspace.openTextDocument(filename).then(async document=>{
+                        vscode.window.showTextDocument(document, {
+                            viewColumn: 1,
+                            preserveFocus: true,
+                            preview: true
+                        })
                     })
-                })
-                // .then(() => {
-                //     vscode.commands.executeCommand('extension.MemoshowPreviewToSide');
-                // });
+                }
             }
-        }).then(function (selected) {   // When selected with the mouse
+        }).then(async function (selected) {   // When selected with the mouse
             if (selected == null) {
                 vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
-            vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(document => {
-                    vscode.window.showTextDocument(document, {
+            await vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(async document => {
+                    await vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
                         preview: true
-                    }).then(editor => {
-                        if (mdPreview) {
+                    }).then(async editor => {
+                        if (listMarkdownPreview == true && openMarkdownPreview == true) {
                             // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
-                                vscode.commands.executeCommand('markdown.showPreviewToSide');
+                                // Markdown-Enhance
+                                // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
+                                await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
+                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                                });
                             // });
+                        } else if (openMarkdownPreview) {
+                            vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
+                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                            });
                         }
                     });
             });
@@ -387,9 +443,9 @@ class Memo {
         let grepLineDecoration: vscode.TextEditorDecorationType;
         let grepKeywordDecoration: vscode.TextEditorDecorationType;
         const rgPath: string = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
-        
-        this.readConfig(); 
-        
+
+        this.readConfig();
+
         vscode.window.showInputBox({
             placeHolder: localize('grepEnterKeyword', 'Please enter a keyword'),
             // prompt: "",
@@ -427,7 +483,7 @@ class Memo {
                         });
                 }
                 );
-                
+
                 // console.time("test2");
                 list.forEach((vlist, index) => {
                     if (vlist == '') {
@@ -441,14 +497,14 @@ class Memo {
                     let line: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
                     .replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();
                     // console.log("line =", line);
-                    
+
                     let col: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
                     .replace(/^:/gm, "").replace(/^(.*?)(?=:)/gm, "").replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();;
                     // console.log("col =", col);
-                    
+
                     let result = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm : /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm, "").toString();
                     // console.log("result =", result);
-                    
+
                     items.push({
                         "label": localize('grepResultLabel', '{0} - Ln:{1} Col:{2}', index, line, col),
                         "description": result,
@@ -464,7 +520,7 @@ class Memo {
                     this.memoGrepChannel.appendLine('');
                 });
                 // console.timeEnd("test2");
-                
+
                 vscode.window.showQuickPick<items>(items, {
                     ignoreFocusOut: true,
                     matchOnDescription: true,
@@ -515,7 +571,7 @@ class Memo {
                                 grepKeywordDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
                                     isWholeLine: false,
                                     backgroundColor: this.memoGrepKeywordBackgroundColor
-                                }); 
+                                });
                                 editor.setDecorations(grepLineDecoration, [new vscode.Range(startPosition, startPosition)]);
                                 editor.setDecorations(grepKeywordDecoration, [new vscode.Range(startKeywordPosition, endKeywordPosition)]);
 
@@ -610,7 +666,7 @@ class Memo {
         // modal dialog
         let modal_options = {
             modal: true
-        } 
+        }
         let modal_items = {
             title: localize('close', 'Close'),
             isCloseAffordance: true
@@ -619,7 +675,7 @@ class Memo {
         if (!vscode.window.activeTextEditor) {
             vscode.window.showErrorMessage(localize('reDateNotActiveEditor', 'Not an active editor.'));
             return;
-        } 
+        }
 
         let activeFilename = vscode.Uri.file(vscode.window.activeTextEditor.document.fileName);
         // console.log(activeFilename.fsPath);
@@ -630,7 +686,7 @@ class Memo {
             return;
         }
 
-        vscode.window.showInformationMessage<MemoMessageItem>(localize('reDateUpdateFilename', 'Would you like to update the file name of {0} to the latest date?', activeFilename.fsPath), { modal: true }, 
+        vscode.window.showInformationMessage<MemoMessageItem>(localize('reDateUpdateFilename', 'Would you like to update the file name of {0} to the latest date?', activeFilename.fsPath), { modal: true },
             {
                 title: localize('yes', 'Yes'),
                 id: 1,
@@ -647,7 +703,7 @@ class Memo {
             switch (selected.id) {
                 case 1:
                     // console.log(path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm));
-                    
+
                     let tempfilename = path.basename(activeFilename.fsPath).replace(/^\d{4}-\d{1,2}-\d{1,2}/gm, '');
                     // console.log('tempfilename =', tempfilename);
 
@@ -726,7 +782,7 @@ class Memo {
                     }
                 });
             }
-        });  
+        });
         return;
     }
 
@@ -737,7 +793,7 @@ class Memo {
         let editor;
         let memodir;
         let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split("\n");
-        
+
         // console.log('readConfig =', list);
         list.forEach(async function (v, i) {
             // console.log(v.split("=")[1]);
@@ -755,25 +811,25 @@ class Memo {
 
     /**
      * cfgtoml
-     * @param confDir 
+     * @param confDir
      */
     public cfgtoml(confDir) {
         let config: IMemoConfig = {
             memodir: process.env.MEMODIR == undefined ? path.normalize(path.join(confDir, "_posts")) : process.env.MEMODIR,
-            editor: process.env.EDITOR == undefined ? "code" : process.env.EDITOR, 
+            editor: process.env.EDITOR == undefined ? "code" : process.env.EDITOR,
             column: 20,
             selectcmd: "peco",
-            grepcmd: (process.platform == "win32") ? "grep -nH ${PATTERN} ${FILES}" : path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg").replace(/\s/g, '\\ ')) + ' -n --no-heading -S ${PATTERN} ${FILES}', 
+            grepcmd: (process.platform == "win32") ? "grep -nH ${PATTERN} ${FILES}" : path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg").replace(/\s/g, '\\ ')) + ' -n --no-heading -S ${PATTERN} ${FILES}',
             assetsdir: "",
-            pluginsdir: path.normalize(path.join(confDir, "plugins")), 
+            pluginsdir: path.normalize(path.join(confDir, "plugins")),
             templatedirfile: "",
             templatebodyfile: "",
         }
-    
+
         return tomlify(config, function (key, value) {
             let context = this;
             let path = tomlify.toKey(context.path);
-            if (/^column/.test(path)) { 
+            if (/^column/.test(path)) {
                 return Math.floor(value).toString();
             }
             return false;
@@ -802,6 +858,7 @@ class Memo {
         this.memoEditDispBtime = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('displayFileBirthTime');
         this.memoGrepLineBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepLineBackgroundColor');
         this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
+        this.memoEditPreviewMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('listMarkdownPreview');
         this.memoEditOpenMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreview');
     }
 
