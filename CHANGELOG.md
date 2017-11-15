@@ -2,14 +2,26 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.3.0
+
+* Fix editor closing process at cancel
+
+# 0.2.9
+
+* Fix localize () was not applied
+
+# 0.2.8 
+
+* "listMarkdownPreview": true and "openMarkdownPreview": false setting, adding a process to close preview when opening a file
+* Add open Markdown Preview when executing `Memo: List/Edit`
+* Add alt key menu to withRespect mode 
+
 # 0.2.7
 
 * `Memo: Re:Date` - Added command to update old date filename to latest date filename
 * `Memo: Edit` - Change command name to `Memo: List/Edit`
 * Display file creation date in `memo: List/Edit`
 * Add menu localization (Japanese only)
-* `Memo: Edit` - Display birthtime of file 
-* Add `Memo Re:Date` command
 * Add message localization
 * Add specify gutter icon path and size when displaying search results
 * Add withRespect mode
