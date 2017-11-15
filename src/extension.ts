@@ -402,6 +402,15 @@ class Memo {
             }
         }).then(async function (selected) {   // When selected with the mouse
             if (selected == null) {
+                if (listMarkdownPreview) {
+                    //キャンセルした時の close 処理
+                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
+                            vscode.commands.executeCommand('workbench.action.focusPreviousGroup').then(() => {
+                                    // vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                            });
+                    });
+                }
+
                 vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
@@ -417,15 +426,15 @@ class Memo {
                                 // Markdown-Enhance
                                 // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
                                 await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
-                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
                                 });
                             // });
                             } else {
-                                vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                                await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                             }
                         } else if (openMarkdownPreview) {
-                            vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
-                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup')
+                            await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
+                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
                             });
                         }
                     });
