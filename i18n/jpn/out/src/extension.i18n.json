@@ -1,5 +1,4 @@
 {
-    "sayHello.text": "こんにちはコマンド",
     "memodirCheck": "config.toml に memodir が設定されていません",
     "memodirAccessCheck" : "memodir に設定されたディレクトリが存在しません", 
     "enterFileanme": "ファイル名を入力してください",

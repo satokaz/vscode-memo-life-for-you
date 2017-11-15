@@ -3,6 +3,7 @@
 [Japanese README is here](https://github.com/satokaz/vscode-memo-life-for-you/blob/master/README_ja.md)
 
 This extension is for writing notes in the markdown format to the VS code.
+Notes are placed in a single directory and are managed with filename based on date.
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
 
@@ -38,6 +39,8 @@ Unique command (memo command is not necessary):
 
 ### Memo: Today's quick Memo
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_quicknote.gif)
+
 * Open the `YY-MM-DD.md` file if it exists. If it does not exist, create it and open.
 * Every time you open, add a timestamp on the bottom line. example: `## 2017-10-19 Thu 06:38`
 * You can insert ISOweek and random-Emoji into the timestamp. example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
@@ -45,10 +48,23 @@ Unique command (memo command is not necessary):
 
 ### Memo: Edit
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
+
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
 * Filter by keyword.
+* You can move the list with the keyboard (up/down cursor keys). And you can preview file contents
+* Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`.
 * selected file will be opened in the VS Code instance that executed the `Memo: Edit` command.
 * At the same time, generate `Memo List` output panel which outputs file list.
+
+#### About markdown display during file selection
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_preview.gif)
+
+* it is also possible to display Markdown Preview by setting `"memo-life-for-you.listMarkdownPreview": true`. However, in order to use this function, the [Markdown preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) extension must be installed.
+* Markdown preview is displayed only when operating the keyboard.
+* You can cancel by pressing the `ESC` key. 
+
 
 ### Memo: Grep
 
@@ -158,6 +174,22 @@ This extension contributes the following settings:
 * `memo-life-for-you.grepLineBackgroundColor`: Search results show keyword background color
 * `memo-life-for-you.grepKeywordBackgroundColor`: Search results show line background color
 * `memo-life-for-you.openMarkdownPreview`: Open Markdown Preview at the same time as opening the file in the editor (default: false)
+
+## tips
+
+### Transpare quickitem list
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_transparentize_menu.png)
+
+You can transparentize the quickitem list which displays the file list and search results.
+However, this setting also affects the sidebar.
+
+```json
+"workbench.colorCustomizations": {
+    "sideBar.background": "#262626DD" // For a Dark theme 
+    // "sideBar.background": "#F0F0F0DD"  //For a light theme
+},
+```
 
 ## Known Issues
 
