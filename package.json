@@ -30,8 +30,8 @@
         "command": "extension.memoEdit",
         "title": "%extension.memoEdit.title%",
         "icon": {
-          "light": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png",
-          "dark": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png"
+          "light": "./resources/Q2xhdWRpYV8x.png",
+          "dark": "./resources/Q2xhdWRpYV8x.png"
         }
       },
       {
@@ -48,8 +48,8 @@
         "command": "extension.memoGrep",
         "title": "%extension.memoGrep.title%",
         "icon": {
-          "light": "./resources/Q2xhdWRpYV8x.png",
-          "dark": "./resources/Q2xhdWRpYV8x.png"
+          "light": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png",
+          "dark": "./resources/44Kv44Op44Km44OH44Kj44Ki44OQ44K544OI44OI44OD44OX.png"
         }
       },
       {
@@ -171,11 +171,8 @@
     }
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
     "watch": "tsc -watch -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install",
-    "test": "npm run compile && node ./node_modules/vscode/bin/test"
+    "postinstall": "node ./node_modules/vscode/bin/install"
   },
   "devDependencies": {
     "@types/mocha": "^2.2.44",
@@ -191,7 +188,7 @@
     "event-stream": "^3.3.4",
     "gulp-filter": "^5.0.1",
     "run-sequence": "^2.2.0",
-    "vsce": "^1.32.0"
+    "vsce": "^1.33.1"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
