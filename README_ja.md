@@ -2,6 +2,8 @@
 
 これは、VS Code でメモを書くための拡張機能です。
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
+
 * この拡張機能は [memo (Memo Life For You)](https://github.com/mattn/memo) に影響を受け、VS Code と組み合わせて利用できるようにするために作り始めました(現在は、作成されたファイルを memo コマンドでも VS Code でも有効に活用できることを考え、一部の機能を除き、個別に動作するようになっており、ファイルを開くことに特化しています)
 * 構成ファイルである `config.toml` と配置先のディレクトリは、memo コマンドと互換性があります
 * Memo: New/Edit/Grep/Config コマンドを実行するために、外部に memo コマンドは必要ありません
@@ -9,7 +11,7 @@
 
 ## Features
 
-![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/media/media/vscode-memo-new.gif)
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_commands.png)
 
 提供されるコマンドは下記のとおりです:
 
@@ -34,6 +36,8 @@
 
 ### Memo: Today's quick Memo
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_quicknote.gif)
+
 * すでにある `YY-MM-DD.md` を開き、追記を行います。もし、ファイルが存在しない場合は、作成してから開きます
 * このコマンドを実行すると開かれたファイルの最下行にタイムスタンプを含んだヘッダが追記されます。(例: `## 2017-10-19 Thu 06:38`)
 * また、ISO Week とランダムな絵文字をタイムスタンプに追加することができます。(例: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`)
@@ -42,14 +46,29 @@
 
 ### Memo: Edit
 
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
+
 * このコマンドを実行すると、ファイル名とそのファイルの最初の 1 行をリストして表示します。これは、memo コマンドの `memo list` または `memo edit` に似ています
 * QuickInput にキーワードを入力することでリストをフィルタすることが可能です
+* キーボードの up/down カーソルキーで移動することが可能です
+* `memo-life-for-you.openMarkdownPreview` を設定することにより、選択されたファイルを開くと同時に、Markdown Preview も表示さします。
 * 選択されたファイルは、`Memo: Edit` コマンドを実行した VS Code インスタンス上で開きます* また、同時に `Memo Grep` 出力パネルを生成し検索結果を出力します
 * また、同時に `Memo List` 出力パネルを生成し一覧を出力します
 
+#### ファイル選択中の Markdown Preview 表示について
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_preview.gif)
+
+* `"memo-life-for-you.listMarkdownPreview": true` を設定することで、ファイルを Markdown Preview で表示することが可能です。
+* この機能を利用するには、[Markdown preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) 拡張機能がインストールされている必要があります
+* キーボードでの操作時のみ表示します
+
+
 ### Memo: Grep
 
-* VS Code に含まれる ripgrep を利用します
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_grep_demo.gif)
+
+* VS Code に含まれる `ripgrep` を利用します
 * QuickImput にキーワードを入力することで、検索結果を QuickPicker に表示し選択で開くことができます
 * 選択されたファイルを開くと、検索結果の該当行と列にカーソルを移動させます
 * 選択されたファイルは、`Memo: Grep` コマンドを実行した VS Code インスタンス上で開きます
@@ -143,6 +162,27 @@ templatebodyfile = ""
 * `memo-life-for-you.grepLineBackgroundColor`: 検索結果のキーワードの背景色
 * `memo-life-for-you.grepKeywordBackgroundColor`: 検索結果のキーワードを含む行の背景色
 * `memo-life-for-you.openMarkdownPreview`: エディタでファイル開くと同時に Markdown Preview を開きます (default: false)
+## tips
+
+### クイックアイテムリストの透過設定
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_transparentize_menu.png)
+
+メモの一覧や検索結果を表示するクイックアイテムリストの色を下記のように変更することで、透過させることができます。ただし、この設定は、sidebar にも反映されます。
+
+```json
+"workbench.colorCustomizations": {
+    "sideBar.background": "#262626DD" // For a Dark theme 
+    // "sideBar.background": "#F0F0F0DD"  //For a light theme
+},
+```
+
+### withRespect mode
+)
+
+すでに終了していたのですが、10月末でとあるキャラクターが終了することを知理ました。そのキャラクターの貢献などに敬意を払いたく、とある設定を true にすると、検索とエディタメニューにちょっとした遊びが入るようにしました
+
+© 2011 Microsoft Corporation All Rights Reserved.
 
 ## Known Issues
 
