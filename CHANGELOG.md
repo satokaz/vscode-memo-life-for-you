@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.3.1
+
+* `Memo: Re:Date` Use fs.rename() to hold file stat
+
 # 0.3.0
 
 * Fix editor closing process at cancel
