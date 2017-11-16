@@ -747,7 +747,7 @@ class Memo {
                     });
 
                     let newFilename = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'YYYY-MM-DD') + tempfilename);
-
+                    
                     vscode.window.showInformationMessage(localize('reDateUpdateToda', 'Updated file name to today\'s date: {0}', newFilename), { modal: true },
                     {
                         title: localize('close', 'Close'),
