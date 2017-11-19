@@ -82,7 +82,7 @@ interface IMemoConfig {
     templatebodyfile: string;
 }
 
-// vscode.QuickPickItem に ln, col を追加した items を interface で作成
+// vscode.QuickPickItem に ln, col, index, filename を追加した items を interface で作成
 interface items extends vscode.QuickPickItem {
     ln: string;
     col: string;
@@ -277,10 +277,11 @@ class Memo {
      */
     public async Edit() {
         this.readConfig();
+        let items: items[] = [];
         let memopath = this.memopath;
         let memodir = this.memodir;
         let list: string[];
-        let items: vscode.QuickPickItem[] = [];
+        // let items: vscode.QuickPickItem[] = [];
         let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
         let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
         let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
@@ -327,32 +328,39 @@ class Memo {
             let filename = path.normalize(path.join(this.memodir, list[index]));
 
             let statBirthtime = this.memoEditDispBtime ? dateFns.format(fs.statSync(filename).birthtime, 'MMM DD HH:mm, YYYY ') : "";
+            let statMtime = this.memoEditDispBtime ? dateFns.format(fs.statSync(filename).mtime, 'MMM DD HH:mm, YYYY ') : "";
+            
+            // console.log(fs.statSync(filename));
             // console.log('birthtime =', statBirthtime);
 
             let array = fs.readFileSync(filename).toString().split("\n");
 
             items.push({
-                "label": list[index],
-                "description": array[0],
-                "detail": this.memoEditDispBtime ? localize('editBirthTime', 'Create date: {0}', statBirthtime) : ""
+                "label": `$(calendar) ` + list[index],
+                "description": `$(three-bars) ` + array[0],
+                "detail": this.memoEditDispBtime ? localize('editBirthTime', '$(heart) Create Time: {0} $(clock) Modified Time: {1} ', statBirthtime, statMtime) : "",
+                "ln": "",
+                "col": "",
+                "index": index,
+                "filename": path.normalize(path.join(this.memodir, list[index]))
              });
 
             this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
         }
-        // console.log("items =", items)
+        console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
-        await vscode.window.showQuickPick(items, {
+        await vscode.window.showQuickPick<items>(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
             placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Todya\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
-            onDidSelectItem: async (selected:vscode.QuickPickItem) => {
+            onDidSelectItem: async (selected:items) => {
                 if (selected == null) {
                     return void 0;
                 }
-                let filename = path.normalize(path.join(memodir, selected.label));
+                // let filename = path.normalize(path.join(memodir, selected.filename));
 
                 // console.log(selected.label);
                 // console.log(isEnabled);
@@ -372,7 +380,7 @@ class Memo {
 
                 if (listMarkdownPreview) {
                     // 選択時に markdown preview を開く場合。要 Markdown Preview Enhance 拡張機能
-                    await vscode.workspace.openTextDocument(filename).then(async document=>{
+                    await vscode.workspace.openTextDocument(selected.filename).then(async document=>{
                         await vscode.window.showTextDocument(document, {
                             viewColumn: 1,
                             preserveFocus: true,
@@ -391,7 +399,7 @@ class Memo {
                     isEnabled = true;
                 } else {
                     // 選択時に markdown preview を開かない設定の場合
-                    vscode.workspace.openTextDocument(filename).then(async document=>{
+                    vscode.workspace.openTextDocument(selected.filename).then(async document=>{
                         vscode.window.showTextDocument(document, {
                             viewColumn: 1,
                             preserveFocus: true,
@@ -414,7 +422,8 @@ class Memo {
                 vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
-            await vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(async document => {
+            // await vscode.workspace.openTextDocument(path.normalize(path.join(memodir, selected.label))).then(async document => {
+            await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
                     await vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
@@ -461,7 +470,7 @@ class Memo {
 
         vscode.window.showInputBox({
             placeHolder: localize('grepEnterKeyword', 'Please enter a keyword'),
-            // prompt: "",
+            prompt: localize('grepEnterKeyword', 'Please enter a keyword...'),
             ignoreFocusOut: true
         }).then((keyword) => {
                 if(keyword == undefined || "") {
@@ -492,7 +501,7 @@ class Memo {
                                 // statusBarItem.dispose();
                                 resolve ();
                             }
-                            console.timeEnd("test");
+                            // console.timeEnd("test");
                         });
                 }
                 );
@@ -519,16 +528,17 @@ class Memo {
                     // console.log("result =", result);
 
                     items.push({
-                        "label": localize('grepResultLabel', '{0} - Ln:{1} Col:{2}', index, line, col),
-                        "description": result,
-                        "detail": path.basename(filename),
+                        "label": localize('grepResultLabel', '{0} - $(location) Ln:{1} Col:{2}', index, line, col),
+                        "description": `$(eye) ` + result,
+                        "detail": `$(calendar) ` + path.basename(filename),
                         "ln": line,
                         "col": col,
                         "index": index,
                         "filename": filename
                     });
 
-                    this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + result);
+                    this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + line + ':' + col );
+                    this.memoGrepChannel.appendLine(result);
                     this.memoGrepChannel.appendLine(vlist.replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                     this.memoGrepChannel.appendLine('');
                 });
