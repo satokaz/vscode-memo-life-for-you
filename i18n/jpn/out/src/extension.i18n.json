@@ -2,13 +2,13 @@
     "memodirCheck": "config.toml に memodir が設定されていません",
     "memodirAccessCheck" : "memodir に設定されたディレクトリが存在しません", 
     "enterFileanme": "ファイル名を入力してください",
-    "enterSelectOrFilename": "ファイルを選択するかファイル名を入力してください。(すべてのアイテム: {0}) {1}",
-    "editBirthTime": "作成日: {0}",
+    "enterSelectOrFilename": "ファイルを選択するかファイル名を特定する文字を入力してください。(総ファイル数: {0}) 今日の日付 {1}",
+    "editBirthTime": "$(heart) 作成日: {0} $(clock) 変更日: {1}",
     "grepEnterKeyword": "検索するキーワードを入力してください",
     "grepProgress": "Memo を検索中...",
     "grepResult": "{0} の検索結果... (総数: {1})",
     "grepNoResult": "キーワードが見つかりません ", 
-    "grepResultLabel": "{0} - 行:{1} 列:{2}",
+    "grepResultLabel": "{0} - $(location) 行:{1} 列:{2}",
     "serveCheck": "memo コマンドが実行できません",
     "reDateNotActiveEditor": "アクティブなエディタが見つかりません",
     "reDateNotMemodir": "memodir に設定されたディレクトに配置されるファイル以外には適用できません",
@@ -19,6 +19,6 @@
     "reDateSameDate": "同一の日付には変更できません",
     "reDateUpdateToda": "ファイル名に日付を今日の日付に変更しました: {0}",
     "close": "閉じる",
-    "createConfig": "vscode memo life for you: {0} ディレクトリを作成しました ",
-    "createConfigFile": "vscode memo life for you: ${0} を作成しました"
+    "createConfig": "$(info) vscode memo life for you: {0} ディレクトリを作成しました ",
+    "createConfigFile": "$(info) vscode memo life for you: ${0} を作成しました"
 }

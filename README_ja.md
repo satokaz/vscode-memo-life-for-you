@@ -1,6 +1,7 @@
 # vscode-memo-life-for-you README
 
-これは、VS Code でメモを書くための拡張機能です。
+これは、Markdown 形式でメモを書くための VS Code 拡張機能です。
+作成されたメモは、日付に基づいたファイル名で単一のディレクトリに置かれ管理されます。
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
 
@@ -32,6 +33,7 @@
 * QuickInput に何も入力せずに Enter を押した場合、日付をベースにした `YY-MM-DD.md` ファイルが作成されます。もし、同じ日付けのファイル名がすでに存在している場合は、上書きせずにそのファイルを開きます
 * また、エディタ上で文字列を選択してから、このコマンドを実行すると、選択された文字列がタイトルとファイル名に利用されます
 * ファイルは、`Memo: New` コマンドを実行した VS Code インスタンス上で開きます
+* ファイルは `preview` 状態で開かれます
 * オプション `memo-life-for-you.openMarkdownPreview` を設定することで Markdown Preview を同時に表示することも可能
 
 ### Memo: Today's quick Memo
@@ -53,6 +55,7 @@
 * キーボードの up/down カーソルキーで移動することが可能です
 * `memo-life-for-you.openMarkdownPreview` を設定することにより、選択されたファイルを開くと同時に、Markdown Preview も表示さします。
 * 選択されたファイルは、`Memo: Edit` コマンドを実行した VS Code インスタンス上で開きます* また、同時に `Memo Grep` 出力パネルを生成し検索結果を出力します
+* ファイルは `preview` 状態で開かれます
 * また、同時に `Memo List` 出力パネルを生成し一覧を出力します
 
 #### ファイル選択中の Markdown Preview 表示について
@@ -72,6 +75,7 @@
 * QuickImput にキーワードを入力することで、検索結果を QuickPicker に表示し選択で開くことができます
 * 選択されたファイルを開くと、検索結果の該当行と列にカーソルを移動させます
 * 選択されたファイルは、`Memo: Grep` コマンドを実行した VS Code インスタンス上で開きます
+* ファイルは `preview` 状態で開かれます
 * また、同時に `Memo Grep` 出力パネルを生成し検索結果を出力します
 
 #### ripgrep について
