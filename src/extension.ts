@@ -9,6 +9,7 @@ import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
 import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
+import * as os from 'os'
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
@@ -198,7 +199,7 @@ class Memo {
                     // fs.accessSync(this.memodir);
                     fs.statSync(file);
                 } catch(err) {
-                    fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + "\n\n");
+                    fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + os.EOL + os.EOL);
                 }
 
                 vscode.workspace.openTextDocument(file).then(document=>{
@@ -237,10 +238,7 @@ class Memo {
 
         file = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'YYYY-MM-DD') + ".md"));
 
-        try {
-            fs.statSync(file);
-        } catch(err) {
-            fs.writeFileSync(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + "\n\n");
+                fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
         }
 
         // 選択されているテキストを取得
@@ -259,12 +257,12 @@ class Memo {
                 editor.selection = new vscode.Selection(newPosition, newPosition);
                     vscode.window.activeTextEditor.edit(function (edit) {
                         edit.insert(newPosition,
-                            "\n" + "## "
+                                os.EOL + "## "
                             + getISOWeek
                             + getEmoji
                             + dateFns.format(new Date(), `${dateFormat}`)
                             + " " + `${selectString.substr(0,49)}`
-                            + "\n\n");
+                                + os.EOL + os.EOL);
                     }).then(() => {
                         editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                     });
@@ -333,7 +331,7 @@ class Memo {
             // console.log(fs.statSync(filename));
             // console.log('birthtime =', statBirthtime);
 
-            let array = fs.readFileSync(filename).toString().split("\n");
+            let array = fs.readFileSync(filename).toString().split(os.EOL);
 
             items.push({
                 "label": `$(calendar) ` + list[index],
@@ -815,7 +813,7 @@ class Memo {
     public readConfig() {
         let editor;
         let memodir;
-        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split("\n");
+        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split(os.EOL);
 
         // console.log('readConfig =', list);
         list.forEach(async function (v, i) {
