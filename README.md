@@ -28,6 +28,7 @@ Unique command (memo command is not necessary):
 
 * `Memo: Today's quick Memo` - Append to the file of today's date
 * `Memo: Re:Date` - Change the date included in the file name to today's date
+* `Memo: Todo` - Todo like [todo.txt](https://github.com/todotxt/todo.txt)
 
 ### Memo: New
 

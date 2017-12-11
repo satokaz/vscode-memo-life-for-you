@@ -64,6 +64,10 @@
       {
         "command": "extension.memoReDate",
         "title": "%extension.memoReDate.title%"
+      },
+      {
+        "command": "extension.memoTodo",
+        "title": "%extension.memoTodo.title%"
       }
     ],
     "menus": {
