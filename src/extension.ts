@@ -112,6 +112,7 @@ class Memo {
     private memoGrepKeywordBackgroundColor: string;
     private memoEditPreviewMarkdown: boolean;
     private memoEditOpenMarkdown: boolean;
+    private memoEditOpenNewInstance: boolean;
 
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -202,6 +203,11 @@ class Memo {
                     fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + os.EOL + os.EOL);
                 }
 
+                if (this.memoEditOpenNewInstance){
+                    vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
+                        vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
+                    });
+                } else {
                 vscode.workspace.openTextDocument(file).then(document=>{
                         vscode.window.showTextDocument(document, {
                             viewColumn: 1,
@@ -218,6 +224,7 @@ class Memo {
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                         });
                 });
+            }
             }
         );
     }
@@ -246,6 +253,39 @@ class Memo {
         let editor = vscode.window.activeTextEditor;
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
 
+        if (this.memoEditOpenNewInstance) {
+            vscode.workspace.openTextDocument(file).then(document => {
+                vscode.window.showTextDocument(document, {
+                    viewColumn: -1,
+                    preserveFocus: false,
+                }).then(async document => {
+                    const editor = vscode.window.activeTextEditor;
+                    const position = editor.selection.active;
+                    const newPosition = position.with(editor.document.lineCount + 1 , 0);
+                    editor.selection = new vscode.Selection(newPosition, newPosition);
+                         vscode.window.activeTextEditor.edit(async function (edit) {
+                             edit.insert(newPosition,
+                                os.EOL + "## "
+                                + getISOWeek
+                                + getEmoji
+                                + dateFns.format(new Date(), `${dateFormat}`)
+                                + " " + `${selectString.substr(0,49)}`
+                                + os.EOL + os.EOL);
+                        }).then(() => {
+                            setTimeout(() => { vscode.commands.executeCommand('workbench.action.closeActiveEditor'); }, 900);
+                        }).then(() => {
+                            console.log(vscode.window.activeTextEditor.document);
+                            vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
+                                vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
+                            });
+                        });
+                });
+            }).then(() => {
+                // vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
+                //     vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
+                // });
+            });
+        } else {
         vscode.workspace.openTextDocument(file).then(document => {
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
@@ -253,7 +293,7 @@ class Memo {
             }).then(document => {
                 const editor = vscode.window.activeTextEditor;
                 const position = editor.selection.active;
-                var newPosition = position.with(editor.document.lineCount + 1 , 0);
+                    const newPosition = position.with(editor.document.lineCount + 1 , 0);
                 editor.selection = new vscode.Selection(newPosition, newPosition);
                     vscode.window.activeTextEditor.edit(function (edit) {
                         edit.insert(newPosition,
@@ -268,6 +308,7 @@ class Memo {
                     });
             });
         });
+    }
     }
 
     /**
@@ -1023,6 +1064,7 @@ class Memo {
         this.memoGrepKeywordBackgroundColor = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepKeywordBackgroundColor');
         this.memoEditPreviewMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('listMarkdownPreview');
         this.memoEditOpenMarkdown = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreview');
+        this.memoEditOpenNewInstance = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openNewInstance');
     }
 
     get onDidChange() {
