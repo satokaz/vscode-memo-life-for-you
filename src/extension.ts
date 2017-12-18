@@ -9,7 +9,7 @@ import * as randomEmoji from 'random-emoji';
 import * as dateFns from 'date-fns';
 import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
-import * as os from 'os'
+import * as os from 'os';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
@@ -85,8 +85,8 @@ interface IMemoConfig {
 
 // vscode.QuickPickItem に ln, col, index, filename を追加した items を interface で作成
 interface items extends vscode.QuickPickItem {
-    ln: string;
-    col: string;
+    ln: number;
+    col: number;
     index: number;
     filename: string;
 }
@@ -141,7 +141,6 @@ class Memo {
 
     async init(){
         await this.setMemoConfDir(); // 初回に memoconfdir が必要なので、createConfig で this.memoconfigdir に値を格納する
-        // console.log("setMemoConfDir =", this.memoconfdir);
         await this.createConfig();
         await this.readConfig();
     }
@@ -378,8 +377,8 @@ class Memo {
                 "label": `$(calendar) ` + list[index],
                 "description": `$(three-bars) ` + array[0],
                 "detail": this.memoEditDispBtime ? localize('editBirthTime', '$(heart) Create Time: {0} $(clock) Modified Time: {1} ', statBirthtime, statMtime) : "",
-                "ln": "",
-                "col": "",
+                "ln": null,
+                "col": null,
                 "index": index,
                 "filename": path.normalize(path.join(this.memodir, list[index]))
              });
@@ -497,7 +496,6 @@ class Memo {
      * win32:
      * Linux:
     */
-
     public Grep() {
         let items: items[] = [];
         let list: string[] = [];
@@ -555,12 +553,12 @@ class Memo {
                     let filename: string = vlist.match((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm).toString();;
                     // console.log("filename =", filename);
 
-                    let line: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
-                    .replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();
+                    let line: number = Number(vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
+                    .replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString());
                     // console.log("line =", line);
 
-                    let col: string = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
-                    .replace(/^:/gm, "").replace(/^(.*?)(?=:)/gm, "").replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString();;
+                    let col: number = Number(vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:)/gm : /^(.*?)(?=:)/gm, "")
+                    .replace(/^:/gm, "").replace(/^(.*?)(?=:)/gm, "").replace(/^:/gm, "").match(/^(.*?)(?=:)/gm).toString());
                     // console.log("col =", col);
 
                     let result = vlist.replace((process.platform == "win32") ? /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm : /^(.*?)(?=:).(.*?)(?=:).(.*?)(?=:):/gm, "").toString();
