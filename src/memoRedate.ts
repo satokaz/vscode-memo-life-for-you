@@ -1,4 +1,3 @@
-
 'use strict';
 
 import * as vscode from 'vscode';
@@ -23,7 +22,6 @@ export class memoRedate extends memoConfigure {
         interface MemoMessageItem extends vscode.MessageItem {
             id: number;
         }
-
         // modal dialog
         let modal_options = {
             modal: true
@@ -40,6 +38,9 @@ export class memoRedate extends memoConfigure {
 
         let activeFilename = vscode.Uri.file(vscode.window.activeTextEditor.document.fileName);
         // console.log(activeFilename.fsPath);
+
+        // this.memodir を扱うために readConfig() を実行
+        this.readConfig();
 
         // vscode.Uri.fsPath は lowercase で、Node.js は Upercase でドライブ名を返してくるので、lowercase に変換して比較する
         if ((process.platform == "win32" ? path.dirname(activeFilename.fsPath).toLowerCase() : path.dirname(activeFilename.fsPath)) !== (process.platform == "win32" ? path.normalize(this.memodir).toLowerCase() : path.normalize(this.memodir))) {
