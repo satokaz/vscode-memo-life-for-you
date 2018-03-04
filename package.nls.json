@@ -20,5 +20,6 @@
     "grepLineBackgroundColor.desc": "Background color of search result keywords",
     "grepKeywordBackgroundColor.desc": "Background color of line containing search result keywords",
     "listMarkdownPreview.desc": "Markdown Preview is displayed at the same time when selecting a file. However, `Markdown Preview Enhanced`(https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) Extension must be installed. ",
-    "openMarkdownPreview.desc": "Open built-in Markdown Preview at the same time as opening the file in the editor. If `Markdown Preview Enhanced` Extension (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) is installed, use it."
+    "openMarkdownPreview.desc": "Open built-in Markdown Preview at the same time as opening the file in the editor. If `Markdown Preview Enhanced` Extension (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) is installed, use it.",
+    "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`"
 }
