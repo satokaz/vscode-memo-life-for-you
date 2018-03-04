@@ -28,6 +28,8 @@ Unique command (memo command is not necessary):
 
 * `Memo: Today's quick Memo` - Append to the file of today's date
 * `Memo: Re:Date` - Change the date included in the file name to today's date
+* `Memo: Todo` - Todo like [todo.txt](https://github.com/todotxt/todo.txt) (incomplete)
+* `Memo: Open Memo Folder` - Open the folder where the memo is stored in the new instance
 
 ### Memo: New
 
@@ -175,9 +177,14 @@ This extension contributes the following settings:
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.displayFileBirthTime`: Display birthtime of file in `Memo: Edit` additionally (default: false)
+
+    ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo-display-birthtime_en.png)
+
 * `memo-life-for-you.grepLineBackgroundColor`: Search results show keyword background color
 * `memo-life-for-you.grepKeywordBackgroundColor`: Search results show line background color
 * `memo-life-for-you.openMarkdownPreview`: Open Markdown Preview at the same time as opening the file in the editor (default: false)
+* `memo-life-for-you.openNewInstance`: Launch a new instance to create a new memo
+* `memo-life-for-you.listSortOrder`: Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`
 
 ## tips
 
@@ -194,6 +201,10 @@ However, this setting also affects the sidebar.
     // "sideBar.background": "#F0F0F0DD"  //For a light theme
 },
 ```
+### If the focus is lost
+
+todo
+
 
 ## Known Issues
 

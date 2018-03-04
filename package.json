@@ -2,7 +2,7 @@
   "name": "vscode-memo-life-for-you",
   "displayName": "vscode-memo-life-for-you",
   "description": "This extension is for writing notes on VS Code. Inspired by memo (Memo Life For You)",
-  "version": "0.3.2",
+  "version": "0.4.0",
   "publisher": "satokaz",
   "engines": {
     "vscode": "^1.17.0"
@@ -64,6 +64,14 @@
       {
         "command": "extension.memoReDate",
         "title": "%extension.memoReDate.title%"
+      },
+      {
+        "command": "extension.memoTodo",
+        "title": "%extension.memoTodo.title%"
+      },
+      {
+        "command": "extension.memoOpenFolder",
+        "title": "%extension.memoOpenFolder.title%"
       }
     ],
     "menus": {
@@ -149,12 +157,12 @@
         },
         "memo-life-for-you.grepLineBackgroundColor": {
           "type": "string",
-          "default": "rgba(244, 65, 92, 0.6)",
+          "default": "rgba(201, 9, 38, 0.3)",
           "description": "%grepLineBackgroundColor.desc%"
         },
         "memo-life-for-you.grepKeywordBackgroundColor": {
           "type": "string",
-          "default": "rgba(255, 225, 0, 0.7)",
+          "default": "rgba(255, 255, 255, 0.4)",
           "description": "%grepKeywordBackgroundColor.desc%"
         },
         "memo-life-for-you.listMarkdownPreview": {
@@ -166,6 +174,16 @@
           "type": "boolean",
           "default": false,
           "description": "%openMarkdownPreview.desc%"
+        },
+        "memo-life-for-you.listSortOrder": {
+          "type": "string",
+          "enum": [
+						"filename",
+            "birthtime",
+            "mtime"
+					],
+          "default": "filename",
+          "description": "%listSortOrder.desc%"
         }
       }
     }
@@ -188,13 +206,13 @@
     "event-stream": "^3.3.4",
     "gulp-filter": "^5.0.1",
     "run-sequence": "^2.2.0",
-    "vsce": "^1.33.1"
+    "vsce": "^1.37.5"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
-    "fs-extra": "^4.0.2",
+    "fs-extra": "^5.0.0",
     "random-emoji": "^1.0.2",
     "tomlify-j0.4": "^2.2.1",
-    "vscode-nls": "^2.0.2"
+    "vscode-nls": "^3.2.1"
   }
 }

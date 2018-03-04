@@ -6,6 +6,8 @@
     "extension.memoServe.title": "Memo: Serve",
     "extension.memoConfig.title": "Memo: Config",    
     "extension.memoReDate.title": "Memo: Re:Date",
+    "extension.memoTodo.title": "Memo: Todo",
+    "extension.memoOpenFolder.title": "Memo: Open Memo Folder in New Instance",
     "memoPath.desc": "Absolute path to the memo command",
     "serve-addr.desc": "Specify port number to `Memo: Serve`",
     "dateFormat.desc": "Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format",
@@ -18,5 +20,6 @@
     "grepLineBackgroundColor.desc": "Background color of search result keywords",
     "grepKeywordBackgroundColor.desc": "Background color of line containing search result keywords",
     "listMarkdownPreview.desc": "Markdown Preview is displayed at the same time when selecting a file. However, `Markdown Preview Enhanced`(https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) Extension must be installed. ",
-    "openMarkdownPreview.desc": "Open built-in Markdown Preview at the same time as opening the file in the editor. If `Markdown Preview Enhanced` Extension (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) is installed, use it."
+    "openMarkdownPreview.desc": "Open built-in Markdown Preview at the same time as opening the file in the editor. If `Markdown Preview Enhanced` Extension (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) is installed, use it.",
+    "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`"
 }

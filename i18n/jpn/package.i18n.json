@@ -6,6 +6,8 @@
     "extension.memoServe.title": "Memo: サーブ",
     "extension.memoConfig.title": "Memo: 設定",
     "extension.memoReDate.title": "Memo: ファイル名の日付を最新に付け替える",
+    "extension.memoTodo.title": "Memo: Todo ",
+    "extension.memoOpenFolder.title": "Memo: メモ格納フォルダを新しい VS Code インスタンスで開く", 
     "memoPath.desc": "memo コマンドへの絶対パス。Serve コマンドを使用する場合に必要",
     "serve-addr.desc": "Memo:Serve コマンドで使用するポート番号を指定する",
     "dateFormat.desc": "date-fns の形式に従ってください。詳細: https://date-fns.org/v1.29.0/docs/format",
@@ -18,5 +20,6 @@
     "grepLineBackgroundColor.desc": "検索結果のキーワードの背景色",
     "grepKeywordBackgroundColor.desc": "検索結果のキーワードを含む行の背景色",
     "listMarkdownPreview.desc": "`Memo: List/Edit` で選択時に Markdown Preview を表示します。このオプションを利用するには、`Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) 拡張機能が必要です。",
-    "openMarkdownPreview.desc": "選択されたファイルを開くと同時に Markdown Preview も開きます。もし、`Markdown Preview Enhanced` 拡張機能 (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) がインストールされている場合は、これを利用します。"
+    "openMarkdownPreview.desc": "選択されたファイルを開くと同時に Markdown Preview も開きます。もし、`Markdown Preview Enhanced` 拡張機能 (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) がインストールされている場合は、これを利用します。",
+    "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`"
 }
