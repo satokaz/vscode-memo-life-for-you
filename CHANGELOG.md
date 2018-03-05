@@ -2,6 +2,20 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.2
+
+* Fixed ReDate does not work
+
+# 0.4.1
+
+* Fix localization
+
+# 0.4.0
+
+* [Breaking Change regarding the usage of vscode-ripgrep #27](https://github.com/satokaz/vscode-memo-life-for-you/issues/27)
+* Add `openNewInstance` setting (oly Memo: New and  QuickMemo)
+* Add 'Memo: Todo' command (incompete)
+
 # 0.3.2
 
 * Adopt octicons
