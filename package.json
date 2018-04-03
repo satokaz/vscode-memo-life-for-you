@@ -2,7 +2,7 @@
   "name": "vscode-memo-life-for-you",
   "displayName": "vscode-memo-life-for-you",
   "description": "This extension is for writing notes on VS Code. Inspired by memo (Memo Life For You)",
-  "version": "0.4.2",
+  "version": "0.4.3",
   "publisher": "satokaz",
   "engines": {
     "vscode": "^1.17.0"
@@ -178,10 +178,10 @@
         "memo-life-for-you.listSortOrder": {
           "type": "string",
           "enum": [
-						"filename",
+            "filename",
             "birthtime",
             "mtime"
-					],
+          ],
           "default": "filename",
           "description": "%listSortOrder.desc%"
         }
@@ -195,18 +195,18 @@
   "devDependencies": {
     "@types/mocha": "^2.2.44",
     "@types/node": "^7.0.43",
-    "gulp": "^3.9.1",
-    "gulp-typescript": "^3.2.3",
-    "mocha": "^4.0.1",
-    "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "vscode": "^1.1.6",
-    "vscode-nls-dev": "^2.1.5",
     "del": "^3.0.0",
     "event-stream": "^3.3.4",
+    "gulp": "^3.9.1",
     "gulp-filter": "^5.0.1",
+    "gulp-typescript": "^3.2.3",
+    "mocha": "^4.0.1",
     "run-sequence": "^2.2.0",
-    "vsce": "^1.37.5"
+    "tslint": "^5.8.0",
+    "typescript": "^2.6.1",
+    "vsce": "^1.37.5",
+    "vscode": "^1.1.6",
+    "vscode-nls-dev": "^2.1.5"
   },
   "dependencies": {
     "date-fns": "^1.29.0",
