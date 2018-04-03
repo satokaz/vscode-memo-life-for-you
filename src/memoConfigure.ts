@@ -99,7 +99,7 @@ export class memoConfigure {
     public readConfig() {
         let editor;
         let memodir;
-        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split(os.EOL);
+        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split('\n');
 
         // console.log('readConfig =', list);
         list.forEach(async function (v, i) {

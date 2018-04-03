@@ -74,7 +74,7 @@ export class memoGrep extends memoConfigure  {
                     console.log('result.status =', result.stderr.toString());
 
                     if (result.status == 0) {
-                        list = result.stdout.toString().split(os.EOL).sort(function(a,b) {
+                        list = result.stdout.toString().split('\n').sort(function(a,b) {
                             return (a < b ? 1 : -1);
                         });
                     } else {

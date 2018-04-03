@@ -115,7 +115,7 @@ export class memoEdit extends memoConfigure  {
             // console.log(fs.statSync(filename));
             // console.log('birthtime =', statBirthtime);
 
-            let array = fs.readFileSync(filename).toString().split(os.EOL);
+            let array = fs.readFileSync(filename).toString().split('\n');
 
             items.push({
                 "label": `$(calendar) ` + list[index],
@@ -165,7 +165,7 @@ export class memoEdit extends memoConfigure  {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
-            placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Todya\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
+            placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Today\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
             onDidSelectItem: async (selected:items) => {
                 if (selected == null) {
                     return void 0;
