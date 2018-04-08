@@ -148,7 +148,7 @@ export class memoNew extends memoConfigure  {
                         }).then(() => {
                             setTimeout(() => { vscode.commands.executeCommand('workbench.action.closeActiveEditor'); }, 900);
                         }).then(() => {
-                            console.log(vscode.window.activeTextEditor.document);
+                            // console.log(vscode.window.activeTextEditor.document);
                             vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
                                 vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
                             });

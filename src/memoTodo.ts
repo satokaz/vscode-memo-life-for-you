@@ -41,7 +41,7 @@ export class memoTodo extends memoConfigure {
         }
 
         file = path.normalize(path.join(this.memodir, 'todo', file));
-        console.log(file);
+        // console.log(file);
         try {
             fs.statSync(file);
         } catch(err) {
@@ -95,7 +95,7 @@ export class memoTodo extends memoConfigure {
                         // week.unshift(date.getDate() - i);
                         week.push(dateFns.format(new Date(date.getFullYear(), date.getMonth(), date.getDate() + i), 'YYYY-MM-DD'));
                     }
-                    console.log(week);
+                    // console.log(week);
                     //
                     // vscode.window.showInputBox({
                     //     placeHolder: localize('enterTodocompletionDate', 'Please enter completion Date'),
@@ -122,7 +122,7 @@ export class memoTodo extends memoConfigure {
                                 return void 0;
                             }
                         
-                            console.log(memo, project, context, due);
+                            // console.log(memo, project, context, due);
                             vscode.workspace.openTextDocument(file).then(document => {
                             vscode.window.showTextDocument(document, {
                                 viewColumn: 1,
@@ -179,7 +179,7 @@ export class memoTodo extends memoConfigure {
                                             })
                                         });
 
-                                        console.log(list);
+                                        // console.log(list);
                                         editor.revealRange(editor.selection, vscode.TextEditorRevealType.InCenter);
                                     });
                                 });

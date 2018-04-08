@@ -69,7 +69,7 @@ export class memoConfigure {
         this._waiting = false;
 
         vscode.workspace.onDidChangeConfiguration(() => {
-            console.log("onDidChangeConfiguration in memoGrep");
+            // console.log("onDidChangeConfiguration in memoGrep");
             this.updateConfiguration();
         });
 

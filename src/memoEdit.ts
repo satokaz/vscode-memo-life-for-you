@@ -77,7 +77,7 @@ export class memoEdit extends memoConfigure  {
             }
         });
 
-        console.log('dirlist =', dirlist);
+        // console.log('dirlist =', dirlist);
 
         // 新しいものを先頭にするための sort
         // if (this.memoListOrder == 'descending'){
@@ -138,26 +138,26 @@ export class memoEdit extends memoConfigure  {
         // sort 結果は常に新しいものが上位にくる降順
         switch (this.memoListSortOrder) {
             case "filename":
-                console.log('filename');
+                // console.log('filename');
                 items = items.sort(function(a, b) {
                     return (a.filename < b.filename ? 1 : -1);
                 });
                 break;
             case "birthtime":
-                console.log('birthtime');
+                // console.log('birthtime');
                 items = items.sort(function(a, b) {
                     return (a.birthtime.getTime() < b.birthtime.getTime() ? 1 : -1);
                 });
                 break;
             case "mtime":
-                console.log('mtime');
+                // console.log('mtime');
                 items = items.sort(function(a, b) {
                     return (a.mtime.getTime() < b.mtime.getTime() ? 1 : -1);
                 });
                 break;
         }
 
-        console.log("items =", items)
+        // console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
 
