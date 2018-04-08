@@ -14,8 +14,8 @@ const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 export class memoOpenFolder extends memoConfigure {
     constructor() {
         super();
-        console.log('memoOpenFolder');
-        console.log(this.memodir);
+        // console.log('memoOpenFolder');
+        // console.log(this.memodir);
         // console.log('vscode.Uri =', vscode.Uri.file(this.memodir));
     }
 

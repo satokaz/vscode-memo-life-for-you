@@ -99,7 +99,7 @@ Options to use:
 
 You can specify options individually by preparing the ripgrep configuration file.
 
-If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc` is used as the configuration file.
+If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc (Windows example: `C:\Users\Sato\.ripgreprc`)` is used as the configuration file.
 
 In addition, you can specify the configuration file. To use an arbitrary file, set the absolute path of the configuration file in `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`. (Example: `"memo-life-for-you.memoGrepUseRipGrepConfigFilePath": "/Users/satokaz/.vscode-ripgreprc"`)
 

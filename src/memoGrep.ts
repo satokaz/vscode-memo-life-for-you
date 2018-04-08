@@ -47,7 +47,7 @@ export class memoGrep extends memoConfigure  {
 
         this.readConfig();
 
-        console.log('memoGrepUseRipGrepConfigFilePath =', this.memoGrepUseRipGrepConfigFilePath);
+        // console.log('memoGrepUseRipGrepConfigFilePath =', this.memoGrepUseRipGrepConfigFilePath);
 
         // Progress
         const progressOptions: vscode.ProgressOptions = {
@@ -56,7 +56,7 @@ export class memoGrep extends memoConfigure  {
         };
         
         vscode.window.showInputBox({
-            placeHolder: localize('grepEnterKeyword', 'Please enter a keyword or pattern'),
+            placeHolder: localize('grepEnterKeyword', 'Please enter a keyword'),
             prompt: localize('grepEnterKeyword', 'Please enter a keyword...'),
             ignoreFocusOut: true
         }).then(async (keyword) => {
@@ -103,9 +103,9 @@ export class memoGrep extends memoConfigure  {
                                 });
                 }
 
-                console.log(rgPath, args.concat([keyword]).concat([this.memodir]));
-                console.log('result.status =', result.status);
-                console.log('result.status =', result.stderr.toString());
+                // console.log(rgPath, args.concat([keyword]).concat([this.memodir]));
+                // console.log('result.status =', result.status);
+                // console.log('result.status =', result.stderr.toString());
 
                 if (result.status == 0) {
                     list = result.stdout.toString().split('\n').sort(function(a,b) {
@@ -115,7 +115,7 @@ export class memoGrep extends memoConfigure  {
                     vscode.window.showErrorMessage(result.stderr.toString());
                     list = [];
                 }
-                console.log('list =', list);
+                // console.log('list =', list);
             });
 
             list.forEach((vlist, index) => {

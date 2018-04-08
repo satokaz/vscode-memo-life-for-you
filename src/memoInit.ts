@@ -33,7 +33,7 @@ export class memoInit {
     // private memoGrepChannel: vscode.OutputChannel;
     // private memoListChannel: vscode.OutputChannel;
     constructor() {
-        console.log('memoInit');
+        // console.log('memoInit');
         this.init(); // 初期化を同期にしたいので async/await で実行する
     }
 
