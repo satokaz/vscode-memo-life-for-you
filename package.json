@@ -184,6 +184,16 @@
           ],
           "default": "filename",
           "description": "%listSortOrder.desc%"
+        },
+        "memo-life-for-you.memoGrepUseRipGrepConfigFile": {
+          "type": "boolean",
+          "default": false,
+          "description": "%memoGrepUseRipGrepConfigFile.desc%"
+        },
+        "memo-life-for-you.memoGrepUseRipGrepConfigFilePath": {
+          "type": "string",
+          "default": "",
+          "description": "%memoGrepUseRipGrepConfigFilePath.desc%"
         }
       }
     }

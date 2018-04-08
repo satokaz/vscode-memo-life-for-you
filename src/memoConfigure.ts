@@ -47,7 +47,9 @@ export class memoConfigure {
     public memoEditDispBtime: boolean = false;
     public memoListSortOrder: string;
     public memoGrepOrder: string;
-
+    public memoGrepUseRipGrepConfigFile: boolean = false;
+    public memoGrepUseRipGrepConfigFilePath: string;
+    
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
         matchOnDescription: true,
@@ -66,9 +68,15 @@ export class memoConfigure {
         this.updateConfiguration();
         this._waiting = false;
 
+        vscode.workspace.onDidChangeConfiguration(() => {
+            console.log("onDidChangeConfiguration in memoGrep");
+            this.updateConfiguration();
+        });
+
         fs.watchFile(path.normalize(path.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
             // console.log(curr);
-            this.updateConfiguration();
+            // this.updateConfiguration();
+            this.readConfig();
         });
     }
 
@@ -155,6 +163,8 @@ export class memoConfigure {
         this.memoEditOpenNewInstance = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openNewInstance');
         this.memoListSortOrder = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('listSortOrder'); //birthtime or mtime or filename
         this.memoGrepOrder = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepOrder');
+        this.memoGrepUseRipGrepConfigFile = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoGrepUseRipGrepConfigFile');
+        this.memoGrepUseRipGrepConfigFilePath = vscode.workspace.getConfiguration('memo-life-for-you').inspect<string>('memoGrepUseRipGrepConfigFilePath').globalValue;
     }
 
     get onDidChange() {
