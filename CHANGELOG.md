@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.4
+
+* ripgrep configuration file support
+
 # 0.4.3
 
 * Revert: Use os.EOL instead of '\n'. There was a problem with the operation in Windows

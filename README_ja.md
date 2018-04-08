@@ -5,7 +5,7 @@
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_new_demo.gif)
 
-* この拡張機能は [memo (Memo Life For You)](https://github.com/mattn/memo) に影響を受け、VS Code と組み合わせて利用できるようにするために作り始めました(現在は、作成されたファイルを memo コマンドでも VS Code でも有効に活用できることを考え、一部の機能を除き、個別に動作するようになっており、ファイルを開くことに特化しています)
+* この拡張機能は [memo (Memo Life For You)](https://github.com/mattn/memo) に影響を受け、VS Code と組み合わせて利用できるようにするために作り始めました (現在は、作成されたファイルを memo コマンドでも VS Code でも有効に活用できることを考え、一部の機能を除き、個別に動作するよう実装し直し、ファイルを開くことに特化しています)
 * 構成ファイルである `config.toml` と配置先のディレクトリは、memo コマンドと互換性があります
 * Memo: New/Edit/Grep/Config コマンドを実行するために、外部に memo コマンドは必要ありません
 * もし、Memo: Serve を使う場合は、memo コマンドをインストールする必要があります
@@ -16,18 +16,20 @@
 
 提供されるコマンドは下記のとおりです:
 
-* `Memo: New` - メモを作成 (memo コマンドは必要ありません)
-* `Memo: Edit` - 作成されたメモのリストと編集 (memo コマンドは必要ありません)
-* `Memo: Grep` - 作成されたメモを検索 (memo コマンドは必要ありません)
-* `Memo: Config` - 構成ファイルの編集 (memo コマンドは必要ありません)
-* `Memo: Serve` - memo コマンドに組み込まれた http server を起動し、ブラウザで表示 (memo コマンドが必要です)
+* `Memo: メモの新規作成` - メモを作成 (memo コマンドは必要ありません)
+* `Memo: メモのリスト/編集` - 作成されたメモのリストと編集 (memo コマンドは必要ありません)
+* `Memo: メモの検索` - 作成されたメモを検索 (memo コマンドは必要ありません)
+* `Memo: 設定` - 構成ファイルの編集 (memo コマンドは必要ありません)
+* `Memo: サーブ` - memo コマンドに組み込まれた http server を起動し、ブラウザで表示 (memo コマンドが必要です)
 
 ユニークなコマンド:
 
-* `Memo: Today's quick Memo` - `YY-MM-DD.md` ファイルに追記 (memo command is not necessary)
-* `Memo: Re:Date` - ファイル名に含まれた日付 (YY-MM-DD) を今日の日付に変更する
+* `Memo: 今日のメモ` - `YY-MM-DD.md` ファイルに追記 (memo コマンドは必要ありません)
+* `Memo: ファイル名の日付を最新に付け替える` - ファイル名に含まれた日付 (YY-MM-DD) を今日の日付に変更する
+* `Memo: Todo` - [todo.txt](https://github.com/todotxt/todo.txt) によるタスク管理 (実装中)
+* `Memo: メモ格納フォルダを新しい VS Code インスタンスで開く` - メモが格納されているフォルダを新しい VS Code インスタンスでオープンします
 
-### Memo: New
+### Memo: メモの新規作成
 
 * QuickInput に入力された値をファイル名およびタイトルとして、ファイルを作成
 * QuickInput に何も入力せずに Enter を押した場合、日付をベースにした `YY-MM-DD.md` ファイルが作成されます。もし、同じ日付けのファイル名がすでに存在している場合は、上書きせずにそのファイルを開きます
@@ -36,7 +38,7 @@
 * ファイルは `preview` 状態で開かれます
 * オプション `memo-life-for-you.openMarkdownPreview` を設定することで Markdown Preview を同時に表示することも可能
 
-### Memo: Today's quick Memo
+### Memo: 今日のメモ
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_quicknote.gif)
 
@@ -46,7 +48,7 @@
 * また、エディタ上で文字列を選択してから、このコマンドを実行すると、タイムスタンプと共に選択された文字列がタイトル名として挿入されます
 * ファイルは、`Memo: Today's quick Memo` コマンドを実行した VS Code インスタンス上で開きます
 
-### Memo: Edit
+### Memo: メモのリスト/編集
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
 
@@ -67,7 +69,7 @@
 * キーボードでの操作時のみ表示します
 
 
-### Memo: Grep
+### Memo: メモの検索
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_grep_demo.gif)
 
@@ -90,11 +92,40 @@ VS Code に同梱されている `ripgrep` を使用するため、別途イン�
 * `-g *.md` -- Include *.md files for searching that match the given glob. 
 * `-S` -- Search case insensitively if the pattern is all lowercase.
 
-### Memo: Config
+#### ripgrep 構成ファイル (vscode 1.22 or later (ripgrep 0.8.1) で利用可能)
+
+ripgrep のオプションを指定できるように ripgrpe 構成ファイルをサポートします。
+
+`memo-life-for-you.memoGrepUseRipGrepConfigFile` に `true` を設定すると、構成ファイルとして `$HOME/.ripgreprc` を使用します。
+
+また、任意の場所に配置された構成ファイルを利用したい場合は、`memo-life-for-you.memoGrepUseRipGrepConfigFilePath` に、構成ファイルの絶対パスをセットしてください。(例: `"memo-life-for-you.memoGrepUseRipGrepConfigFilePath": "/Users/satokaz/.vscode-ripgreprc"`)
+
+いずれの場合も、構成ファイルが存在しない場合は、エラーになります。
+
+構成ファイルには、下記のオプションを必ず入れてください: 
+
+```
+--vimgrep
+```
+
+構成ファイルを使わない時の動作と同じにする設定は、下記となりなす:
+
+```
+--vimgrep
+--color never
+--glob=*.md
+--smart-case
+```
+
+> 詳しくは、下記を参照してください:
+> See: https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
+
+
+### Memo: 設定
 
 * VS Code で構成ファイルを開きます
 
-### Memo: Serve
+### Memo: サーブ
 
 * memo コマンドが必要です。この機能が必要ない場合は、memoコマンドをインストールする必要はありません。
 * `memo serve` を実行し、memo コマンドの組み込み http サーバを起動し、ブラウザに表示します。プロセスは手動で終了する必要があります。
@@ -166,6 +197,11 @@ templatebodyfile = ""
 * `memo-life-for-you.grepLineBackgroundColor`: 検索結果のキーワードの背景色
 * `memo-life-for-you.grepKeywordBackgroundColor`: 検索結果のキーワードを含む行の背景色
 * `memo-life-for-you.openMarkdownPreview`: エディタでファイル開くと同時に Markdown Preview を開きます (default: false)
+* `memo-life-for-you.openNewInstance`: メモを開くときは、新しいインスタンスで開く
+* `memo-life-for-you.listSortOrder`: メモのリスト表示を `filename`, `birthtime` または `mtime` で並び替えます 
+* `memo-life-for-you.memoGrepUseRipGrepConfigFile`: ripgrep 構成ファイルを利用する (default: $HOME/.ripgreprc)
+* `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`: 任意の場所に配置された構成ファイルを利用する場合 (例: /Users/satokaz/.vscode-ripgreprc)
+
 ## tips
 
 ### クイックアイテムリストの透過設定
@@ -182,7 +218,6 @@ templatebodyfile = ""
 ```
 
 ### withRespect mode
-)
 
 すでに終了していたのですが、10月末でとあるキャラクターが終了することを知り、そのキャラクターの貢献などに敬意を払いたく、とある設定を true にすると、検索とエディタメニューにちょっとした遊びが入るようにしました。アイコンを alt キーを押しながらクリックで別な機能を呼び出すこともできます。
 
