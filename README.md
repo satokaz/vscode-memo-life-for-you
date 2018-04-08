@@ -70,7 +70,6 @@ Unique command (memo command is not necessary):
 * Markdown preview is displayed only when operating the keyboard.
 * You can cancel by pressing the `ESC` key. 
 
-
 ### Memo: Grep
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_grep_demo.gif)
@@ -81,8 +80,9 @@ Unique command (memo command is not necessary):
 * selected file will be opened in the VS Code instance that executed the `Memo: Grep` command
 * The file is opened with `preview` state.
 * At the same time, generate `Memo Grep` output panel which outputs file list.
+* 
 
-####  Supported grep command
+#### built-in ripgrep options
 
 Picker Items is created from the output of `ripgrep` command. Therefore, picker items may not be generated correctly depending on the output. 
 
@@ -94,6 +94,33 @@ Options to use:
 * `--color never` -- Do not use color in output.
 * `-g *.md` -- Include *.md files for searching that match the given glob. 
 * `-S` -- Search case insensitively if the pattern is all lowercase.
+
+#### ripgrep configuration file (Available in vscode 1.22 or later (ripgrep 0.8.1))
+
+You can specify options individually by preparing the ripgrep configuration file.
+
+If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc` is used as the configuration file.
+
+In addition, you can specify the configuration file. To use an arbitrary file, set the absolute path of the configuration file in `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`. (Example: `"memo-life-for-you.memoGrepUseRipGrepConfigFilePath": "/Users/satokaz/.vscode-ripgreprc"`)
+
+If the configuration file does not exist, an error occurs.
+
+The following option is mandatory;
+
+```
+--vimgrep
+```
+
+Same settings as built-in options:
+
+```
+--vimgrep
+--color never
+--glob=*.md
+--smart-case
+```
+
+> See: https://github.com/BurntSushi/ripgrep/blob/master/GUIDE.md#configuration-file
 
 ### Memo: Config
 
@@ -185,6 +212,10 @@ This extension contributes the following settings:
 * `memo-life-for-you.openMarkdownPreview`: Open Markdown Preview at the same time as opening the file in the editor (default: false)
 * `memo-life-for-you.openNewInstance`: Launch a new instance to create a new memo
 * `memo-life-for-you.listSortOrder`: Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`
+* `memo-life-for-you.memoGrepUseRipGrepConfigFile`: Do you want ripgrep to work with the configuration file (default: $HOME/.ripgreprc)
+* `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`: If you set memoGrepUseRipGrepConfigFile to ture and want to use ripgrep config file located further in a specific place, set the path of config file (example: /Users/satokaz/.vscode-ripgreprc)
+
+ 
 
 ## tips
 

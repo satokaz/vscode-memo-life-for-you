@@ -88,7 +88,7 @@ export class memoNew extends memoConfigure  {
                                 // カーソルを目的の行に移動させて表示する為の処理
                                 const editor = vscode.window.activeTextEditor;
                                 const position = editor.selection.active;
-                                var newPosition = position.with(editor.document.lineCount + 1 , 0);
+                                const newPosition = position.with(editor.document.lineCount + 1 , 0);
                                 // カーソルで選択 (ここでは、まだエディタ上で見えない)
                                 editor.selection = new vscode.Selection(newPosition, newPosition);
                                 // カーソル位置までスクロール
@@ -118,7 +118,7 @@ export class memoNew extends memoConfigure  {
             if (err) {
                 fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
                     if (err) throw err;
-                  });
+                });
             }
         });
 
@@ -137,8 +137,8 @@ export class memoNew extends memoConfigure  {
                     const position = editor.selection.active;
                     const newPosition = position.with(editor.document.lineCount + 1 , 0);
                     editor.selection = new vscode.Selection(newPosition, newPosition);
-                         vscode.window.activeTextEditor.edit(async function (edit) {
-                             edit.insert(newPosition,
+                        vscode.window.activeTextEditor.edit(async function (edit) {
+                            edit.insert(newPosition,
                                 os.EOL + "## "
                                 + getISOWeek
                                 + getEmoji
