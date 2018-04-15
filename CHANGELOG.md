@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.5
+
+* Memo: Grep Maximum result limit is 10,000
+* Experimental implementation of Memo: Todo
+
 # 0.4.4
 
 * ripgrep configuration file support
