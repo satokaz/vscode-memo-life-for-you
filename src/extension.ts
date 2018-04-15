@@ -44,7 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoConfig", () => new memoConfig().Config()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoServe", () => new memoServe().Serve()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoReDate", () => new memoRedate().reDate()));
-    context.subscriptions.push(vscode.commands.registerCommand("extension.memoTodo", () => new memoTodo().Todo()));
+    context.subscriptions.push(vscode.commands.registerCommand("extension.memoTodo", () => new memoTodo().TodoGrep()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenFolder", () => new memoOpenFolder().OpenDir()));    
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
         new memoConfigure().updateConfiguration();
