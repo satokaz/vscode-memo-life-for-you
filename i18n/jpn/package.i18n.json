@@ -23,5 +23,6 @@
     "openMarkdownPreview.desc": "選択されたファイルを開くと同時に Markdown Preview も開きます。もし、`Markdown Preview Enhanced` 拡張機能 (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) がインストールされている場合は、これを利用します。",
     "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`",
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
-    "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file"
+    "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
+    "memoTodoUserePattern": "Todo として認識するためのパターンを定義します (default: ^.*@todo.*?:)"
 }

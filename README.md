@@ -28,7 +28,7 @@ Unique command (memo command is not necessary):
 
 * `Memo: Today's quick Memo` - Append to the file of today's date
 * `Memo: Re:Date` - Change the date included in the file name to today's date
-* `Memo: Todo` - Todo like [todo.txt](https://github.com/todotxt/todo.txt) (incomplete)
+* `Memo: Todo` - Output items matching the specified pattern (experimental)
 * `Memo: Open Memo Folder` - Open the folder where the memo is stored in the new instance
 
 ### Memo: New
@@ -75,12 +75,11 @@ Unique command (memo command is not necessary):
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_grep_demo.gif)
 
 * Use `ripgrep` included in VS Code distribution.
-* By entering keyword, the search results are displayed on Quick Picker.
+* By entering keyword or pattern, the search results are displayed on Quick Picker.
 * Open by selecting a file and move the cursor to the corresponding line and column
 * selected file will be opened in the VS Code instance that executed the `Memo: Grep` command
 * The file is opened with `preview` state.
 * At the same time, generate `Memo Grep` output panel which outputs file list.
-* 
 
 #### built-in ripgrep options
 
@@ -130,6 +129,23 @@ Same settings as built-in options:
 
 * Requires memo command. If you do not need this function, you do not need to install the memo command.
 * Execute `memo serve`, start the built-in http server of the memo command. and display it in the browser. Manually you need to kill the process manually.
+
+### Memo: Todo (experimental)
+
+* Output items matching the specified pattern. The default pattern is `^.*@todo.*?:`. 
+* It matches the pattern by writing `@todo:` as shown below
+
+```md
+### todo example
+
+* [ ] @todo: Submit to customer due:2018-04-18
+* [x] Thank Mom for the meatballs @phone @todo: Impression of meatball
+- @todo: Get back to the boss
+
+```
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_todo.png)
+
 
 ## About the configuration file
 
@@ -214,8 +230,8 @@ This extension contributes the following settings:
 * `memo-life-for-you.listSortOrder`: Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`
 * `memo-life-for-you.memoGrepUseRipGrepConfigFile`: Do you want ripgrep to work with the configuration file (default: $HOME/.ripgreprc)
 * `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`: If you set memoGrepUseRipGrepConfigFile to ture and want to use ripgrep config file located further in a specific place, set the path of config file (example: /Users/satokaz/.vscode-ripgreprc)
+* `memo-life-for-you.memoTodoUserePattern`: Define a pattern to recognize as Todo. (default: ^.*@todo.*?:)
 
- 
 
 ## tips
 

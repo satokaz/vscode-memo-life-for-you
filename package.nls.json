@@ -23,5 +23,6 @@
     "openMarkdownPreview.desc": "Open built-in Markdown Preview at the same time as opening the file in the editor. If `Markdown Preview Enhanced` Extension (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) is installed, use it.",
     "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`",
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
-    "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file"
+    "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
+    "memoTodoUserePattern": "Define a pattern to recognize as todo (default: ^.*@todo.*?:)"
 }
