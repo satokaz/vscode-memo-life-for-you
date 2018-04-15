@@ -49,6 +49,7 @@ export class memoConfigure {
     public memoGrepOrder: string;
     public memoGrepUseRipGrepConfigFile: boolean = false;
     public memoGrepUseRipGrepConfigFilePath: string;
+    public memoTodoUserePattern: string;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -165,6 +166,7 @@ export class memoConfigure {
         this.memoGrepOrder = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('grepOrder');
         this.memoGrepUseRipGrepConfigFile = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoGrepUseRipGrepConfigFile');
         this.memoGrepUseRipGrepConfigFilePath = vscode.workspace.getConfiguration('memo-life-for-you').inspect<string>('memoGrepUseRipGrepConfigFilePath').globalValue;
+        this.memoTodoUserePattern = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoTodoUserePattern');
     }
 
     get onDidChange() {

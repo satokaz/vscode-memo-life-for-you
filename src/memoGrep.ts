@@ -7,7 +7,6 @@ import * as nls from 'vscode-nls';
 import * as fs from 'fs';
 import * as os from 'os';
 import { items, memoConfigure } from './memoConfigure';
-import { resolve } from 'url';
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
@@ -63,9 +62,9 @@ export class memoGrep extends memoConfigure  {
             }
 
         // Progress
-            await vscode.window.withProgress({
+            vscode.window.withProgress({
                 location: vscode.ProgressLocation.Notification,
-                title: "Start search...",
+                title: localize('grepStart', "Start search..."),
                 cancellable: true,
             }, async (progress, token) => {
                 token.onCancellationRequested(() => {
@@ -74,7 +73,7 @@ export class memoGrep extends memoConfigure  {
                     }
                 });
                 return new Promise((resolve, reject) => {
-                    progress.report({ message: localize('grepProgress', "Searching Memo...")});
+                    progress.report({ message: localize('grepProgress', "Searching for keyword: {0}...", keyword)});
                     // progress.report({ increment: 100 });
 
                     // console.log('memoGrepUseRipGrepConfigFile =', this.memoGrepUseRipGrepConfigFile);
@@ -107,32 +106,50 @@ export class memoGrep extends memoConfigure  {
                                         cwd: this.memodir
                                     });
                     }
-
                         
                     child.stdout.setEncoding('utf-8');
                     child.stdout.on("data", (message) => {
                         // console.log('stdout =', message);
+
                         result += message;
+
+                        // console.log('result.length =', result);
+                        // console.log('result.length =', result.length);
+                        
+                        // console.log('result.length =', result.split('\n').length);
+                        if (result.split('\n').length > 10000) {
+
+                            child.stdout.removeAllListeners();
+
+                            list = result.split('\n').sort(function(a, b) {
+                                return (a < b ? 1 : -1);
+                            });
+                            
+                            vscode.window.showInformationMessage(localize('grepResultMax', 'Search result exceeded 10000. Please enter a more specific search pattern and narrow down the search results'));
+                            // vscode.window.showErrorMessage(child.stderr.toString());
+                            resolve();
+                        }
                     });
 
                     child.stderr.setEncoding('utf-8');
                     child.stderr.on("data", (message) => {
-                        console.log(message);
+                        vscode.window.showErrorMessage(message.toString());
+                        // console.log(message);
                     });
 
                     child.on("close", async (code) => {
-                        console.log(code);
+                        // console.log(code);
                         // console.log(result);
-                        if ( code == 0) {
-                            list = result.split('\n').sort(function(a,b) {
+                        if (code == 0) {
+                            list = result.split('\n').sort(function(a, b) {
                                 return (a < b ? 1 : -1);
                             });
+                            resolve();
                         } else {
-                            vscode.window.showErrorMessage(child.stderr.toString());
                             list = [];
+                            vscode.window.showWarningMessage(localize('grepNoResult', 'No keywords found'));
+                            reject();
                         }
-
-                        resolve();
                     });
 
                 });
@@ -172,7 +189,7 @@ export class memoGrep extends memoConfigure  {
                 });
 
                 this.memoGrepChannel.appendLine(`${index}: ` + 'file://' + filename + (process.platform == 'linux' ? ":" : "#") + line + ':' + col );
-                this.memoGrepChannel.appendLine(result);
+                // this.memoGrepChannel.appendLine(result);
                 this.memoGrepChannel.appendLine(vlist.replace(/^(.*?)(?=:)/gm, '').replace(/^:/g, 'Line ').toString());
                 this.memoGrepChannel.appendLine('');
             });
@@ -235,6 +252,8 @@ export class memoGrep extends memoConfigure  {
 
                             // カーソル位置までスクロール
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
+                        }).then(() => {
+
                         });
                     });
                 }
@@ -260,10 +279,13 @@ export class memoGrep extends memoConfigure  {
                         // カーソル位置までスクロール
                         editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
                     });
+                }).then(() => {
+                    // ファイルを選択した後に、decoration を消す
+                    setTimeout(() => { 
+                        grepLineDecoration.dispose();
+                        grepKeywordDecoration.dispose();
+                    }, 500);
                 });
-                // ファイルを選択した後に、decoration を消す
-                grepLineDecoration.dispose();
-                grepKeywordDecoration.dispose();
             });
             });
         });
