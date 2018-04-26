@@ -114,9 +114,9 @@ export class memoNew extends memoConfigure  {
         // console.log(getISOWeek);
         // console.log(getEmoji);
 
-        fs.stat(file, (err, files) => {
+        fs.stat(file, async (err, files) => {
             if (err) {
-                fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
+                await fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
                     if (err) throw err;
                 });
             }
