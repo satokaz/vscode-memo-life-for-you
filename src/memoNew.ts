@@ -8,6 +8,7 @@ import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
 import * as os from 'os';
 import { items, memoConfigure } from './memoConfigure';
+import * as clipboardy from 'clipboardy';
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
@@ -45,6 +46,13 @@ export class memoNew extends memoConfigure  {
         let editor = vscode.window.activeTextEditor;
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
 
+        // vscde 上で何も選択されていない (= 0) 場合は、clipboard を参照する 
+        if (selectString.length == 0) {
+            selectString = clipboardy.readSync();
+        }
+
+        console.log('selectString =', selectString);
+
         vscode.window.showInputBox({
             placeHolder: localize('enterFileanme', 'Please Enter a Filename'),
             // prompt: "",
@@ -56,12 +64,12 @@ export class memoNew extends memoConfigure  {
                     return void 0;
                 }
 
-                let dateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
+                let fileNameDateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
 
                 if (title == "") {
-                    file = dateFormat + ".md";
+                    file = fileNameDateFormat + ".md";
                 } else {
-                    file = dateFormat + '-' + title
+                    file = fileNameDateFormat + '-' + title
                     .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                     .replace(/--+/g ,'') + ".md";
                 }
@@ -71,7 +79,7 @@ export class memoNew extends memoConfigure  {
                     // fs.accessSync(this.memodir);
                     fs.statSync(file);
                 } catch(err) {
-                    fs.writeFileSync(file, "# " + dateFormat + " " + `${title}` + os.EOL + os.EOL);
+                    fs.writeFileSync(file, "# " + fileNameDateFormat + " " + `${title}` + os.EOL + os.EOL);
                 }
 
                 if (this.memoEditOpenNewInstance){
@@ -114,9 +122,9 @@ export class memoNew extends memoConfigure  {
         // console.log(getISOWeek);
         // console.log(getEmoji);
 
-        fs.stat(file, (err, files) => {
+        fs.stat(file, async (err, files) => {
             if (err) {
-                fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
+                await fs.writeFile(file, "# " + dateFns.format(new Date(), `${dateFormat}`) + os.EOL + os.EOL, (err) => {
                     if (err) throw err;
                 });
             }

@@ -35,7 +35,8 @@ Unique command (memo command is not necessary):
 
 * Create a file with the entered value as `title` and `filename`.
 * When you press enter with empty, create a file with `YY-MM-DD.md`. If a file with the same name already exists, it opens the file without overwriting it. 
-* When text is selected on the editor and the command is executed, it can be used for title and file name.
+* When text is selected (selected on vscode or copy) on the editor and the command is executed, it can be used for title and file name.
+
 * The file is opened to the VS Code instance that executed the `Memo: Edit` command.
 * The file is opened with `preview` state.
 * Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`
