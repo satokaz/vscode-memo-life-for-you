@@ -2,6 +2,13 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+
+# 0.4.6
+
+* Support paste from os clipboard to supplement the file name of Memo: New.
+* Fix: For the first time on that day, it may not be displayed when you run Memo:Today.
+
+
 # 0.4.5
 
 * Memo: Grep Maximum result limit is 10,000
