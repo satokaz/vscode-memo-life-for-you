@@ -201,6 +201,10 @@ templatebodyfile = ""
 * `memo-life-for-you.listSortOrder`: メモのリスト表示を `filename`, `birthtime` または `mtime` で並び替えます 
 * `memo-life-for-you.memoGrepUseRipGrepConfigFile`: ripgrep 構成ファイルを利用する (default: $HOME/.ripgreprc)
 * `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`: 任意の場所に配置された構成ファイルを利用する場合 (例: /Users/satokaz/.vscode-ripgreprc)
+* `memo-life-for-you.memoTodoUserePattern`: Todo として認識するためのパターンを定義します (default: ^.*@todo.*?:)
+* `memo-life-for-you.memoNewFilenameFromClipboard`: OS のクリップボードに格納された文字列を新しく作成するファイルの名前として使用する (defaut: false),
+* `memo-life-for-you.memoNewFilenameFromSelection`: vscode 上で選択した文字列を新しく作成するファイルの名前として使用する (default: false),
+* `memo-life-for-you.memoNewFilNameDateSuffix`: ファイル名（YYYY-MM-DD）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v1.29.0/docs/format を参照してください
 
 ## tips
 

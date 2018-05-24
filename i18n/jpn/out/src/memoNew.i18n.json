@@ -1,7 +1,7 @@
 {
     "memodirCheck": "config.toml に memodir が設定されていません",
     "memodirAccessCheck" : "memodir に設定されたディレクトリが存在しません", 
-    "enterFileanme": "ファイル名を入力してください",
+    "enterFilename": "ファイル名を入力してください (default: {0}.md)",
     "enterSelectOrFilename": "ファイルを選択するかファイル名を特定する文字を入力してください。(総ファイル数: {0}) 今日の日付 {1}",
     "editBirthTime": "$(heart) 作成日: {0} $(clock) 変更日: {1}",
     "serveCheck": "memo コマンドが実行できません",

@@ -25,7 +25,7 @@ The following commands are supported.
 * `Memo: Serve` - start http server (Requires memo command)
 
 Unique command (memo command is not necessary):
-
+``
 * `Memo: Today's quick Memo` - Append to the file of today's date
 * `Memo: Re:Date` - Change the date included in the file name to today's date
 * `Memo: Todo` - Output items matching the specified pattern (experimental)
@@ -220,6 +220,15 @@ This extension contributes the following settings:
 * `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
+
+    example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
+
+    ```
+        "memo-life-for-you.dateFormat": "YYYY-MM-DD ddd HH:mm",
+        "memo-life-for-you.insertISOWeek": true,
+        "memo-life-for-you.insertEmoji": true,
+    ```
+
 * `memo-life-for-you.displayFileBirthTime`: Display birthtime of file in `Memo: Edit` additionally (default: false)
 
     ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo-display-birthtime_en.png)
@@ -232,7 +241,16 @@ This extension contributes the following settings:
 * `memo-life-for-you.memoGrepUseRipGrepConfigFile`: Do you want ripgrep to work with the configuration file (default: $HOME/.ripgreprc)
 * `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`: If you set memoGrepUseRipGrepConfigFile to ture and want to use ripgrep config file located further in a specific place, set the path of config file (example: /Users/satokaz/.vscode-ripgreprc)
 * `memo-life-for-you.memoTodoUserePattern`: Define a pattern to recognize as Todo. (default: ^.*@todo.*?:)
+* `memo-life-for-you.memoNewFilenameFromClipboard`: Use the string stored in OS clipboard as the name of the newly created file (defaut: false),
+* `memo-life-for-you.memoNewFilenameFromSelection`: Use the selected string on vscode as the name of the newly create file (default: false),
+* `memo-life-for-you.memoNewFilNameDateSuffix`: Add a date related suffix after filename prefix (YYYY-MM-DD). The added string is passed to datefns.format(). See: https://date-fns.org/v1.29.0/docs/format (default: empty). 
 
+    example: 
+
+    * If you specify `-dddd`, the filename is `2018-05-24-Thursday.md`. 
+    * If you specify `-W`, the filename is `2018-05-24-21.md`. 
+    * If you add a string, some characters may be formatted by datefns.format(). If you do not want to format it please escape the character with `\\`.
+    * 
 
 ## tips
 

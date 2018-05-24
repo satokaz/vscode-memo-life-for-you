@@ -2,6 +2,11 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.7
+
+* Add setting: `memo-life-for-you.memoNewFilenameFromClipboard`: Use the string stored in OS clipboard as the name of the newly created file (defaut: false),
+* Add setting: `memo-life-for-you.memoNewFilenameFromSelection`: Use the selected string on vscode as the name of the newly create file (default: false),
+* Add setting: `memo-life-for-you.memoNewFilNameDateSuffix`: Add a date related suffix after filename prefix (YYYY-MM-DD). The added string is passed to datefns.format(). See: https://date-fns.org/v1.29.0/docs/format (default: empty)
 
 # 0.4.6
 
