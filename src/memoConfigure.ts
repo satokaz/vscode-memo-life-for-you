@@ -50,6 +50,7 @@ export class memoConfigure {
     public memoGrepUseRipGrepConfigFile: boolean = false;
     public memoGrepUseRipGrepConfigFilePath: string;
     public memoTodoUserePattern: string;
+    public memoNewFilenameFromClipboard: boolean;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -167,6 +168,7 @@ export class memoConfigure {
         this.memoGrepUseRipGrepConfigFile = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoGrepUseRipGrepConfigFile');
         this.memoGrepUseRipGrepConfigFilePath = vscode.workspace.getConfiguration('memo-life-for-you').inspect<string>('memoGrepUseRipGrepConfigFilePath').globalValue;
         this.memoTodoUserePattern = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoTodoUserePattern');
+        this.memoNewFilenameFromClipboard = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoNewFilenameFromClipboard');
     }
 
     get onDidChange() {

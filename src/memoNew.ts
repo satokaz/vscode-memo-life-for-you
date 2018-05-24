@@ -27,6 +27,10 @@ export class memoNew extends memoConfigure  {
         let file: string;
         let dateFormat = this.memoDateFormat;
 
+        let selectString: string = "";
+        // エディタが一つも無い場合は、エラーになるので対処しておく
+        let editor = vscode.window.activeTextEditor;
+
         if(!this.memodir) {
             vscode.window.showErrorMessage(localize('memodirCheck', 'memodir is not set in config.toml'));
             return;
@@ -47,8 +51,10 @@ export class memoNew extends memoConfigure  {
         let selectString: String = editor ? editor.document.getText(editor.selection) : "";
 
         // vscde 上で何も選択されていない (= 0) 場合は、clipboard を参照する 
+        if (this.memoNewFilenameFromClipboard == true) {
         if (selectString.length == 0) {
             selectString = clipboardy.readSync();
+        }
         }
 
         console.log('selectString =', selectString);

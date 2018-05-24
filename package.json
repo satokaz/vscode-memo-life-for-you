@@ -199,6 +199,11 @@
           "type": "string",
           "default": "^.*@todo.*?:",
           "description": "%memoTodoUserePattern.desc%"
+        },
+        "memo-life-for-you.memoNewFilenameFromClipboard": {
+          "type": "boolean",
+          "default": false,
+          "description": "%memoNewFilenameFromClipboard.desc%"
         }
       }
     }
