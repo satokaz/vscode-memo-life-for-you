@@ -35,7 +35,7 @@ export class memoTodo extends memoConfigure  {
         let args: string[];
         let result: string = ""; // "" で初期化しておかないと result += hoge で先頭に undefined が入ってしまう
         let child: cp.ChildProcess;
-        let keyword = this.memoTodoUserePattern;
+        let keyword = this.memoTodoUserePattern;    // '^.*@todo.*?:'
 
         // ASAR
         if (fs.existsSync(path.normalize(path.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
@@ -48,8 +48,12 @@ export class memoTodo extends memoConfigure  {
 
         this.readConfig();
 
-        
-        // let keyword = '^.*@todo.*?:';
+        // todo-tree.regex
+        // keyword = vscode.workspace.getConfiguration('todo-tree').get<string>('regex');
+        // console.log('keyword =', keyword);
+        // var RegexParser = require("regex-parser");
+        // console.log('RegexParser =', RegexParser("/((//|#|<!--|;|/\*)\s*($TAGS)|^\s*- \[ \])/g").toString());
+
         
         // Progress
             vscode.window.withProgress({
@@ -68,7 +72,6 @@ export class memoTodo extends memoConfigure  {
 
                     // console.log('memoGrepUseRipGrepConfigFile =', this.memoGrepUseRipGrepConfigFile);
                     // console.log('memoGrepUseRipGrepConfigFilePath =', this.memoGrepUseRipGrepConfigFilePath);
-                    
 
                     // console.log('memoGrep =', process.env.RIPGREP_CONFIG_PATH);
                     args = ['--vimgrep', '--color', 'never', '-g', '*.md', '-S', '-r', 'TODO: '];
