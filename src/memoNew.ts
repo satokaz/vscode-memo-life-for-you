@@ -45,10 +45,10 @@ export class memoNew extends memoConfigure  {
             return;
         }
 
-        // 選択されているテキストを取得
-        // エディタが一つも無い場合は、エラーになるので対処しておく
-        let editor = vscode.window.activeTextEditor;
-        let selectString: String = editor ? editor.document.getText(editor.selection) : "";
+        // vscode 上選択されているテキストを取得
+        if (this.memoNewFilenameFromSelection == true) {
+            selectString = editor.document.getText(editor.selection);
+        }
 
         // vscde 上で何も選択されていない (= 0) 場合は、clipboard を参照する 
         if (this.memoNewFilenameFromClipboard == true) {
@@ -56,6 +56,7 @@ export class memoNew extends memoConfigure  {
             selectString = clipboardy.readSync();
         }
         }
+        // console.log('selectString =', selectString);
 
         console.log('selectString =', selectString);
 

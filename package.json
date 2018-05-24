@@ -204,6 +204,11 @@
           "type": "boolean",
           "default": false,
           "description": "%memoNewFilenameFromClipboard.desc%"
+        },
+        "memo-life-for-you.memoNewFilenameFromSelection": {
+          "type": "boolean",
+          "default": false,
+          "description": "%memoNewFilenameFromSelection.desc%"
         }
       }
     }

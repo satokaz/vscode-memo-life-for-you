@@ -25,4 +25,5 @@
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
     "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
     "memoNewFilenameFromClipboard.desc": "OS のクリップボードに格納された文字列を新しく作成するファイルの名前として使用する",
+	"memoNewFilenameFromSelection.desc": "vscode 上で選択した文字列を新しく作成するファイルの名前として使用する",
 }
