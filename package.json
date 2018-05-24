@@ -209,6 +209,11 @@
           "type": "boolean",
           "default": false,
           "description": "%memoNewFilenameFromSelection.desc%"
+        },
+        "memo-life-for-you.memoNewFilNameDateSuffix": {
+          "type": "string",
+          "default": "",
+          "description": "%memoNewFilNameDateSuffix.desc%"
         }
       }
     }

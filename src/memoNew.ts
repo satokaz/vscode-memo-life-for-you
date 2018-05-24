@@ -25,7 +25,6 @@ export class memoNew extends memoConfigure  {
         this.readConfig();
 
         let file: string;
-        let dateFormat = this.memoDateFormat;
 
         let selectString: string = "";
         // エディタが一つも無い場合は、エラーになるので対処しておく
@@ -50,18 +49,24 @@ export class memoNew extends memoConfigure  {
             selectString = editor.document.getText(editor.selection);
         }
 
-        // vscde 上で何も選択されていない (= 0) 場合は、clipboard を参照する 
+        // vscde 上で何も選択されていない (= 0) 場合は、clipboard を参照する
         if (this.memoNewFilenameFromClipboard == true) {
-        if (selectString.length == 0) {
-            selectString = clipboardy.readSync();
-        }
+            if (selectString.length == 0) {
+                selectString = clipboardy.readSync();
+            }
         }
         // console.log('selectString =', selectString);
 
-        console.log('selectString =', selectString);
+        let fileNameDateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
+        let filNameDateSuffix: string = "";
+
+        if (this.memoNewFilNameDateSuffix !== "") {
+            filNameDateSuffix  = dateFns.format(new Date(), this.memoNewFilNameDateSuffix);
+            
+        }
 
         vscode.window.showInputBox({
-            placeHolder: localize('enterFileanme', 'Please Enter a Filename'),
+            placeHolder: localize('enterFilename', 'Please Enter a Filename (default: {0}.md)', fileNameDateFormat + filNameDateSuffix),
             // prompt: "",
             value: `${selectString.substr(0,49)}`,
             ignoreFocusOut: true
@@ -71,12 +76,10 @@ export class memoNew extends memoConfigure  {
                     return void 0;
                 }
 
-                let fileNameDateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
-
                 if (title == "") {
-                    file = fileNameDateFormat + ".md";
+                    file = fileNameDateFormat + filNameDateSuffix + ".md";
                 } else {
-                    file = fileNameDateFormat + '-' + title
+                    file = fileNameDateFormat + filNameDateSuffix + "-" + title
                     .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                     .replace(/--+/g ,'') + ".md";
                 }
@@ -140,7 +143,7 @@ export class memoNew extends memoConfigure  {
         // 選択されているテキストを取得
         // エディタが一つも無い場合は、エラーになるので対処しておく
         let editor = vscode.window.activeTextEditor;
-        let selectString: String = editor ? editor.document.getText(editor.selection) : "";
+        let selectString: String = editor ? editor.document.getText(editor.selection) : "";    
 
         if (this.memoEditOpenNewInstance) {
             vscode.workspace.openTextDocument(file).then(document => {

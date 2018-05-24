@@ -52,6 +52,7 @@ export class memoConfigure {
     public memoTodoUserePattern: string;
     public memoNewFilenameFromClipboard: boolean;
     public memoNewFilenameFromSelection: boolean;
+    public memoNewFilNameDateSuffix: string;;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -171,6 +172,7 @@ export class memoConfigure {
         this.memoTodoUserePattern = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoTodoUserePattern');
         this.memoNewFilenameFromClipboard = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoNewFilenameFromClipboard');
         this.memoNewFilenameFromSelection = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoNewFilenameFromSelection');
+        this.memoNewFilNameDateSuffix = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoNewFilNameDateSuffix');
     }
 
     get onDidChange() {
