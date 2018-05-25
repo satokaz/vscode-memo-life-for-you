@@ -231,7 +231,7 @@ templatebodyfile = ""
 
 * ファイルを開くと、そのファイルを含むリポジトリ情報が SCM ビューに追加されます。 (See [When I Open Just One File in Initialized Git Folder - Source Control Shows Number of Changed Files · Issue #35555 · Microsoft/vscode](https://github.com/Microsoft/vscode/issues/35555))
 
-## Tanks
+## Thanks
 
 * [memo (Memo Life For You)](https://github.com/mattn/memo)
 
