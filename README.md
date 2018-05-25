@@ -276,7 +276,7 @@ todo
 
 * If you open a file, the repository information that contains that file will be added to SCM view. (See [When I Open Just One File in Initialized Git Folder - Source Control Shows Number of Changed Files · Issue #35555 · Microsoft/vscode](https://github.com/Microsoft/vscode/issues/35555))
 
-## Tanks
+## Thanks
 
 * [memo (Memo Life For You)](https://github.com/mattn/memo)
 
