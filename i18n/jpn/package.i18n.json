@@ -24,8 +24,9 @@
     "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`",
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
     "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
-    "memoTodoUserePattern": "Todo として認識するためのパターンを定義します (default: ^.*@todo.*?:)",
+    "memoTodoUserePattern.desc": "Todo として認識するためのパターンを定義します (default: ^.*@todo.*?:)",
     "memoNewFilenameFromClipboard.desc": "OS のクリップボードに格納された文字列を新しく作成するファイルの名前として使用する",
 	"memoNewFilenameFromSelection.desc": "vscode 上で選択した文字列を新しく作成するファイルの名前として使用する",
-	"memoNewFilNameDateSuffix.desc": "ファイル名（YYYY-MM-DD）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v1.29.0/docs/format を参照してください"
+    "memoNewFilNameDateSuffix.desc": "ファイル名（YYYY-MM-DD）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v1.29.0/docs/format を参照してください",
+    "openMarkdownPreviewUseMPE.desc": "`memo-life-for-you.openMarkdownPreview` に `true` がセットされている場合、`Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) を使ってプレビューを開く (default: false)"
 }

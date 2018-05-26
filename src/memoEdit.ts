@@ -30,6 +30,7 @@ export class memoEdit extends memoConfigure  {
         let dirlist: string[] = [];
         let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
         let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
+        let openMarkdownPreviewUseMPE: boolean = this.openMarkdownPreviewUseMPE;
         let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
         // console.log("memodir = ", memodir)
 
@@ -222,44 +223,21 @@ export class memoEdit extends memoConfigure  {
                     })
                 }
             }
-        }).then(async function (selected) {   // When selected with the mouse
-            if (selected == null) {
-                if (listMarkdownPreview) {
-                    //キャンセルした時の close 処理
-                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
-                            vscode.commands.executeCommand('workbench.action.focusPreviousGroup').then(() => {
-                                    // vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-                            });
+        }).then(async () => {
+            if (openMarkdownPreview) {
+                if (openMarkdownPreviewUseMPE) { // MPE で Preview を開く
+                    await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
+                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
+                    });
+                } else {
+                    await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
+                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
                     });
                 }
+            } else {
+                // Markdown preview を閉じる
                 await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-                return void 0;
             }
-                await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
-                    await vscode.window.showTextDocument(document, {
-                            viewColumn: 1,
-                            preserveFocus: true,
-                            preview: true
-                        }).then(async editor => {
-                            if (listMarkdownPreview) {
-                                if (openMarkdownPreview) {
-                                // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
-                                    // Markdown-Enhance
-                                    // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
-                                    await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
-                                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
-                                    });
-                                // });
-                                } else {
-                                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-                                }
-                            } else if (openMarkdownPreview) {
-                                await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
-                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
-                                });
-                            }
-                        });
-                });
         });
     }
 }

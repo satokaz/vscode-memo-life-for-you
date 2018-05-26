@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.8
+
+* Add setting: `memo-life-for-you.openMarkdownPreviewUseMPE`: If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"
+
 # 0.4.7
 
 * Add setting: `memo-life-for-you.memoNewFilenameFromClipboard`: Use the string stored in OS clipboard as the name of the newly created file (defaut: false),

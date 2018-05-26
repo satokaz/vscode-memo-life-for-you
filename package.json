@@ -214,6 +214,11 @@
           "type": "string",
           "default": "",
           "description": "%memoNewFilNameDateSuffix.desc%"
+        },
+        "memo-life-for-you.openMarkdownPreviewUseMPE": {
+          "type": "boolean",
+          "default": false,
+          "description": "%openMarkdownPreviewUseMPE.desc%"
         }
       }
     }
