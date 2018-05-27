@@ -232,10 +232,8 @@ export class memoEdit extends memoConfigure  {
                             });
                     });
                 }
-            // } else {
                 // Markdown preview を閉じる
                 await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-                return void 0;
             }
 
             await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
