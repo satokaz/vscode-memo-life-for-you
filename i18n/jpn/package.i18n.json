@@ -20,7 +20,7 @@
     "grepLineBackgroundColor.desc": "検索結果のキーワードの背景色",
     "grepKeywordBackgroundColor.desc": "検索結果のキーワードを含む行の背景色",
     "listMarkdownPreview.desc": "`Memo: List/Edit` で選択時に Markdown Preview を表示します。このオプションを利用するには、`Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) 拡張機能が必要です。",
-    "openMarkdownPreview.desc": "選択されたファイルを開くと同時に Markdown Preview も開きます。もし、`Markdown Preview Enhanced` 拡張機能 (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) がインストールされている場合は、これを利用します。",
+    "openMarkdownPreview.desc": "選択されたファイルを開くと同時に Markdown Preview も開きます。もし、`Markdown Preview Enhanced` 拡張機能 (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) がインストールされている場合、`memo-life-for-you.openMarkdownPreview` に `true` に設定することで、MPE を利用することもできます。",
     "listSortOrder.desc": "Controls the order of Memo: List display. Selectable from `filename` or `birthtime` or `mtime`",
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
     "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
