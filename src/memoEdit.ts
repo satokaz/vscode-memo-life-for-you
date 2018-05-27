@@ -253,6 +253,8 @@ export class memoEdit extends memoConfigure  {
                                 });
                             // });
                             } else {
+                                // MPE preview を close してから built-in preview を開く
+                                await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                                 await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
                                     vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
                                 });
