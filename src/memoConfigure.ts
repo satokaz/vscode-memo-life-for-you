@@ -52,7 +52,8 @@ export class memoConfigure {
     public memoTodoUserePattern: string;
     public memoNewFilenameFromClipboard: boolean;
     public memoNewFilenameFromSelection: boolean;
-    public memoNewFilNameDateSuffix: string;;
+    public memoNewFilNameDateSuffix: string;
+    public openMarkdownPreviewUseMPE: boolean;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -173,6 +174,7 @@ export class memoConfigure {
         this.memoNewFilenameFromClipboard = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoNewFilenameFromClipboard');
         this.memoNewFilenameFromSelection = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('memoNewFilenameFromSelection');
         this.memoNewFilNameDateSuffix = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoNewFilNameDateSuffix');
+        this.openMarkdownPreviewUseMPE = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreviewUseMPE');
     }
 
     get onDidChange() {

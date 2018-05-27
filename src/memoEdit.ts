@@ -1,4 +1,3 @@
-
 'use strict';
 
 import * as vscode from 'vscode';
@@ -30,6 +29,7 @@ export class memoEdit extends memoConfigure  {
         let dirlist: string[] = [];
         let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
         let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
+        let openMarkdownPreviewUseMPE: boolean = this.openMarkdownPreviewUseMPE;
         let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
         // console.log("memodir = ", memodir)
 
@@ -77,7 +77,7 @@ export class memoEdit extends memoConfigure  {
             }
         });
 
-        // console.log('dirlist =', dirlist);
+        console.log('dirlist =', dirlist);
 
         // 新しいものを先頭にするための sort
         // if (this.memoListOrder == 'descending'){
@@ -138,26 +138,26 @@ export class memoEdit extends memoConfigure  {
         // sort 結果は常に新しいものが上位にくる降順
         switch (this.memoListSortOrder) {
             case "filename":
-                // console.log('filename');
+                console.log('filename');
                 items = items.sort(function(a, b) {
                     return (a.filename < b.filename ? 1 : -1);
                 });
                 break;
             case "birthtime":
-                // console.log('birthtime');
+                console.log('birthtime');
                 items = items.sort(function(a, b) {
                     return (a.birthtime.getTime() < b.birthtime.getTime() ? 1 : -1);
                 });
                 break;
             case "mtime":
-                // console.log('mtime');
+                console.log('mtime');
                 items = items.sort(function(a, b) {
                     return (a.mtime.getTime() < b.mtime.getTime() ? 1 : -1);
                 });
                 break;
         }
 
-        // console.log("items =", items)
+        console.log("items =", items)
 
         // let previousFile = vscode.window.activeTextEditor.document.uri;
 
@@ -167,7 +167,7 @@ export class memoEdit extends memoConfigure  {
             matchOnDetail: true,
             placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Today\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
             onDidSelectItem: async (selected:items) => {
-                if (selected == null) {
+                if (selected == undefined || selected == null) {
                     return void 0;
                 }
 
@@ -223,43 +223,58 @@ export class memoEdit extends memoConfigure  {
                 }
             }
         }).then(async function (selected) {   // When selected with the mouse
-            if (selected == null) {
+            if (selected == undefined || selected == null) {
                 if (listMarkdownPreview) {
                     //キャンセルした時の close 処理
                     await vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
                             vscode.commands.executeCommand('workbench.action.focusPreviousGroup').then(() => {
-                                    // vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                                // vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                             });
                     });
                 }
+            // } else {
+                // Markdown preview を閉じる
                 await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
                 return void 0;
             }
-                await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
-                    await vscode.window.showTextDocument(document, {
-                            viewColumn: 1,
-                            preserveFocus: true,
-                            preview: true
-                        }).then(async editor => {
-                            if (listMarkdownPreview) {
-                                if (openMarkdownPreview) {
+
+            await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
+                await vscode.window.showTextDocument(document, {
+                        viewColumn: 1,
+                        preserveFocus: true,
+                        preview: true
+                }).then(async editor => {
+                    if (listMarkdownPreview) {
+                        if (openMarkdownPreview) {
+                            if (openMarkdownPreviewUseMPE) {
                                 // vscode.window.showTextDocument(document, vscode.ViewColumn.One, false).then(editor => {
-                                    // Markdown-Enhance
-                                    // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
-                                    await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
-                                        vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
-                                    });
-                                // });
-                                } else {
-                                    await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
-                                }
-                            } else if (openMarkdownPreview) {
+                                // Markdown-Enhance
+                                // await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() =>{
+                                await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
+                                    vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
+                                });
+                            // });
+                            } else {
                                 await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
                                     vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
                                 });
                             }
-                        });
+                        } else {
+                            await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
+                        }
+                    } else if (openMarkdownPreview) {
+                        if (openMarkdownPreviewUseMPE) {
+                            await vscode.commands.executeCommand('markdown-preview-enhanced.openPreview').then(() =>{
+                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
+                            });
+                        } else {
+                            await vscode.commands.executeCommand('markdown.showPreviewToSide').then(() => {
+                                vscode.commands.executeCommand('workbench.action.focusPreviousGroup');
+                            });
+                        }
+                    }
                 });
+            });
         });
     }
 }
