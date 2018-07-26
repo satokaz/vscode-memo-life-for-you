@@ -142,7 +142,6 @@ Same settings as built-in options:
 * [ ] @todo: Submit to customer due:2018-04-18
 * [x] Thank Mom for the meatballs @phone @todo: Impression of meatball
 - @todo: Get back to the boss
-
 ```
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_todo.png)
