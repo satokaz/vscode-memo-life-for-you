@@ -72,6 +72,10 @@
       {
         "command": "extension.memoOpenFolder",
         "title": "%extension.memoOpenFolder.title%"
+      },
+      {
+        "command": "extension.memoOpenChrome",
+        "title": "%extension.memoOpenChrome.title%"
       }
     ],
     "menus": {
@@ -219,6 +223,11 @@
           "type": "boolean",
           "default": false,
           "description": "%openMarkdownPreviewUseMPE.desc%"
+        },
+        "memo-life-for-you.openChromeCustomizeURL": {
+          "type": "string",
+          "default": "data:text/html, <html contenteditable>",
+          "description": "%openChromeCustomizeURL.desc%"
         }
       }
     }
@@ -244,6 +253,7 @@
     "vscode-nls-dev": "^2.1.5"
   },
   "dependencies": {
+    "chrome-launcher": "^0.10.2",
     "clipboardy": "^1.2.3",
     "date-fns": "^1.29.0",
     "fs-extra": "^5.0.0",

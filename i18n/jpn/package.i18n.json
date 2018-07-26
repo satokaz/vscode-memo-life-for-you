@@ -8,6 +8,7 @@
     "extension.memoReDate.title": "Memo: ファイル名の日付を最新に付け替える",
     "extension.memoTodo.title": "Memo: Todo ",
     "extension.memoOpenFolder.title": "Memo: メモ格納フォルダを新しい VS Code インスタンスで開く", 
+    "extension.memoOpenChrome.title": "Memo: <html contenteditable> で Chrome を開く ",
     "memoPath.desc": "memo コマンドへの絶対パス。Serve コマンドを使用する場合に必要",
     "serve-addr.desc": "Memo:Serve コマンドで使用するポート番号を指定する",
     "dateFormat.desc": "date-fns の形式に従ってください。詳細: https://date-fns.org/v1.29.0/docs/format",

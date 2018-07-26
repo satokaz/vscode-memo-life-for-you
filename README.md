@@ -137,15 +137,31 @@ Same settings as built-in options:
 * It matches the pattern by writing `@todo:` as shown below
 
 ```md
-### todo example
+    ### todo example
 
-* [ ] @todo: Submit to customer due:2018-04-18
-* [x] Thank Mom for the meatballs @phone @todo: Impression of meatball
-- @todo: Get back to the boss
+    * [ ] @todo: Submit to customer due:2018-04-18
+    * [x] Thank Mom for the meatballs @phone @todo: Impression of meatball
+    - @todo: Get back to the boss
 ```
 
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_todo.png)
 
+### Memo: Open Chrome with \<html contenteditable\>
+
+It is useful for "copy and paste" from an editor or preview and saving to a file.
+
+* Chrome must be installed
+* Launch chrome with simple notepad mode
+
+With the `memo-life-for-you.openChromeCustomizeURL` setting, you can customize it to your preferred URL.
+
+default: 
+
+```json
+"memo-life-for-you.openChromeCustomizeURL": "data:text/html, <html contenteditable>"
+```
+
+> When customizing, the comment column of [https://coderwall.com/p/lhsrcq/one-line-browser-notepad](https://coderwall.com/p/lhsrcq/one-line-browser-notepad) is helpful.
 
 ## About the configuration file
 
@@ -243,14 +259,16 @@ This extension contributes the following settings:
 * `memo-life-for-you.memoNewFilenameFromClipboard`: Use the string stored in OS clipboard as the name of the newly created file (defaut: false),
 * `memo-life-for-you.memoNewFilenameFromSelection`: Use the selected string on vscode as the name of the newly create file (default: false),
 * `memo-life-for-you.memoNewFilNameDateSuffix`: Add a date related suffix after filename prefix (YYYY-MM-DD). The added string is passed to datefns.format(). See: https://date-fns.org/v1.29.0/docs/format (default: empty). 
-* `memo-life-for-you.openMarkdownPreviewUseMPE`: If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"
 
     example: 
 
     * If you specify `-dddd`, the filename is `2018-05-24-Thursday.md`. 
     * If you specify `-W`, the filename is `2018-05-24-21.md`. 
     * If you add a string, some characters may be formatted by datefns.format(). If you do not want to format it please escape the character with `\\`.
-    * 
+
+* `memo-life-for-you.openMarkdownPreviewUseMPE`: If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"
+
+* `memo-life-for-you.openChromeCustomizeURL`: Define a customized URL for the `Memo: Open Chrome with <html contenteditable>` command.
 
 ## tips
 

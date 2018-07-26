@@ -20,7 +20,7 @@ import { memoRedate } from './memoRedate';
 import { memoTodo } from './memoTodo';
 import { memoServe } from './memoServe';
 import { memoOpenFolder } from './memoOpenFolder';
-
+import { memoOpenChrome } from './memoOpenChrome';
 
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
@@ -46,6 +46,7 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoReDate", () => new memoRedate().reDate()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoTodo", () => new memoTodo().TodoGrep()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenFolder", () => new memoOpenFolder().OpenDir()));    
+    context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenChrome", () => new memoOpenChrome().OpenChrome()));
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
         new memoConfigure().updateConfiguration();
     }));
