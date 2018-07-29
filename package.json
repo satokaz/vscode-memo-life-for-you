@@ -5,7 +5,7 @@
   "version": "0.4.8",
   "publisher": "satokaz",
   "engines": {
-    "vscode": "^1.22.0"
+    "vscode": "^1.25.0"
   },
   "categories": [
     "Other"
@@ -249,7 +249,7 @@
     "tslint": "^5.8.0",
     "typescript": "^2.6.1",
     "vsce": "^1.37.5",
-    "vscode": "^1.1.6",
+    "vscode": "^1.1.18",
     "vscode-nls-dev": "^2.1.5"
   },
   "dependencies": {
