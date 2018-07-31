@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+# 0.4.9
+
+* Add `Memo: Open Chrome with <html contenteditable>` command to start chrome in simple notepad mode.
+
 # 0.4.8
 
 * Add setting: `memo-life-for-you.openMarkdownPreviewUseMPE`: If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"

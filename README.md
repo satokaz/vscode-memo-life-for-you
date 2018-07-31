@@ -153,6 +153,12 @@ It is useful for "copy and paste" from an editor or preview and saving to a file
 * Chrome must be installed
 * Launch chrome with simple notepad mode
 
+Execute select-all (Ctrl + A or ⌘A )and copy (Ctrl + C or ⌘C) on the vscode preview on the right side. Paste (Ctrl + P or ⌘P) to the Chroem on the left side: 
+
+![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo-chrome.jpeg)
+
+> In vscode insiders 1.26, select-all (ctrl + a or ⌘A) is supported in preview
+
 With the `memo-life-for-you.openChromeCustomizeURL` setting, you can customize it to your preferred URL.
 
 default: 

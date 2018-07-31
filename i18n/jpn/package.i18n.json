@@ -29,5 +29,6 @@
     "memoNewFilenameFromClipboard.desc": "OS のクリップボードに格納された文字列を新しく作成するファイルの名前として使用する",
 	"memoNewFilenameFromSelection.desc": "vscode 上で選択した文字列を新しく作成するファイルの名前として使用する",
     "memoNewFilNameDateSuffix.desc": "ファイル名（YYYY-MM-DD）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v1.29.0/docs/format を参照してください",
-    "openMarkdownPreviewUseMPE.desc": "`memo-life-for-you.openMarkdownPreview` に `true` がセットされている場合、`Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) を使ってプレビューを開く (default: false)"
+    "openMarkdownPreviewUseMPE.desc": "`memo-life-for-you.openMarkdownPreview` に `true` がセットされている場合、`Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) を使ってプレビューを開く (default: false)",
+    "openChromeCustomizeURL.desc": "Memo: Open Chrome with <html contenteditable> コマンドで起動する Chrome の URL をカスタマイズする" 
 }
