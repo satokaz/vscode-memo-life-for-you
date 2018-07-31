@@ -1,15 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
-import * as fs from 'fs';
-import * as fse from 'fs-extra';
-import * as path from 'path';
-import * as randomEmoji from 'random-emoji';
-import * as dateFns from 'date-fns';
-import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
-import * as os from 'os';
 import { memoConfigure } from './memoConfigure';
 import { memoInit }from './memoInit';
 import { memoNew } from './memoNew';
@@ -20,7 +12,8 @@ import { memoRedate } from './memoRedate';
 import { memoTodo } from './memoTodo';
 import { memoServe } from './memoServe';
 import { memoOpenFolder } from './memoOpenFolder';
-
+import { memoOpenChrome } from './memoOpenChrome';
+// import { MemoTreeProvider } from './memoTreeProvider';
 
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
@@ -29,13 +22,16 @@ const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');
     // console.log(vscode.env);
-
     // console.log(path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg")));
     // console.log('vscode.Markdown =', vscode.extensions.getExtension("Microsoft.vscode-markdown").extensionPath);
 
     new memoInit();
     let memoedit = new memoEdit();
     let memogrep = new memoGrep();
+
+    // const treeViewProvider = new MemoTreeProvider(); // constructor に list2 を引数として渡すために、このような実装になっている.
+    // console.log(treeViewProvider);
+    // vscode.window.registerTreeDataProvider('satokaz', treeViewProvider);
 
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoNew", () => new memoNew().New()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoQuick", () => new memoNew().QuickNew()));
@@ -45,11 +41,15 @@ export function activate(context: vscode.ExtensionContext) {
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoServe", () => new memoServe().Serve()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoReDate", () => new memoRedate().reDate()));
     context.subscriptions.push(vscode.commands.registerCommand("extension.memoTodo", () => new memoTodo().TodoGrep()));
-    context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenFolder", () => new memoOpenFolder().OpenDir()));    
+    context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenFolder", () => new memoOpenFolder().OpenDir()));
+    context.subscriptions.push(vscode.commands.registerCommand("extension.memoOpenChrome", () => new memoOpenChrome().OpenChrome()));
     context.subscriptions.push(vscode.workspace.onDidChangeConfiguration(() => {
         new memoConfigure().updateConfiguration();
     }));
 
+    // vscode.commands.registerCommand('favorites.refresh', () => treeViewProvider.refresh());
+
+    
 //Markdown
 // 	let provider = new MDDocumentContentProvider(context);
 //     let registration = vscode.workspace.registerTextDocumentContentProvider('markdown', provider);

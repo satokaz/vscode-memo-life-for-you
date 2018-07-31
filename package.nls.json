@@ -8,6 +8,7 @@
     "extension.memoReDate.title": "Memo: Re:Date",
     "extension.memoTodo.title": "Memo: Todo",
     "extension.memoOpenFolder.title": "Memo: Open Memo Folder in New Instance",
+    "extension.memoOpenChrome.title": "Memo: Open Chrome with <html contenteditable>",
     "memoPath.desc": "Absolute path to the memo command",
     "serve-addr.desc": "Specify port number to `Memo: Serve`",
     "dateFormat.desc": "Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format",
@@ -25,5 +26,6 @@
     "memoGrepUseRipGrepConfigFile.desc": "Do you want ripgrep to work with the configuration file (.ripgreprc)",
     "memoGrepUseRipGrepConfigFilePath.desc": "If you set `memoGrepUseRipGrepConfigFile` to `ture` and want to use ripgrep config file located further in a specific place, set the path of config file",
     "memoTodoUserePattern.desc": "Define a pattern to recognize as todo (default: ^.*@todo.*?:)",
-    "openMarkdownPreviewUseMPE.desc": "If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"
+    "openMarkdownPreviewUseMPE.desc": "If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)",
+    "openChromeCustomizeURL.desc": "Customize Chrome's URL to be launched with Memo: Open Chrome with <html contenteditable> command."
 }
