@@ -76,6 +76,10 @@
       {
         "command": "extension.memoOpenChrome",
         "title": "%extension.memoOpenChrome.title%"
+      },
+      {
+        "command": "extension.memoOpenTypora",
+        "title": "%extension.memoOpenTypora.title%"
       }
     ],
     "menus": {
@@ -228,6 +232,11 @@
           "type": "string",
           "default": "data:text/html, <html contenteditable>",
           "description": "%openChromeCustomizeURL.desc%"
+        },
+        "memo-life-for-you.TyporaExecPath": {
+          "type": "string",
+          "default": "",
+          "description": "%memoTyporaExecPath.desc%"
         }
       }
     }

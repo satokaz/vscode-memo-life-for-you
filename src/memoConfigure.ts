@@ -55,6 +55,7 @@ export class memoConfigure {
     public memoNewFilNameDateSuffix: string;
     public openMarkdownPreviewUseMPE: boolean;
     public memoOpenChromeCustomizeURL: string;
+    public memoTyporaExecPath: string;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -177,6 +178,7 @@ export class memoConfigure {
         this.memoNewFilNameDateSuffix = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoNewFilNameDateSuffix');
         this.openMarkdownPreviewUseMPE = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreviewUseMPE');
         this.memoOpenChromeCustomizeURL = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('openChromeCustomizeURL');
+        this.memoTyporaExecPath = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('TyporaExecPath');
     }
 
     get onDidChange() {
