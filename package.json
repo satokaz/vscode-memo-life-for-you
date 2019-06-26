@@ -273,7 +273,7 @@
     "clipboardy": "^1.2.3",
     "date-fns": "^1.29.0",
     "fs-extra": "^5.0.0",
-    "random-emoji": "^1.0.2",
+    "node-emoji": "^1.10.0",
     "tomlify-j0.4": "^2.2.1",
     "vscode-nls": "^2.0.2"
   }

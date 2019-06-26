@@ -3,7 +3,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as randomEmoji from 'random-emoji';
+import * as randomEmoji from 'node-emoji';
 import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
 import * as os from 'os';
@@ -128,7 +128,8 @@ export class memoNew extends memoConfigure  {
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
         let getISOWeek = this.memoISOWeek == true ? "[Week: " + dateFns.getISOWeek(new Date()) + "/" + dateFns.getISOWeeksInYear(new Date()) + "] " : "";
-        let getEmoji = this.memoEmoji == true ? randomEmoji.random({count: 1})[0].character + " " : "";
+        let getEmoji = this.memoEmoji == true ? randomEmoji.random().emoji : "";
+
         // console.log(getISOWeek);
         // console.log(getEmoji);
 
