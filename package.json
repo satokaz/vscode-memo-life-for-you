@@ -246,7 +246,13 @@
           "description": "%memoTyporaExecPath.desc%"
         }
       }
+    },
+    "snippets": [
+			{
+				"language": "markdown",
+				"path": "./snippets/markdown.json"
     }
+		]
   },
   "scripts": {
     "watch": "tsc -watch -p ./",
