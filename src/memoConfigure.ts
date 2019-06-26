@@ -1,14 +1,9 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
 import * as fs from 'fs';
-import * as fse from 'fs-extra';
 import * as path from 'path';
-import * as os from 'os';
-import * as randomEmoji from 'random-emoji';
-import * as dateFns from 'date-fns';
-import * as tomlify from 'tomlify-j0.4';
+
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
