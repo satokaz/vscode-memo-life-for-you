@@ -13,7 +13,7 @@ export class memoOpenTypora extends memoConfigure {
     constructor() {
         super();
     }
-
+    
     /**
      * OpenTypora
      */
@@ -23,10 +23,10 @@ export class memoOpenTypora extends memoConfigure {
         console.log(this.memopath);
 
         // memo-life-for-you.TyporaExecPath
-        if(this.memoTyporaExecPath === ""){
-            vscode.window.showErrorMessage(localize('typoraCheck', `memo-life-for-you.TyporaExecPath is empty.`));
-            return;
-        }
+        // if(this.memoTyporaExecPath === ""){
+        //     vscode.window.showErrorMessage(localize('typoraCheck', 'memo-life-for-you.TyporaExecPath is empty.'));
+        //     return;
+        // }
 
         if (!vscode.window.activeTextEditor){
             return;
@@ -35,13 +35,20 @@ export class memoOpenTypora extends memoConfigure {
         let editor = vscode.window.activeTextEditor;
         let doc = editor.document;
 
-        console.log(doc.fileName);
+        // console.log(doc.fileName);
 
         try{
-            cp.execSync('open ' + this.memoTyporaExecPath + ' --args ' + doc.fileName);
+            if (process.platform == "darwin") {
+                cp.execSync('open -b ' + 'abnerworks.Typora ' + doc.fileName);
+            } else {
+                vscode.window.showErrorMessage("This command is only available for macOS.");
+                return;
+            }
+            // console.log('open -b ' + 'abnerworks.Typora' + ' --args ' + doc.fileName);
+            // cp.execSync('open ' + this.memoTyporaExecPath + ' --args ' + doc.fileName);
         } catch(err) {
             console.log(err);
-            vscode.window.showErrorMessage(localize('typoraNotFound', `Not Found ${this.memoTyporaExecPath}`));
+            vscode.window.showErrorMessage(localize('typoraNotFound', 'Typora.app Not Found'));
             return;
         }
     }

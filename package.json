@@ -83,6 +83,13 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "command": "extension.memoOpenTypora",
+          "title": "%extension.memoOpenTypora.title%",
+          "when": "isMac"
+        }
+      ],
       "editor/title": [
         {
           "when": "config.memo-life-for-you.withRespectMode",
