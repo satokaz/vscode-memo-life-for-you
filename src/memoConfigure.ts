@@ -1,14 +1,9 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
 import * as fs from 'fs';
-import * as fse from 'fs-extra';
 import * as path from 'path';
-import * as os from 'os';
-import * as randomEmoji from 'random-emoji';
-import * as dateFns from 'date-fns';
-import * as tomlify from 'tomlify-j0.4';
+
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
@@ -55,6 +50,7 @@ export class memoConfigure {
     public memoNewFilNameDateSuffix: string;
     public openMarkdownPreviewUseMPE: boolean;
     public memoOpenChromeCustomizeURL: string;
+    public memoTyporaExecPath: string;
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -177,6 +173,7 @@ export class memoConfigure {
         this.memoNewFilNameDateSuffix = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoNewFilNameDateSuffix');
         this.openMarkdownPreviewUseMPE = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreviewUseMPE');
         this.memoOpenChromeCustomizeURL = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('openChromeCustomizeURL');
+        this.memoTyporaExecPath = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('TyporaExecPath');
     }
 
     get onDidChange() {

@@ -169,6 +169,13 @@ default:
 
 > When customizing, the comment column of [https://coderwall.com/p/lhsrcq/one-line-browser-notepad](https://coderwall.com/p/lhsrcq/one-line-browser-notepad) is helpful.
 
+### Memo: Open Typora 
+
+> macOS only enabled
+
+Open the file that is opened in the active markdown editor with [Typora](https://typora.io).
+You need to install typora.
+
 ## About the configuration file
 
 If configuration files and directories do not exist, they are automatically created for the first time.
@@ -277,6 +284,10 @@ This extension contributes the following settings:
 * `memo-life-for-you.openChromeCustomizeURL`: Define a customized URL for the `Memo: Open Chrome with <html contenteditable>` command.
 
 ## tips
+
+### built-in snippets
+
+* "prefix": "insert date" - Add a snippet to enter the time of the format such as `## 2019-07-01 Mon 09:53`
 
 ### Transpare quickitem list
 

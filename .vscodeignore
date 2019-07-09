@@ -7,3 +7,6 @@ src/**
 .gitignore
 tsconfig.json
 vsc-extension-quickstart.md
+node_modules
+package-lock.json
+webpack.config.js

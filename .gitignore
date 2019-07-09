@@ -3,3 +3,4 @@ out/*
 node_modules
 *.vsix
 package.nls.ja.json
+dist
