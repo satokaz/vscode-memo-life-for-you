@@ -26,6 +26,7 @@ export class memoConfigure {
     public memopath: string;
     public memoaddr: string;
     public  memodir: string;
+    public memotemplate: string;
     public memoconfdir: string;
     public memoDateFormat: string;
     public memoISOWeek: boolean = false;
@@ -109,6 +110,7 @@ export class memoConfigure {
     public readConfig() {
         let editor;
         let memodir;
+        let memotemplate;
         let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split('\n');
 
         // console.log('readConfig =', list);
@@ -117,12 +119,16 @@ export class memoConfigure {
             if (v.match(/^memodir =/)) {
                 memodir = v.split("=")[1].replace(/"/g, "").trim();
             }
+            if (v.match(/^memotemplate =/)) {
+                memotemplate = v.split("=")[1].replace(/"/g, "").trim();
+            }
             if (v.match(/^editor =/)) {
                 editor = v.split("=")[1].replace(/"/g, "").trim();
             }
         });
 
         this.memodir = memodir;
+        this.memotemplate = memotemplate;
         return void 0;
     }
 
