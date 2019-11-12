@@ -9,6 +9,7 @@ import * as nls from 'vscode-nls';
 import * as os from 'os';
 import { items, memoConfigure } from './memoConfigure';
 import * as clipboardy from 'clipboardy';
+import * as Mustache from 'mustache';
 
 const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
 
@@ -89,7 +90,8 @@ export class memoNew extends memoConfigure  {
                     // fs.accessSync(this.memodir);
                     fs.statSync(file);
                 } catch(err) {
-                    fs.writeFileSync(file, "# " + fileNameDateFormat + " " + `${title}` + os.EOL + os.EOL);
+                    const content = this.memoTemplate(title, fileNameDateFormat);
+                    fs.writeFileSync(file, content);
                 }
 
                 if (this.memoEditOpenNewInstance){
@@ -202,5 +204,20 @@ export class memoNew extends memoConfigure  {
                 });
             });
         }
+    }
+
+    /**
+     * memoTemplate
+     */
+    private memoTemplate(title: string, date: string): string {
+        if (!this.memotemplate) {
+            return "# " + `${date}` + " " + `${title}` + os.EOL + os.EOL;
+        }
+        const content = fs.readFileSync(this.memotemplate).toString();
+        const params = {
+            ".Title": title,
+            ".Date": date
+        };
+        return Mustache.render(content, params);
     }
 }
