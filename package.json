@@ -2,10 +2,10 @@
   "name": "vscode-memo-life-for-you",
   "displayName": "vscode-memo-life-for-you",
   "description": "This extension is for writing notes on VS Code. Inspired by memo (Memo Life For You)",
-  "version": "0.5.0",
+  "version": "0.5.1",
   "publisher": "satokaz",
   "engines": {
-    "vscode": "^1.34.0"
+    "vscode": "^1.39.0"
   },
   "categories": [
     "Other"
