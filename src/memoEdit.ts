@@ -47,7 +47,7 @@ export class memoEdit extends memoConfigure  {
         }
 
         try {
-            list = fs.readdirSync(memodir, this.cp_options);
+            list = fs.readdirSync(memodir, this.cp_options) as string[];
         } catch(err) {
             console.log('err =', err);
         }
