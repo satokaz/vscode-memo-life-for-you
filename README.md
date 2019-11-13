@@ -176,6 +176,38 @@ default:
 Open the file that is opened in the active markdown editor with [Typora](https://typora.io).
 You need to install typora.
 
+
+### Memo Template support
+
+You can use memo template using Go's text/template format. A template receives the following attributes.
+
+Title
+Date (format: %Y-%m-%d)
+
+example: 
+```go
+---
+title: {{.Title}}
+date: {{.Date}}
+---
+
+{{.Title}}
+===========
+```
+
+```yaml
+---
+title: test
+date: 2019-11-13
+---
+
+test
+===========
+```
+
+glidenote/memolist.vim's template format is not supported.
+
+
 ## About the configuration file
 
 If configuration files and directories do not exist, they are automatically created for the first time.
@@ -186,6 +218,7 @@ This file can also be used as it is with the memo command.
 
 ```yaml
 memodir - Destination directory of memo file (Required for this extension)
+memotemplate - Destination file path of template file (Optional) 
 editor - editor command (not used by this extension)
 column - Number of display columns (not used by this extension)
 selectcmd - selector command (not used by this extension)
@@ -201,6 +234,7 @@ macOS:
 
 ```yaml
 memodir = "/Users/satokaz/.config/memo/_posts"
+memotemplate = ""
 editor = "code"
 column = 20
 selectcmd = "peco"
@@ -214,6 +248,7 @@ Windows:
 
 ```yaml
 memodir = "C:\\Users\\Sato\\AppData\\Roaming\\memo\\_posts"
+memotemplate = ""
 editor = "code"
 column = 20
 selectcmd = "peco"
