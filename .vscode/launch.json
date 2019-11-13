@@ -11,7 +11,7 @@
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [ "${workspaceFolder}/dist/**/*.js" ],
-            "preLaunchTask": "npm: watch"
+            "preLaunchTask": "npm: webpack"
         },
         {
             "name": "Launch Tests",
@@ -22,7 +22,7 @@
             "stopOnEntry": false,
             "sourceMaps": true,
             "outFiles": [ "${workspaceFolder}/dist/test/**/*.js" ],
-            "preLaunchTask": "npm: watch"
+            "preLaunchTask": "npm: webpack"
         }
     ]
 }

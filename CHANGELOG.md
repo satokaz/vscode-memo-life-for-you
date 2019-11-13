@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.1
+
+* feat: support memotemplate (thx PR: @tkt989)
+* chroe: Update Run webpack when debugging
+
+
 ## 0.5.0
 
 * chore: Adopt webpack
