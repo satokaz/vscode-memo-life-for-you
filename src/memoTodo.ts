@@ -78,7 +78,7 @@ export class memoTodo extends memoConfigure  {
                     child = cp.spawn(rgPath, args.concat([keyword]).concat([this.memodir]), {
                                     stdio: ['inherit'],
                                     cwd: this.memodir,
-                                    env: process.env.RIPGREP_CONFIG_PATH = ''
+                                    env: { RIPGREP_CONFIG_PATH: '' }
                                 });
                         
                     child.stdout.setEncoding('utf-8');

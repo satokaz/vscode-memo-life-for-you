@@ -1,6 +1,10 @@
 # Change Log
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
+## 0.5.2
+
+* fix: Fixed documents for MPE (PR #50: @hotchpotch)
+* refactor: Update Dependency to vscode 1.49
 
 ## 0.5.1
 
