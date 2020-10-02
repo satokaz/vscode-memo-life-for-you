@@ -32,6 +32,8 @@ export class memoOpenChrome extends memoConfigure {
         //     // await vscode.commands.executeCommand('workbench.action.');
         // });
 
+        // Issue #214: Error "Runtime error encountered: No Chrome installations found."
+        //
         chromeLauncher.launch({
             // startingUrl: 'data:text/html, <html contenteditable>',
             // startingUrl: data:text/html, <html contenteditable><style>body{background-color:#272822;color:#ddd;margin:50px 100px}</style>

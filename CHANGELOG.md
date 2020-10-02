@@ -5,6 +5,7 @@ All notable changes to the "vscode-memo-life-for-you" extension will be document
 
 * fix: Fixed documents for MPE (PR #50: @hotchpotch)
 * refactor: Update Dependency to vscode 1.49
+* chroe: chrome-launcher and fs-extra package updates
 
 ## 0.5.1
 

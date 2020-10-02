@@ -292,10 +292,10 @@
     "webpack-cli": "^3.3.5"
   },
   "dependencies": {
-    "chrome-launcher": "^0.10.2",
+    "chrome-launcher": "^0.13.2",
     "clipboardy": "^1.2.3",
     "date-fns": "^1.29.0",
-    "fs-extra": "^5.0.0",
+    "fs-extra": "^9.0.1",
     "mustache": "^3.1.0",
     "node-emoji": "^1.10.0",
     "tomlify-j0.4": "^2.2.1",
