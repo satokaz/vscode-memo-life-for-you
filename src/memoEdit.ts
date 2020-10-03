@@ -25,12 +25,13 @@ export class memoEdit extends memoConfigure  {
         let items: items[] = [];
         let memopath = this.memopath;
         let memodir = this.memodir;
-        let list: string[];
+        let list: string[] = [];
         let dirlist: string[] = [];
         let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
         let listMarkdownPreview: boolean = this.memoEditPreviewMarkdown;
         let openMarkdownPreviewUseMPE: boolean = this.openMarkdownPreviewUseMPE;
         let isEnabled: boolean = false; // Flag: opened Markdown Preview (Markdown Enhance Preview)
+        let listDisplayExtname: string[] = this.memoListDisplayExtname;
         // console.log("memodir = ", memodir)
 
         this.memoListChannel.clear();
@@ -47,59 +48,35 @@ export class memoEdit extends memoConfigure  {
         }
 
         try {
-            list = fs.readdirSync(memodir, this.cp_options) as string[];
+            list = readdirRecursively(memodir);
         } catch(err) {
             console.log('err =', err);
         }
 
-        // fs.readdir(this.memodir, ((err, files) => {
-        //     console.log(files);
-        //     files = files.filter(function(v, i) {
-        //         return (path.extname(v) == ".md");
-        //     });
-        //     files = files.sort(function(a,b) {
-        //         return (a < b ? 1 : -1);
-        //     });
-        //     console.log('list2 = ', files);
-        //     return files;
-        // }));
+        // let listDisplayExtname: string[] = ["md", "txt"];
+        // listDisplayExtname　= [];
+        // listDisplayExtname が空の場合は、強制的に .md のみ対象にする
+        if (listDisplayExtname.length == 0 ) {
+            listDisplayExtname　= ["md"];
+        } 
 
-        // .md file のみで配列を作り直しながら、YYYY-MM のディレクトリだけ集めた配列を作成
-        list = list.filter(function(v, i) {
-            if(path.extname(v) == ".md") {
-                return (path.extname(v) == ".md");
-            } else {
-                if (fs.statSync(path.join(memodir,v)).isDirectory()) {
-                    if (v.match(/^[0-9]{4}-[0-9]{2}/)) {
-                        dirlist.push(v);
-                    }
-                }
-            }
+        // 取得したファイル一覧を整形
+        list = list.filter((v) => {
+                for (const value of listDisplayExtname){
+                    // console.log(value);
+                    if (path.extname(v).match("." + value)) {
+                        // console.log(v);  
+                        return v;                  
+                    }   
+                }           
+        }).map((v) => {     // .map で配列の中身を操作してから新しい配列を作成する    
+            // memodir を削除したパス名を返す
+                return (v.split(path.sep).splice(memodir.split(path.sep).length, v.split(path.sep).length).join(path.sep));
         });
 
-        // console.log('dirlist =', dirlist);
+        // console.log(listDisplayExtname);
 
-        // 新しいものを先頭にするための sort
-        // if (this.memoListOrder == 'descending'){
-        //     list = list.sort(function(a,b) {
-        //         return (a < b ? 1 : -1);
-        //     });
-        // }
-
-        // ディレクトリリストの処理
-        // items.push({
-        //     "label": `$(package) アーカイブ`,
-        //     "description": "",
-        //     "detail": "",
-        //     "ln": null,
-        //     "col": null,
-        //     "index": null,
-        //     "filename": "",
-        //     isDirectory: true
-        //  });
-
-        // console.log('list =', list);
-
+        // メニューアイテムの作成
         for (let index = 0; index < list.length; index++) {
             let v = list[index];
 
@@ -112,11 +89,27 @@ export class memoEdit extends memoConfigure  {
             let statBirthtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.birthtime, 'MMM DD HH:mm, YYYY ') : "";
             let statMtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.mtime, 'MMM DD HH:mm, YYYY ') : "";
 
-            // console.log(fs.statSync(filename));
-            // console.log('birthtime =', statBirthtime);
-
             let array = fs.readFileSync(filename).toString().split('\n');
+            
+            // 先頭一行目だけなので、readline で代替してみたが、遅い...
+            // let readFirstLine = async (file) => {
+            //     let firstLine: string;
+            //     const stream = fs.createReadStream(file, { highWaterMark : 5 });
+            //     const rl = readline.createInterface({ input: stream });
 
+            //     for await (const line of rl) {              
+            //         rl.pause();
+            //         firstLine = line;
+            //         break;
+            //     }
+            //     // rl.close();
+            //     // stream.destroy();
+            //     return firstLine;
+            // };
+
+            // let array = await readFirstLine(filename);
+            // console.log("firstLine = ", array);
+            
             items.push({
                 "label": `$(calendar) ` + list[index],
                 "description": `$(three-bars) ` + array[0],
@@ -130,6 +123,7 @@ export class memoEdit extends memoConfigure  {
                 "mtime": fileStat.mtime
             });
 
+            // 出力タブへの出力を生成
             this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
         }
@@ -159,8 +153,6 @@ export class memoEdit extends memoConfigure  {
 
         // console.log("items =", items)
 
-        // let previousFile = vscode.window.activeTextEditor.document.uri;
-
         vscode.window.showQuickPick<items>(items, {
             ignoreFocusOut: true,
             matchOnDescription: true,
@@ -170,11 +162,6 @@ export class memoEdit extends memoConfigure  {
                 if (selected == undefined || selected == null) {
                     return void 0;
                 }
-
-                // if (selected.isDirectory == true) {
-                //     console.log('アーカイブを選択 1');
-                // }
-                // let filename = path.normalize(path.join(memodir, selected.filename));
 
                 // console.log(selected.label);
                 // console.log(isEnabled);
@@ -279,3 +266,19 @@ export class memoEdit extends memoConfigure  {
         });
     }
 }
+
+// memodir 配下のファイルとディレクトリ一覧を取得
+// https://blog.araya.dev/posts/2019-05-09/node-recursive-readdir.html
+const readdirRecursively = (dir, files = []) => {
+    const dirents = fs.readdirSync(dir, { encoding: 'utf8', withFileTypes: true });
+    const dirs = [];
+    for (const dirent of dirents) {
+      if (dirent.isDirectory()) dirs.push(`${dir}/${dirent.name}`);
+      if (dirent.isFile()) files.push(`${dir}/${dirent.name}`);
+    }
+    for (const d of dirs) {
+      files = readdirRecursively(d, files);
+    }
+    return files;
+};
+  

@@ -53,6 +53,7 @@
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
 
 * このコマンドを実行すると、ファイル名とそのファイルの最初の 1 行をリストして表示します。これは、memo コマンドの `memo list` または `memo edit` に似ています
+* リストに表示されるファイルの拡張子は `.md`と` .txt`のみです（デフォルト）。これは、`memo-life-for-you.listDisplayExtname` 設定で変更できます。
 * QuickInput にキーワードを入力することでリストをフィルタすることが可能です
 * キーボードの up/down カーソルキーで移動することが可能です
 * `memo-life-for-you.openMarkdownPreview` を設定することにより、選択されたファイルを開くと同時に、Markdown Preview も表示さします。

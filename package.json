@@ -243,7 +243,15 @@
         "memo-life-for-you.TyporaExecPath": {
           "type": "string",
           "default": "",
-          "description": "%memoTyporaExecPath.desc%"
+          "description": "%openTyporaExecPath.desc%"
+        },
+        "memo-life-for-you.listDisplayExtname": {
+          "type": "array",
+          "default": [
+            "md",
+            "txt"
+          ],
+          "description": "%memolistDisplayExtname.desc%"
         }
       }
     },

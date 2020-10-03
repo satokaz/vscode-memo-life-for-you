@@ -56,6 +56,7 @@ Unique command (memo command is not necessary):
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
 
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
+* The files to be displayed in the list have only `.md` and `.txt` extensions (default). Can be changed in the `memo-life-for-you.listDisplayExtname` setting.
 * Filter by keyword.
 * You can move the list with the keyboard (up/down cursor keys). And you can preview file contents
 * Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`.
