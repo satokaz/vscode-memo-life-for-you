@@ -18,7 +18,7 @@ import { memoOpenTypora } from './memoOpenTypora';
 
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+// const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export function activate(context: vscode.ExtensionContext) {
     console.log('Congratulations, your extension "vscode-memo-life-for-you" is now active!');

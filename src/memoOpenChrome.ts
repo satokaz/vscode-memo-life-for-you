@@ -6,7 +6,7 @@ import { memoConfigure } from './memoConfigure';
 import * as chromeLauncher from 'chrome-launcher';
 
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoOpenChrome extends memoConfigure {
     constructor() {

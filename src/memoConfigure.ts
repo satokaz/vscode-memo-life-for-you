@@ -7,7 +7,7 @@ import * as path from 'path';
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 // vscode.QuickPickItem に ln, col, index, filename を追加した items を interface で作成
 export interface items extends vscode.QuickPickItem {

@@ -5,6 +5,7 @@ All notable changes to the "vscode-memo-life-for-you" extension will be document
 
 * fix: Fixed documents for MPE (PR #50: @hotchpotch)
 * refactor: Update Dependency to vscode 1.49
+* refactor: Update Dependency to gulp v4 and vscode-nls v5 
 * chroe: chrome-launcher and fs-extra package updates
 * feat: Issue #43. Added memo-life-for-you.listDisplayExtname setting to allow customizable listed file extensions. 
 

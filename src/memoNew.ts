@@ -11,7 +11,7 @@ import { items, memoConfigure } from './memoConfigure';
 import * as clipboardy from 'clipboardy';
 import * as Mustache from 'mustache';
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoNew extends memoConfigure  {
 

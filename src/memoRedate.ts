@@ -7,7 +7,7 @@ import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
 import { memoConfigure } from './memoConfigure';
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoRedate extends memoConfigure {
 

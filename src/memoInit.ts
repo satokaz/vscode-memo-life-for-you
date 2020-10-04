@@ -11,7 +11,7 @@ import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
 
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 /**
  * config.toml を作るための interface
