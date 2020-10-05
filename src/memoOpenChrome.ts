@@ -6,7 +6,7 @@ import { memoConfigure } from './memoConfigure';
 import * as chromeLauncher from 'chrome-launcher';
 
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoOpenChrome extends memoConfigure {
     constructor() {
@@ -32,6 +32,8 @@ export class memoOpenChrome extends memoConfigure {
         //     // await vscode.commands.executeCommand('workbench.action.');
         // });
 
+        // Issue #214: Error "Runtime error encountered: No Chrome installations found."
+        //
         chromeLauncher.launch({
             // startingUrl: 'data:text/html, <html contenteditable>',
             // startingUrl: data:text/html, <html contenteditable><style>body{background-color:#272822;color:#ddd;margin:50px 100px}</style>

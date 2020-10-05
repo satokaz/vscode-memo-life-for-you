@@ -9,7 +9,7 @@ import * as nls from 'vscode-nls';
 import * as os from 'os';
 import { memoConfigure } from './memoConfigure';
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoOpenFolder extends memoConfigure {
     constructor() {

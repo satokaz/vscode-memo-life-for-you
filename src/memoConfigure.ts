@@ -7,7 +7,7 @@ import * as path from 'path';
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 // vscode.QuickPickItem に ln, col, index, filename を追加した items を interface で作成
 export interface items extends vscode.QuickPickItem {
@@ -52,6 +52,7 @@ export class memoConfigure {
     public openMarkdownPreviewUseMPE: boolean;
     public memoOpenChromeCustomizeURL: string;
     public memoTyporaExecPath: string;
+    public memoListDisplayExtname: string[];
     
     public options: vscode.QuickPickOptions = {
         ignoreFocusOut: true,
@@ -180,6 +181,7 @@ export class memoConfigure {
         this.openMarkdownPreviewUseMPE = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('openMarkdownPreviewUseMPE');
         this.memoOpenChromeCustomizeURL = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('openChromeCustomizeURL');
         this.memoTyporaExecPath = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('TyporaExecPath');
+        this.memoListDisplayExtname = vscode.workspace.getConfiguration('memo-life-for-you').get<string[]>('listDisplayExtname');
     }
 
     get onDidChange() {

@@ -11,7 +11,7 @@ import { items, memoConfigure } from './memoConfigure';
 import * as clipboardy from 'clipboardy';
 import * as Mustache from 'mustache';
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoNew extends memoConfigure  {
 
@@ -58,7 +58,7 @@ export class memoNew extends memoConfigure  {
         }
         // console.log('selectString =', selectString);
 
-        let fileNameDateFormat: string = dateFns.format(new Date(), 'YYYY-MM-DD');
+        let fileNameDateFormat: string = dateFns.format(new Date(), 'yyyy-MM-dd');
         let filNameDateSuffix: string = "";
 
         if (this.memoNewFilNameDateSuffix !== "") {
@@ -126,7 +126,7 @@ export class memoNew extends memoConfigure  {
     public QuickNew() {
         this.readConfig();
 
-        let file: string = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'YYYY-MM-DD') + ".md"));
+        let file: string = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'yyyy-MM-dd') + ".md"));
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
         let getISOWeek = this.memoISOWeek == true ? "[Week: " + dateFns.getISOWeek(new Date()) + "/" + dateFns.getISOWeeksInYear(new Date()) + "] " : "";

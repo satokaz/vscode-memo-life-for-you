@@ -8,7 +8,7 @@ import * as fs from 'fs';
 import * as os from 'os';
 import { items, memoConfigure } from './memoConfigure';
 
-const localize = nls.config(process.env.VSCODE_NLS_CONFIG)();
+const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
 export class memoTodo extends memoConfigure  {
     private _disposable: vscode.Disposable;
@@ -78,7 +78,7 @@ export class memoTodo extends memoConfigure  {
                     child = cp.spawn(rgPath, args.concat([keyword]).concat([this.memodir]), {
                                     stdio: ['inherit'],
                                     cwd: this.memodir,
-                                    env: process.env.RIPGREP_CONFIG_PATH = ''
+                                    env: { RIPGREP_CONFIG_PATH: '' }
                                 });
                         
                     child.stdout.setEncoding('utf-8');

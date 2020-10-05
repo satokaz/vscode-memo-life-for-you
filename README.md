@@ -56,6 +56,15 @@ Unique command (memo command is not necessary):
 ![alt](https://raw.githubusercontent.com/satokaz/vscode-memo-life-for-you/assets/images/vscode-memo_list_normal_preview.gif)
 
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
+* The files to be displayed in the list have only `.md` and `.txt` extensions (default). Can be changed in the `memo-life-for-you.listDisplayExtname` setting.
+
+    ```jsonc
+        "memo-life-for-you.listDisplayExtname": [
+            "md",
+            "txt"
+        ],
+    ```
+
 * Filter by keyword.
 * You can move the list with the keyboard (up/down cursor keys). And you can preview file contents
 * Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`.
@@ -99,7 +108,7 @@ Options to use:
 
 You can specify options individually by preparing the ripgrep configuration file.
 
-If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc (Windows example: `C:\Users\Sato\.ripgreprc`)` is used as the configuration file.
+If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc (Windows example: `C:\Users\Sato\\.ripgreprc`)` is used as the configuration file.
 
 In addition, you can specify the configuration file. To use an arbitrary file, set the absolute path of the configuration file in `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`. (Example: `"memo-life-for-you.memoGrepUseRipGrepConfigFilePath": "/Users/satokaz/.vscode-ripgreprc"`)
 
@@ -280,14 +289,14 @@ This extension contributes the following settings:
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
 * `"memo-life-for-you.serve-addr"`: server address (If you use Serve command)
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" (default: "8080")
-* `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
+* `"memo-life-for-you.dateFormat"`: Follow format of date-fns. See: https://date-fns.org/v2.16.1/docs/format (default: "yyyy-MM-dd ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: Insert ISO Week when "Memo: Today's quick Memo" is executed
 * `memo-life-for-you.insertEmoji`: Insert random-Emoji when "Memo: Today's quick Memo" is executed
 
     example: `## [Week: 42/52] 😸 42 2017-10-19 Thu 06:26`
 
     ```
-        "memo-life-for-you.dateFormat": "YYYY-MM-DD ddd HH:mm",
+        "memo-life-for-you.dateFormat": "yyyy-MM-dd ddd HH:mm",
         "memo-life-for-you.insertISOWeek": true,
         "memo-life-for-you.insertEmoji": true,
     ```
@@ -306,7 +315,7 @@ This extension contributes the following settings:
 * `memo-life-for-you.memoTodoUserePattern`: Define a pattern to recognize as Todo. (default: ^.*@todo.*?:)
 * `memo-life-for-you.memoNewFilenameFromClipboard`: Use the string stored in OS clipboard as the name of the newly created file (defaut: false),
 * `memo-life-for-you.memoNewFilenameFromSelection`: Use the selected string on vscode as the name of the newly create file (default: false),
-* `memo-life-for-you.memoNewFilNameDateSuffix`: Add a date related suffix after filename prefix (YYYY-MM-DD). The added string is passed to datefns.format(). See: https://date-fns.org/v1.29.0/docs/format (default: empty). 
+* `memo-life-for-you.memoNewFilNameDateSuffix`: Add a date related suffix after filename prefix (yyyy-MM-dd). The added string is passed to datefns.format(). See: https://date-fns.org/v2.16.1/docs/format (default: empty). 
 
     example: 
 
