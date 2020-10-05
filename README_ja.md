@@ -223,10 +223,10 @@ templatebodyfile = ""
 
 メモの一覧や検索結果を表示するクイックアイテムリストの色を下記のように変更することで、透過させることができます。ただし、この設定は、sidebar にも反映されます。
 
-```json
+```jsonc
 "workbench.colorCustomizations": {
-    "sideBar.background": "#262626DD" // For a Dark theme 
-    // "sideBar.background": "#F0F0F0DD"  //For a light theme
+    "quickInput.background": "#262626DD" // For a Dark theme 
+    // "quickInput.background": "#F0F0F0DD"  //For a light theme
 },
 ```
 

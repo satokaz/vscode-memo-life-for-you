@@ -340,10 +340,10 @@ This extension contributes the following settings:
 You can transparentize the quickitem list which displays the file list and search results.
 However, this setting also affects the sidebar.
 
-```json
+```jsonc
 "workbench.colorCustomizations": {
-    "sideBar.background": "#262626DD" // For a Dark theme 
-    // "sideBar.background": "#F0F0F0DD"  //For a light theme
+    "quickInput.background": "#262626DD" // For a Dark theme 
+    // "quickInput.background": "#F0F0F0DD"  //For a light theme
 },
 ```
 ### If the focus is lost

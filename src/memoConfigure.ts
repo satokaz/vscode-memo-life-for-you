@@ -118,13 +118,13 @@ export class memoConfigure {
         list.forEach(async function (v, i) {
             // console.log(v.split("=")[1]);
             if (v.match(/^memodir =/)) {
-                memodir = v.split("=")[1].replace(/"/g, "").trim();
+                memodir = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
             }
             if (v.match(/^memotemplate =/)) {
-                memotemplate = v.split("=")[1].replace(/"/g, "").trim();
+                memotemplate = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
             }
             if (v.match(/^editor =/)) {
-                editor = v.split("=")[1].replace(/"/g, "").trim();
+                editor = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
             }
         });
 
