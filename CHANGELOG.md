@@ -1,6 +1,12 @@
 # Change Log
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
+
+## 0.5.3
+
+* fix: Issue #53. memo: Edit/List does not work on Windows
+* docs: Fixed Transpare quickitem list section
+
 ## 0.5.2
 
 * fix: Fixed documents for MPE (PR #50: @hotchpotch)
