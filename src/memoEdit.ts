@@ -273,8 +273,8 @@ const readdirRecursively = (dir, files = []) => {
     const dirents = fs.readdirSync(dir, { encoding: 'utf8', withFileTypes: true });
     const dirs = [];
     for (const dirent of dirents) {
-      if (dirent.isDirectory()) dirs.push(`${dir}/${dirent.name}`);
-      if (dirent.isFile()) files.push(`${dir}/${dirent.name}`);
+      if (dirent.isDirectory()) dirs.push(path.normalize(path.join(`${dir}`, `${dirent.name}`)));
+      if (dirent.isFile()) files.push(path.normalize(path.join(`${dir}`, `${dirent.name}`)));
     }
     for (const d of dirs) {
       files = readdirRecursively(d, files);
