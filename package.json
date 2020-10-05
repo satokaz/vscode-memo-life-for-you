@@ -137,7 +137,7 @@
         },
         "memo-life-for-you.dateFormat": {
           "type": "string",
-          "default": "YYYY-MM-DD ddd HH:mm",
+          "default": "yyyy-MM-dd ddd HH:mm",
           "description": "%dateFormat.desc%"
         },
         "memo-life-for-you.insertISOWeek": {
@@ -299,7 +299,7 @@
   "dependencies": {
     "chrome-launcher": "^0.13.2",
     "clipboardy": "^1.2.3",
-    "date-fns": "^1.29.0",
+    "date-fns": "^2.16.1",
     "fs-extra": "^9.0.1",
     "mustache": "^3.1.0",
     "node-emoji": "^1.10.0",

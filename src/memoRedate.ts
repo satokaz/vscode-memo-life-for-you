@@ -74,7 +74,7 @@ export class memoRedate extends memoConfigure {
                         return;
                     }
 
-                    let newFilePath = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'YYYY-MM-DD') + tempfilename);
+                    let newFilePath = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
 
                     // file 名を新しい日付に書き換える
                     if (activeFilename.fsPath == newFilePath) {
@@ -83,7 +83,7 @@ export class memoRedate extends memoConfigure {
                     }
 
                     // birthtime などを維持したいので fs.copySync ではなく fs.renameSync を利用する
-                    fs.renameSync(activeFilename.fsPath, path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'YYYY-MM-DD') + tempfilename));
+                    fs.renameSync(activeFilename.fsPath, path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename));
 
                     vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
                         vscode.workspace.openTextDocument(newFilePath).then(document=>{
@@ -95,7 +95,7 @@ export class memoRedate extends memoConfigure {
                         });
                     });
 
-                    let newFilename = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'YYYY-MM-DD') + tempfilename);
+                    let newFilename = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
 
                     vscode.window.showInformationMessage(localize('reDateUpdateToda', 'Updated file name to today\'s date: {0}', newFilename), { modal: true },
                     {

@@ -86,8 +86,8 @@ export class memoEdit extends memoConfigure  {
 
             let filename: string = path.normalize(path.join(this.memodir, list[index]));
             let fileStat: fs.Stats = fs.statSync(filename);
-            let statBirthtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.birthtime, 'MMM DD HH:mm, YYYY ') : "";
-            let statMtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.mtime, 'MMM DD HH:mm, YYYY ') : "";
+            let statBirthtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.birthtime, 'MMM dd HH:mm, yyyy ') : "";
+            let statMtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.mtime, 'MMM dd HH:mm, yyyy ') : "";
 
             let array = fs.readFileSync(filename).toString().split('\n');
             
@@ -157,7 +157,7 @@ export class memoEdit extends memoConfigure  {
             ignoreFocusOut: true,
             matchOnDescription: true,
             matchOnDetail: true,
-            placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Today\'s: {1}', items.length, dateFns.format(new Date(), 'MMM DD HH:mm, YYYY ')),
+            placeHolder: localize('enterSelectOrFilename', 'Please select or enter a filename...(All items: {0}) ...Today\'s: {1}', items.length, dateFns.format(new Date(), 'MMM dd HH:mm, yyyy ')),
             onDidSelectItem: async (selected:items) => {
                 if (selected == undefined || selected == null) {
                     return void 0;

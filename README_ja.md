@@ -199,7 +199,7 @@ templatebodyfile = ""
    * ex: Windows: `"C:/Users/Sato/go/bin/memo.exe"`
 * `"memo-life-for-you.serve-addr"`: server address (Serve コマンドで default: 8080 以外のポートを利用する場合)
    * `memo serve --addr :8083` = ex: "memo-life-for-you.serve-addr": "8083" (default: "8080")
-* `"memo-life-for-you.dateFormat"`: date-fns のフォーマット形式 See: https://date-fns.org/v1.29.0/docs/format (default: "YYYY-MM-DD ddd HH:mm")
+* `"memo-life-for-you.dateFormat"`: date-fns のフォーマット形式 See: https://date-fns.org/v2.16.1/docs/format (default: "yyyy-MM-dd ddd HH:mm")
 * `memo-life-for-you.insertISOWeek`: "Memo: Today's quick Memo" コマンド実行時に挿入されるタイトルに ISO Week を追加します
 * `memo-life-for-you.insertEmoji`: "Memo: Today's quick Memo" コマンド実行時に挿入されるタイトルに random-Emoji を追加します
 * `memo-life-for-you.displayFileBirthTime`: `Memo:リスト/編集` の情報に、ファイル作成日を追加表示します。(default: false)
@@ -213,7 +213,7 @@ templatebodyfile = ""
 * `memo-life-for-you.memoTodoUserePattern`: Todo として認識するためのパターンを定義します (default: ^.*@todo.*?:)
 * `memo-life-for-you.memoNewFilenameFromClipboard`: OS のクリップボードに格納された文字列を新しく作成するファイルの名前として使用する (defaut: false),
 * `memo-life-for-you.memoNewFilenameFromSelection`: vscode 上で選択した文字列を新しく作成するファイルの名前として使用する (default: false),
-* `memo-life-for-you.memoNewFilNameDateSuffix`: ファイル名（YYYY-MM-DD）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v1.29.0/docs/format を参照してください
+* `memo-life-for-you.memoNewFilNameDateSuffix`: ファイル名（yyyy-MM-dd）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v2.16.1/docs/format を参照してください
 
 ## tips
 
