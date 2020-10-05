@@ -15,7 +15,6 @@ All notable changes to the "vscode-memo-life-for-you" extension will be document
 * feat: support memotemplate (PR #44: @tkt989)
 * chroe: Update Run webpack when debugging
 
-
 ## 0.5.0
 
 * chore: Adopt webpack
