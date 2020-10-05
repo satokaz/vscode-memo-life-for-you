@@ -57,6 +57,14 @@ Unique command (memo command is not necessary):
 
 * List the file name and the first line of the file as `memo list` or ` memo edit`.
 * The files to be displayed in the list have only `.md` and `.txt` extensions (default). Can be changed in the `memo-life-for-you.listDisplayExtname` setting.
+
+    ```jsonc
+        "memo-life-for-you.listDisplayExtname": [
+            "md",
+            "txt"
+        ],
+    ```
+
 * Filter by keyword.
 * You can move the list with the keyboard (up/down cursor keys). And you can preview file contents
 * Markdown Preview can be displayed at the same time by setting option `memo-life-for-you.openMarkdownPreview`.
@@ -100,7 +108,7 @@ Options to use:
 
 You can specify options individually by preparing the ripgrep configuration file.
 
-If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc (Windows example: `C:\Users\Sato\.ripgreprc`)` is used as the configuration file.
+If `memo-life-for-you.memoGrepUseRipGrepConfigFile` is set to `true`, `$HOME/.ripgreprc (Windows example: `C:\Users\Sato\\.ripgreprc`)` is used as the configuration file.
 
 In addition, you can specify the configuration file. To use an arbitrary file, set the absolute path of the configuration file in `memo-life-for-you.memoGrepUseRipGrepConfigFilePath`. (Example: `"memo-life-for-you.memoGrepUseRipGrepConfigFilePath": "/Users/satokaz/.vscode-ripgreprc"`)
 
