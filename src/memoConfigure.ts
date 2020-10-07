@@ -121,10 +121,18 @@ export class memoConfigure {
                 memodir = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
             }
             if (v.match(/^memotemplate =/)) {
-                memotemplate = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
+                    memotemplate = v.split("=")[1].replace(/"/g, "").trim();
+                } else {
+                    memotemplate = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+                }
             }
             if (v.match(/^editor =/)) {
-                editor = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
+                    editor = v.split("=")[1].replace(/"/g, "").trim();
+                } else {
+                    editor = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+                }
             }
         });
 

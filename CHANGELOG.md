@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.4
+
+* fix: Issue #55. memo: New does not work on 0.5.3
+
 ## 0.5.3
 
 * fix: Issue #53. memo: Edit/List does not work on Windows
