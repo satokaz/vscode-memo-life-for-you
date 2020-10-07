@@ -270,7 +270,7 @@ export class memoEdit extends memoConfigure  {
 // memodir 配下のファイルとディレクトリ一覧を取得
 // https://blog.araya.dev/posts/2019-05-09/node-recursive-readdir.html
 const readdirRecursively = (dir, files = []) => {
-    const dirents = fs.readdirSync(dir, { encoding: 'utf8', withFileTypes: true });
+    const dirents = fs.readdirSync(dir, { withFileTypes: true });
     const dirs = [];
     for (const dirent of dirents) {
       if (dirent.isDirectory()) dirs.push(path.normalize(path.join(`${dir}`, `${dirent.name}`)));

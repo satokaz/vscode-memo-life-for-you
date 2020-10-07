@@ -5,6 +5,7 @@ All notable changes to the "vscode-memo-life-for-you" extension will be document
 ## 0.5.4
 
 * fix: Issue #55. memo: New does not work on 0.5.3
+* fix: Remove unnecessary encoding settings
 
 ## 0.5.3
 
