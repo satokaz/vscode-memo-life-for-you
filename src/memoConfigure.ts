@@ -77,7 +77,7 @@ export class memoConfigure {
             this.updateConfiguration();
         });
 
-        fs.watchFile(path.normalize(path.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
+        fs.watchFile(upath.normalize(upath.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
             // console.log(curr);
             // this.updateConfiguration();
             this.readConfig();

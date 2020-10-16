@@ -304,6 +304,7 @@
     "mustache": "^3.1.0",
     "node-emoji": "^1.10.0",
     "tomlify-j0.4": "^2.2.1",
+    "upath": "^2.0.0",
     "vscode-nls": "^5.0.0"
   }
 }
