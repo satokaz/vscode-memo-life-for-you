@@ -1,7 +1,6 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as fse from 'fs-extra';
 import * as upath from 'upath';

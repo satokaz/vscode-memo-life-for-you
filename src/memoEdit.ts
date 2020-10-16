@@ -5,12 +5,11 @@ import * as fs from 'fs';
 import * as upath from 'upath';
 import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
-import * as os from 'os';
 import { items, memoConfigure } from './memoConfigure';
 
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
 
-export class memoEdit extends memoConfigure  {
+export class memoEdit extends memoConfigure {
     public memoListChannel: vscode.OutputChannel;
     constructor() {
         super();
@@ -77,7 +76,6 @@ export class memoEdit extends memoConfigure  {
 
         // メニューアイテムの作成
         for (let index = 0; index < list.length; index++) {
-            let v = list[index];
 
             if (list[index] == '') {
                 break;

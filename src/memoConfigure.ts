@@ -25,7 +25,7 @@ export class memoConfigure {
     public _waiting : boolean;
     public memopath: string;
     public memoaddr: string;
-    public  memodir: string;
+    public memodir: string;
     public memotemplate: string;
     public memoconfdir: string;
     public memoDateFormat: string;
