@@ -112,29 +112,29 @@ export class memoConfigure {
         let list = fs.readFileSync(upath.normalize(upath.join(this.memoconfdir, "config.toml"))).toString().split('\n');
 
         // console.log('readConfig =', list);
-        list.forEach(async function (v, i) {
-            // console.log(v.split("=")[1]);
-            if (v.match(/^memodir =/)) {
-                memodir = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+        list.forEach((v) => {
+            // 設定と値を split して整形
+            const array = v.split("=").map((v) => {
+                return v.replace(/"/g, "").trim();
+            });
+
+            // console.log(array);
+
+            if (array[0].match(/memodir/)) {
+                this.memodir = upath.normalizeTrim(array[1]);
             }
-            if (v.match(/^memotemplate =/)) {
-                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
-                    memotemplate = v.split("=")[1].replace(/"/g, "").trim();
-                } else {
-                    memotemplate = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
-                }
+
+            if (array[0].match(/memotemplate/)) {
+                this.memotemplate = upath.normalizeTrim(array[1]);
             }
-            if (v.match(/^editor =/)) {
-                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
-                    editor = v.split("=")[1].replace(/"/g, "").trim();
-                } else {
-                    editor = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
-                }
-            }
+
+            // if (array[0].match(/editor/)) {
+            //     this.editor = upath.normalizeTrim(array[1]);
+            // }
         });
 
-        this.memodir = memodir;
-        this.memotemplate = memotemplate;
+        // console.log(this.memodir);
+        // console.log(this.memotemplate);
         return void 0;
     }
 
