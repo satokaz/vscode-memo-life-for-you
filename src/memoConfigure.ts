@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as upath from 'upath';
 
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
@@ -96,11 +96,11 @@ export class memoConfigure {
         if (process.platform == "win32") {
             this.memoconfdir = process.env.APPDATA;
             if (this.memoconfdir == "") {
-                this.memoconfdir = path.normalize(path.join(process.env.USERPROFILE, "Application Data", "memo"));
+                this.memoconfdir = upath.normalize(upath.join(process.env.USERPROFILE, "Application Data", "memo"));
             }
-            this.memoconfdir = path.normalize(path.join(this.memoconfdir, "memo"));
+            this.memoconfdir = upath.normalize(upath.join(this.memoconfdir, "memo"));
         } else {
-            this.memoconfdir = path.normalize(path.join(process.env.HOME, ".config", "memo"));
+            this.memoconfdir = upath.normalize(upath.join(process.env.HOME, ".config", "memo"));
         }
         return void 0;
     }
@@ -109,10 +109,7 @@ export class memoConfigure {
      * readConfig
      */
     public readConfig() {
-        let editor;
-        let memodir;
-        let memotemplate;
-        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split('\n');
+        let list = fs.readFileSync(upath.normalize(upath.join(this.memoconfdir, "config.toml"))).toString().split('\n');
 
         // console.log('readConfig =', list);
         list.forEach(async function (v, i) {
@@ -164,7 +161,7 @@ export class memoConfigure {
      * updateConfiguration
      */
     public updateConfiguration() {
-        this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+        this.memopath = upath.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');

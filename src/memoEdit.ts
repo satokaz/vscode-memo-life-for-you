@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as upath from 'upath';
 import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
 import * as os from 'os';
@@ -23,8 +23,7 @@ export class memoEdit extends memoConfigure  {
     public async Edit() {
         this.readConfig();
         let items: items[] = [];
-        let memopath = this.memopath;
-        let memodir = this.memodir;
+        let memodir = upath.normalizeTrim(this.memodir);
         let list: string[] = [];
         let dirlist: string[] = [];
         let openMarkdownPreview: boolean = this.memoEditOpenMarkdown;
@@ -64,14 +63,14 @@ export class memoEdit extends memoConfigure  {
         list = list.filter((v) => {
                 for (const value of listDisplayExtname){
                     // console.log(value);
-                    if (path.extname(v).match("." + value)) {
+                    if (upath.extname(v).match("." + value)) {
                         // console.log(v);  
                         return v;                  
                     }   
                 }           
         }).map((v) => {     // .map で配列の中身を操作してから新しい配列を作成する    
             // memodir を削除したパス名を返す
-                return (v.split(path.sep).splice(memodir.split(path.sep).length, v.split(path.sep).length).join(path.sep));
+            return (v.split(upath.sep).splice(memodir.split(upath.sep).length, v.split(upath.sep).length).join(upath.sep));
         });
 
         // console.log(listDisplayExtname);
@@ -84,7 +83,7 @@ export class memoEdit extends memoConfigure  {
                 break;
             }
 
-            let filename: string = path.normalize(path.join(this.memodir, list[index]));
+            let filename: string = upath.normalize(upath.join(memodir, list[index]));
             let fileStat: fs.Stats = fs.statSync(filename);
             let statBirthtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.birthtime, 'MMM dd HH:mm, yyyy ') : "";
             let statMtime = this.memoEditDispBtime ? (typeof fileStat === 'string') ? "" : dateFns.format(fileStat.mtime, 'MMM dd HH:mm, yyyy ') : "";
@@ -117,14 +116,14 @@ export class memoEdit extends memoConfigure  {
                 "ln": null,
                 "col": null,
                 "index": index,
-                "filename": path.normalize(path.join(this.memodir, list[index])),
+                "filename": upath.normalize(upath.join(memodir, list[index])),
                 "isDirectory": false,
                 "birthtime": fileStat.birthtime,
                 "mtime": fileStat.mtime
             });
 
             // 出力タブへの出力を生成
-            this.memoListChannel.appendLine('file://' + path.normalize(path.join(this.memodir, list[index])) + `\t` + array[0]);
+            this.memoListChannel.appendLine('file://' + upath.normalize(upath.join(memodir, list[index])) + `\t` + array[0]);
             this.memoListChannel.appendLine('');
         }
 
@@ -224,7 +223,7 @@ export class memoEdit extends memoConfigure  {
                 return void 0;
             }
 
-            await vscode.workspace.openTextDocument(path.normalize(selected.filename)).then(async document => {
+            await vscode.workspace.openTextDocument(upath.normalize(selected.filename)).then(async document => {
                 await vscode.window.showTextDocument(document, {
                         viewColumn: 1,
                         preserveFocus: true,
@@ -273,8 +272,8 @@ const readdirRecursively = (dir, files = []) => {
     const dirents = fs.readdirSync(dir, { withFileTypes: true });
     const dirs = [];
     for (const dirent of dirents) {
-      if (dirent.isDirectory()) dirs.push(path.normalize(path.join(`${dir}`, `${dirent.name}`)));
-      if (dirent.isFile()) files.push(path.normalize(path.join(`${dir}`, `${dirent.name}`)));
+      if (dirent.isDirectory()) dirs.push(upath.normalize(upath.join(`${dir}`, `${dirent.name}`)));
+      if (dirent.isFile()) files.push(upath.normalize(upath.join(`${dir}`, `${dirent.name}`)));
     }
     for (const d of dirs) {
       files = readdirRecursively(d, files);

@@ -4,9 +4,7 @@ import * as vscode from 'vscode';
 import * as cp from 'child_process';
 import * as fs from 'fs';
 import * as fse from 'fs-extra';
-import * as path from 'path';
-import * as os from 'os';
-import * as dateFns from 'date-fns';
+import * as upath from 'upath';
 import * as tomlify from 'tomlify-j0.4';
 import * as nls from 'vscode-nls';
 
@@ -51,12 +49,13 @@ export class memoInit {
         if (process.platform == "win32") {
             this.memoconfdir = process.env.APPDATA;
             if (this.memoconfdir == "") {
-                this.memoconfdir = path.normalize(path.join(process.env.USERPROFILE, "Application Data", "memo"));
+                this.memoconfdir = upath.normalize(upath.join(process.env.USERPROFILE, "Application Data", "memo"));
             }
-            this.memoconfdir = path.normalize(path.join(this.memoconfdir, "memo"));
+            this.memoconfdir = upath.normalize(upath.join(this.memoconfdir, "memo"));
         } else {
-            this.memoconfdir = path.normalize(path.join(process.env.HOME, ".config", "memo"));
+            this.memoconfdir = upath.normalize(upath.join(process.env.HOME, ".config", "memo"));
         }
+        console.log(this.memoconfdir);
         return void 0;
     }
 
@@ -68,16 +67,16 @@ export class memoInit {
             if (!exists) {
                 // memo ディレクトリが存在しているか確認しなければ、memo dir, _posts dir と plugins dir を作成
                 fse.mkdirpSync(this.memoconfdir, {mode: 0o700});
-                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, '_posts')), {mode: 0o700});
-                fse.mkdirpSync(path.normalize(path.join(this.memoconfdir, 'plugins')), {mode: 0o700});
-                fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir), {mode: 0o600});
+                fse.mkdirpSync(upath.normalize(upath.join(this.memoconfdir, '_posts')), {mode: 0o700});
+                fse.mkdirpSync(upath.normalize(upath.join(this.memoconfdir, 'plugins')), {mode: 0o700});
+                fs.writeFileSync(upath.normalize(upath.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir), {mode: 0o600});
                 vscode.window.showInformationMessage(localize('createConfig', 'vscode memo life for you: {0} directory created', this.memoconfdir));
             } else {
                 // config.toml が存在しているかチェック
-                fse.pathExists(path.normalize(path.join(this.memoconfdir, "config.toml")), (err, exists) => {
+                fse.pathExists(upath.normalize(upath.join(this.memoconfdir, "config.toml")), (err, exists) => {
                     if (!exists) {
-                        fs.writeFileSync(path.normalize(path.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir));
-                        vscode.window.showInformationMessage(localize('createConfigFile', "vscode memo life for you: {0} created", path.normalize(path.join(this.memoconfdir, "config.toml"))));
+                        fs.writeFileSync(upath.normalize(upath.join(this.memoconfdir, 'config.toml')), this.cfgtoml(this.memoconfdir));
+                        vscode.window.showInformationMessage(localize('createConfigFile', "vscode memo life for you: {0} created", upath.normalize(upath.join(this.memoconfdir, "config.toml"))));
                     }
                 });
             }
@@ -114,14 +113,14 @@ export class memoInit {
      */
     public cfgtoml(confDir) {
         let config: IMemoConfig = {
-            memodir: process.env.MEMODIR == undefined ? path.normalize(path.join(confDir, "_posts")) : process.env.MEMODIR,
+            memodir: process.env.MEMODIR == undefined ? upath.normalize(upath.join(confDir, "_posts")) : process.env.MEMODIR,
             memotemplate: "",
             editor: process.env.EDITOR == undefined ? "code" : process.env.EDITOR,
             column: 20,
             selectcmd: "peco",
-            grepcmd: (process.platform == "win32") ? "grep -nH ${PATTERN} ${FILES}" : path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg").replace(/\s/g, '\\ ')) + ' -n --no-heading -S ${PATTERN} ${FILES}',
+            grepcmd: (process.platform == "win32") ? "grep -nH ${PATTERN} ${FILES}" : upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg").replace(/\s/g, '\\ ')) + ' -n --no-heading -S ${PATTERN} ${FILES}',
             assetsdir: "",
-            pluginsdir: path.normalize(path.join(confDir, "plugins")),
+            pluginsdir: upath.normalize(upath.join(confDir, "plugins")),
             templatedirfile: "",
             templatebodyfile: "",
         }

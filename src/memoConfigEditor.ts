@@ -1,7 +1,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as path from 'path';
+import * as upath from 'upath';
 import { memoConfigure } from './memoConfigure';
 
 export class memoConfig extends memoConfigure {
@@ -14,7 +14,7 @@ export class memoConfig extends memoConfigure {
      * Config
      */
     public Config() {
-        vscode.workspace.openTextDocument(path.normalize(path.join(this.memoconfdir, 'config.toml'))).then(document =>{
+        vscode.workspace.openTextDocument(upath.normalize(upath.join(this.memoconfdir, 'config.toml'))).then(document =>{
             vscode.window.showTextDocument(document, {
                 viewColumn: 1,
                 preserveFocus: true,
