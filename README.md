@@ -346,7 +346,13 @@ However, this setting also affects the sidebar.
     // "quickInput.background": "#F0F0F0DD"  //For a light theme
 },
 ```
-### If the focus is lost
+
+### How to return to the file tab you were working on immediately after opening a memo file
+
+The vscode command below will help you:
+
+Execute `View: Open Previous Recently Used Editor` from the command palette.
+Alternatively, assign the `workbench.action.openPreviousRecentlyUsedEditor` command to a shortcut key.
 
 todo
 
