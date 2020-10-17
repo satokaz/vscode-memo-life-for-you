@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as upath from 'upath';
 
 import * as nls from 'vscode-nls';
 // import {MDDocumentContentProvider, isMarkdownFile, getMarkdownUri, showPreview} from './MDDocumentContentProvider'
@@ -25,7 +25,7 @@ export class memoConfigure {
     public _waiting : boolean;
     public memopath: string;
     public memoaddr: string;
-    public  memodir: string;
+    public memodir: string;
     public memotemplate: string;
     public memoconfdir: string;
     public memoDateFormat: string;
@@ -77,7 +77,7 @@ export class memoConfigure {
             this.updateConfiguration();
         });
 
-        fs.watchFile(path.normalize(path.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
+        fs.watchFile(upath.normalize(upath.join(this.memoconfdir, 'config.toml')), (curr, prev) => {
             // console.log(curr);
             // this.updateConfiguration();
             this.readConfig();
@@ -96,11 +96,11 @@ export class memoConfigure {
         if (process.platform == "win32") {
             this.memoconfdir = process.env.APPDATA;
             if (this.memoconfdir == "") {
-                this.memoconfdir = path.normalize(path.join(process.env.USERPROFILE, "Application Data", "memo"));
+                this.memoconfdir = upath.normalize(upath.join(process.env.USERPROFILE, "Application Data", "memo"));
             }
-            this.memoconfdir = path.normalize(path.join(this.memoconfdir, "memo"));
+            this.memoconfdir = upath.normalize(upath.join(this.memoconfdir, "memo"));
         } else {
-            this.memoconfdir = path.normalize(path.join(process.env.HOME, ".config", "memo"));
+            this.memoconfdir = upath.normalize(upath.join(process.env.HOME, ".config", "memo"));
         }
         return void 0;
     }
@@ -109,35 +109,32 @@ export class memoConfigure {
      * readConfig
      */
     public readConfig() {
-        let editor;
-        let memodir;
-        let memotemplate;
-        let list = fs.readFileSync(path.normalize(path.join(this.memoconfdir, "config.toml"))).toString().split('\n');
+        let list = fs.readFileSync(upath.normalize(upath.join(this.memoconfdir, "config.toml"))).toString().split('\n');
 
         // console.log('readConfig =', list);
-        list.forEach(async function (v, i) {
-            // console.log(v.split("=")[1]);
-            if (v.match(/^memodir =/)) {
-                memodir = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
+        list.forEach((v) => {
+            // 設定と値を split して整形
+            const array = v.split("=").map((v) => {
+                return v.replace(/"/g, "").trim();
+            });
+
+            // console.log(array);
+
+            if (array[0].match(/memodir/)) {
+                this.memodir = upath.normalizeTrim(array[1]);
             }
-            if (v.match(/^memotemplate =/)) {
-                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
-                    memotemplate = v.split("=")[1].replace(/"/g, "").trim();
-                } else {
-                    memotemplate = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
-                }
+
+            if (array[0].match(/memotemplate/)) {
+                this.memotemplate = upath.normalizeTrim(array[1]);
             }
-            if (v.match(/^editor =/)) {
-                if (v.split("=")[1].replace(/"/g, "").trim() == "") {
-                    editor = v.split("=")[1].replace(/"/g, "").trim();
-                } else {
-                    editor = path.normalize(v.split("=")[1].replace(/"/g, "").trim());
-                }
-            }
+
+            // if (array[0].match(/editor/)) {
+            //     this.editor = upath.normalizeTrim(array[1]);
+            // }
         });
 
-        this.memodir = memodir;
-        this.memotemplate = memotemplate;
+        // console.log(this.memodir);
+        // console.log(this.memotemplate);
         return void 0;
     }
 
@@ -164,7 +161,7 @@ export class memoConfigure {
      * updateConfiguration
      */
     public updateConfiguration() {
-        this.memopath = path.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
+        this.memopath = upath.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');

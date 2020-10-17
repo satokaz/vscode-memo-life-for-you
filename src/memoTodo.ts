@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as cp from 'child_process';
-import * as path from 'path';
+import * as upath from 'upath';
 import * as nls from 'vscode-nls';
 import * as fs from 'fs';
 import * as os from 'os';
@@ -38,12 +38,12 @@ export class memoTodo extends memoConfigure  {
         let keyword = this.memoTodoUserePattern;    // '^.*@todo.*?:'
 
         // ASAR
-        if (fs.existsSync(path.normalize(path.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
+        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
             // vscode 12.1 or later
-            rgPath = path.normalize(path.join(vscode.env.appRoot, "node_modules.asar.unpacked", "vscode-ripgrep", "bin", "rg"));
-        } else if (fs.existsSync(path.normalize(path.join(vscode.env.appRoot, "node_modules")))) {
+            rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "vscode-ripgrep", "bin", "rg"));
+        } else if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules")))) {
             // vscode 12.0
-            rgPath = path.normalize(path.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
+            rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "vscode-ripgrep", "bin", "rg"));
         }
 
         this.readConfig();
@@ -135,7 +135,7 @@ export class memoTodo extends memoConfigure  {
                 items.push({
                     "label": `$(issue-opened) ` + result,
                     // "description": 'due: ',
-                    "detail": `$(calendar) ` + path.basename(filename),
+                    "detail": `$(calendar) ` + upath.basename(filename),
                     "ln": line,
                     "col": col,
                     "index": index,
@@ -191,9 +191,9 @@ export class memoTodo extends memoConfigure  {
                             // Line Decoration
                             grepLineDecoration = vscode.window.createTextEditorDecorationType( <vscode.DecorationRenderOptions> {
                                 isWholeLine: true,
-                                gutterIconPath: this.memoWithRespectMode == true ? path.join(__filename, '..', '..', '..', 'resources', 'Q2xhdWRpYVNEM3gxNjA=.png')
+                                gutterIconPath: this.memoWithRespectMode == true ? upath.join(__filename, '..', '..', '..', 'resources', 'Q2xhdWRpYVNEM3gxNjA=.png')
                                     : (this.memoGutterIconPath ? this.memoGutterIconPath
-                                    : path.join(__filename, '..', '..', '..', 'resources', 'sun.svg')),
+                                    : upath.join(__filename, '..', '..', '..', 'resources', 'sun.svg')),
                                 gutterIconSize: this.memoGutterIconSize ? this.memoGutterIconSize : '100% auto',
                                 backgroundColor: this.memoGrepLineBackgroundColor
                             });

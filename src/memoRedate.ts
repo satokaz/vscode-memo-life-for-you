@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as upath from 'upath';
 import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
 import { memoConfigure } from './memoConfigure';
@@ -43,7 +43,7 @@ export class memoRedate extends memoConfigure {
         this.readConfig();
 
         // vscode.Uri.fsPath は lowercase で、Node.js は Upercase でドライブ名を返してくるので、lowercase に変換して比較する
-        if ((process.platform == "win32" ? path.dirname(activeFilename.fsPath).toLowerCase() : path.dirname(activeFilename.fsPath)) !== (process.platform == "win32" ? path.normalize(this.memodir).toLowerCase() : path.normalize(this.memodir))) {
+        if ((process.platform == "win32" ? upath.dirname(activeFilename.fsPath).toLowerCase() : upath.dirname(activeFilename.fsPath)) !== (process.platform == "win32" ? upath.normalize(this.memodir).toLowerCase() : upath.normalize(this.memodir))) {
             vscode.window.showInformationMessage(localize('reDateNotMemodir', "There are no files in memodir to apply changes"), modal_options, modal_items);
             return;
         }
@@ -66,15 +66,15 @@ export class memoRedate extends memoConfigure {
                 case 1:
                     // console.log(path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm));
 
-                    let tempfilename = path.basename(activeFilename.fsPath).replace(/^\d{4}-\d{1,2}-\d{1,2}/gm, '');
+                    let tempfilename = upath.basename(activeFilename.fsPath).replace(/^\d{4}-\d{1,2}-\d{1,2}/gm, '');
                     // console.log('tempfilename =', tempfilename);
 
-                    if(!path.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm) || tempfilename == ".md"){
+                    if(!upath.basename(activeFilename.fsPath).match(/^\d{4}-\d{1,2}-\d{1,2}-/gm) || tempfilename == ".md"){
                         vscode.window.showInformationMessage(localize('reDateNotUpdateFilename', "Since the file name is only date, it will not be updated. Only the file name of 'YY-MM-DD -xxxx.md' format can be changed."), modal_options, modal_items);
                         return;
                     }
 
-                    let newFilePath = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
+                    let newFilePath = upath.join(upath.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
 
                     // file 名を新しい日付に書き換える
                     if (activeFilename.fsPath == newFilePath) {
@@ -83,7 +83,7 @@ export class memoRedate extends memoConfigure {
                     }
 
                     // birthtime などを維持したいので fs.copySync ではなく fs.renameSync を利用する
-                    fs.renameSync(activeFilename.fsPath, path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename));
+                    fs.renameSync(activeFilename.fsPath, upath.join(upath.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename));
 
                     vscode.commands.executeCommand('workbench.action.closeActiveEditor').then(() => {
                         vscode.workspace.openTextDocument(newFilePath).then(document=>{
@@ -95,7 +95,7 @@ export class memoRedate extends memoConfigure {
                         });
                     });
 
-                    let newFilename = path.join(path.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
+                    let newFilename = upath.join(upath.dirname(activeFilename.fsPath), dateFns.format(new Date(), 'yyyy-MM-dd') + tempfilename);
 
                     vscode.window.showInformationMessage(localize('reDateUpdateToda', 'Updated file name to today\'s date: {0}', newFilename), { modal: true },
                     {

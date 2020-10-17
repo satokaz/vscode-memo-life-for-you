@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 import * as fs from 'fs';
-import * as path from 'path';
+import * as upath from 'upath';
 import * as randomEmoji from 'node-emoji';
 import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
@@ -84,7 +84,7 @@ export class memoNew extends memoConfigure  {
                     .replace(/[\s\]\[\!\"\#\$\%\&\'\(\)\*\/\:\;\<\=\>\?\@\\\^\{\|\}\~\`]/g, '-')
                     .replace(/--+/g ,'') + ".md";
                 }
-                file = path.normalize(path.join(this.memodir, file));
+                file = upath.normalize(upath.join(this.memodir, file));
 
                 try {
                     // fs.accessSync(this.memodir);
@@ -95,7 +95,7 @@ export class memoNew extends memoConfigure  {
                 }
 
                 if (this.memoEditOpenNewInstance){
-                    vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
+                    vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(upath.dirname(file)), true).then(() => {
                         vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
                     });
                 } else {
@@ -126,7 +126,7 @@ export class memoNew extends memoConfigure  {
     public QuickNew() {
         this.readConfig();
 
-        let file: string = path.normalize(path.join(this.memodir, dateFns.format(new Date(), 'yyyy-MM-dd') + ".md"));
+        let file: string = upath.normalize(upath.join(this.memodir, dateFns.format(new Date(), 'yyyy-MM-dd') + ".md"));
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
         let getISOWeek = this.memoISOWeek == true ? "[Week: " + dateFns.getISOWeek(new Date()) + "/" + dateFns.getISOWeeksInYear(new Date()) + "] " : "";
@@ -170,7 +170,7 @@ export class memoNew extends memoConfigure  {
                             setTimeout(() => { vscode.commands.executeCommand('workbench.action.closeActiveEditor'); }, 900);
                         }).then(() => {
                             // console.log(vscode.window.activeTextEditor.document);
-                            vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(path.dirname(file)), true).then(() => {
+                            vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(upath.dirname(file)), true).then(() => {
                                 vscode.commands.executeCommand("vscode.openFolder", vscode.Uri.file(file));
                             });
                         });

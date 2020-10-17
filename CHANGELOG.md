@@ -2,6 +2,13 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.5
+
+* refactor: Use upath instead of path module
+* fix: Trim at the end of path (to work / and \ or without / and \ )
+* docs: How to return to the file tab you were working on immediately after opening a memo file
+* docs: How to keep quickopen from closing when you lose focus
+
 ## 0.5.4
 
 * fix: Issue #55. memo: New does not work on 0.5.3

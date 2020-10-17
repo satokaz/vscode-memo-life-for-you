@@ -2,11 +2,7 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as fs from 'fs';
-import * as path from 'path';
-import * as dateFns from 'date-fns';
 import * as nls from 'vscode-nls';
-import * as os from 'os';
 import { memoConfigure } from './memoConfigure';
 
 const localize = nls.config({ messageFormat: nls.MessageFormat.file })();
