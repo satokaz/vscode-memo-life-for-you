@@ -2,6 +2,10 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.6
+
+* fix: Issue #58. Insufficient action when no value was set in memotemplate
+
 ## 0.5.5
 
 * refactor: Use upath instead of path module

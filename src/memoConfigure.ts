@@ -125,7 +125,8 @@ export class memoConfigure {
             }
 
             if (array[0].match(/memotemplate/)) {
-                this.memotemplate = upath.normalizeTrim(array[1]);
+                this.memotemplate = (upath.normalizeTrim(array[1]) === upath.normalizeTrim(".")) ? "" : upath.normalizeTrim(array[1]) ;                    
+                // console.log('memotemplate =', this.memotemplate);
             }
 
             // if (array[0].match(/editor/)) {
