@@ -164,7 +164,7 @@ export class memoNew extends memoConfigure  {
                                 + getISOWeek
                                 + getEmoji
                                 + dateFns.format(new Date(), `${dateFormat}`)
-                                + " " + `${selectString.substr(0,49)}`
+                                + (selectString === "" ? "" : ` ${selectString.substr(0,49)}`)
                                 + os.EOL + os.EOL);
                         }).then(() => {
                             setTimeout(() => { vscode.commands.executeCommand('workbench.action.closeActiveEditor'); }, 900);
@@ -196,7 +196,7 @@ export class memoNew extends memoConfigure  {
                                 + getISOWeek
                                 + getEmoji
                                 + dateFns.format(new Date(), `${dateFormat}`)
-                                + " " + `${selectString.substr(0,49)}`
+                                + (selectString === "" ? "" : ` ${selectString.substr(0,49)}`)
                                 + os.EOL + os.EOL);
                         }).then(() => {
                             editor.revealRange(editor.selection, vscode.TextEditorRevealType.Default);
