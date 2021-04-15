@@ -28,6 +28,7 @@ export class memoConfigure {
     public memodir: string;
     public memotemplate: string;
     public memoconfdir: string;
+    public memoTitlePrefix: string;
     public memoDateFormat: string;
     public memoISOWeek: boolean = false;
     public memoEmoji: boolean = false;
@@ -164,6 +165,7 @@ export class memoConfigure {
     public updateConfiguration() {
         this.memopath = upath.normalize(vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoPath'));
         this.memoaddr = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('serve-addr');
+        this.memoTitlePrefix = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('titlePrefix');
         this.memoDateFormat = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('dateFormat');
         this.memoISOWeek = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertISOWeek');
         this.memoEmoji = vscode.workspace.getConfiguration('memo-life-for-you').get<boolean>('insertEmoji');

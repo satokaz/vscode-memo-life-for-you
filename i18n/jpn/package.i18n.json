@@ -12,6 +12,7 @@
 	"extension.memoOpenTypora.title": "Memo: Typora で開く",
     "memoPath.desc": "memo コマンドへの絶対パス。Serve コマンドを使用する場合に必要",
     "serve-addr.desc": "Memo:Serve コマンドで使用するポート番号を指定する",
+    "titlePrefix.desc": "`Memo: 今日のメモ` 実行時、タイトルの先頭に指定した文字列を自動的に挿入します",
     "dateFormat.desc": "date-fns の形式に従ってください。詳細: https://date-fns.org/v2.16.1/docs/format",
     "insertISOWeek.desc": "`Memo: 今日のメモ` 実行時、タイトルに ISO 週番号を自動的に挿入します",
     "insertEmoji.desc": "`Memo: 今日のメモ` 実行時、タイトルにランダムな絵文字を自動的に挿入します",
