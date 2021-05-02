@@ -129,6 +129,7 @@ export class memoNew extends memoConfigure  {
         let file: string = upath.normalize(upath.join(this.memodir, dateFns.format(new Date(), 'yyyy-MM-dd') + ".md"));
         let date: Date = new Date();
         let dateFormat = this.memoDateFormat;
+        let titlePrefix = this.memoTitlePrefix;
         let getISOWeek = this.memoISOWeek == true ? "[Week: " + dateFns.getISOWeek(new Date()) + "/" + dateFns.getISOWeeksInYear(new Date()) + "] " : "";
         let getEmoji = this.memoEmoji == true ? randomEmoji.random().emoji : "";
 
@@ -160,7 +161,8 @@ export class memoNew extends memoConfigure  {
                     editor.selection = new vscode.Selection(newPosition, newPosition);
                         vscode.window.activeTextEditor.edit(async function (edit) {
                             edit.insert(newPosition,
-                                os.EOL + "## "
+                                os.EOL
+                                + titlePrefix 
                                 + getISOWeek
                                 + getEmoji
                                 + dateFns.format(new Date(), `${dateFormat}`)
@@ -192,7 +194,8 @@ export class memoNew extends memoConfigure  {
                     editor.selection = new vscode.Selection(newPosition, newPosition);
                         vscode.window.activeTextEditor.edit(function (edit) {
                             edit.insert(newPosition,
-                                os.EOL + "## "
+                                os.EOL
+                                + titlePrefix 
                                 + getISOWeek
                                 + getEmoji
                                 + dateFns.format(new Date(), `${dateFormat}`)

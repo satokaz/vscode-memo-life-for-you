@@ -135,6 +135,11 @@
           "default": "8080",
           "description": "%serve-addr.desc%"
         },
+        "memo-life-for-you.titlePrefix": {
+          "type": "string",
+          "default": "## ",
+          "description": "%titlePrefix.desc%"
+        },
         "memo-life-for-you.dateFormat": {
           "type": "string",
           "default": "yyyy-MM-dd ddd HH:mm",

@@ -12,6 +12,7 @@
     "extension.memoOpenTypora.title": "Memo: Open Typora",
     "memoPath.desc": "Absolute path to the memo command",
     "serve-addr.desc": "Specify port number to `Memo: Serve`",
+    "titlePrefix.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts the specified prefix string of the title",
     "dateFormat.desc": "Follow format of date-fns. See: https://date-fns.org/v2.16.1/docs/format",
     "insertISOWeek.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts ISO Week number in the title",
     "insertEmoji.desc": "When executing `Memo: Today's Quick Memo`, it automatically inserts random-emoji in the title",
