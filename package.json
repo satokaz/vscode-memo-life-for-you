@@ -273,10 +273,11 @@
     "webpack-dev": "webpack --mode development --watch",
     "compile": "webpack --mode none",
     "watch": "webpack --mode none --watch",
-    "test-compile": "tsc -p ./",
-    "postinstall": "node ./node_modules/vscode/bin/install"
+    "test-compile": "tsc -p ./"
   },
   "devDependencies": {
+    "@types/vscode": "^1.30.0",
+    "vscode-test": "^1.4.0",
     "@types/glob": "^7.1.3",
     "@types/node": "^12.11.7",
     "@types/mustache": "^0.8.32",
@@ -285,7 +286,6 @@
     "@typescript-eslint/parser": "^4.3.0",
     "glob": "^7.1.6",
     "typescript": "^4.0.2",
-    "vscode-test": "^1.4.0",
     "del": "^4.1.1",
     "event-stream": "^4.0.1",
     "gulp": "^4.0.2",
@@ -296,7 +296,6 @@
     "terser-webpack-plugin": "^1.3.0",
     "ts-loader": "^8.0.4",
     "vsce": "^1.81.1",
-    "vscode": "^1.1.37",
     "vscode-nls-dev": "^3.3.2",
     "webpack": "^4.44.2",
     "webpack-cli": "^3.3.12"
