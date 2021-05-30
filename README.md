@@ -326,6 +326,7 @@ This extension contributes the following settings:
 * `memo-life-for-you.openMarkdownPreviewUseMPE`: If `memo-life-for-you.openMarkdownPreview` is set to `true`, use `Markdown Preview Enhanced` (https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) to open preview (default: false)"
 
 * `memo-life-for-you.openChromeCustomizeURL`: Define a customized URL for the `Memo: Open Chrome with <html contenteditable>` command.
+* `memo-life-for-you.titlePrefix`: When executing `Memo: Today's Quick Memo`, it automatically inserts the specified prefix string of the title
 
 ## tips
 

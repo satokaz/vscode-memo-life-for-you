@@ -215,6 +215,17 @@ templatebodyfile = ""
 * `memo-life-for-you.memoNewFilenameFromSelection`: vscode 上で選択した文字列を新しく作成するファイルの名前として使用する (default: false),
 * `memo-life-for-you.memoNewFilNameDateSuffix`: ファイル名（yyyy-MM-dd）の後に日付関連の接尾辞を追加します。追加された文字列は、datefns.format() に渡されます。詳細は、https://date-fns.org/v2.16.1/docs/format を参照してください
 
+   例: 
+
+    * `-dddd` を指定すると、ファイル名は `2018-05-24-Thursday.md` になります
+    * `-W` を指定した場合、ファイル名は `2018-05-24-21.md` になります
+    * 追加する文字列によっては、datefns.format() で一部の文字がフォーマットされる場合があります。 フォーマットされることを回避する場合は、`\\` で文字をエスケープしてください
+
+* `memo-life-for-you.openMarkdownPreview` が `true` に設定されている場合、[Markdown Preview Enhanced](https://marketplace.visualstudio.com/items?itemName=shd101wyy.markdown-preview-enhanced) を使用してプレビューを開きます (デフォルト: false)
+
+* `memo-life-for-you.openChromeCustomizeURL`: `Memo: Open Chrome with <html contenteditable>` コマンド用にカスタマイズした URL を定義します
+* `memo-life-for-you.titlePrefix`: `Memo: Today's Quick Memo` 実行時、指定されたタイトルのプレフィックス文字列を自動的に挿入します (default: `## `)
+
 ## tips
 
 ### クイックアイテムリストの透過設定
