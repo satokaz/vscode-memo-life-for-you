@@ -66,7 +66,7 @@ export class memoTodo extends memoConfigure  {
                         child.kill();
                     }
                 });
-                return new Promise((resolve, reject) => {
+                return new Promise<void>((resolve, reject) => {
                     progress.report({ message: localize('todoProgress', "Searching for Todo. . .: {0}...", keyword)});
                     // progress.report({ increment: 100 });
 

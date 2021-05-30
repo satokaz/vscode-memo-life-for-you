@@ -9,6 +9,7 @@ All notable changes to the "vscode-memo-life-for-you" extension will be document
 * feat: Add setting: memo-life-for-you.titlePrefix (PR #64: @syou6162)
 * refactor: Update Dependency
 * docs: Update README 
+* refactor: error TS2794
 
 ## 0.5.6
 
