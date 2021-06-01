@@ -72,7 +72,7 @@ export class memoGrep extends memoConfigure  {
                         child.kill();
                     }
                 });
-                return new Promise((resolve, reject) => {
+                return new Promise<void>((resolve, reject) => {
                     progress.report({ message: localize('grepProgress', "Searching for keyword: {0}...", keyword)});
                     // progress.report({ increment: 100 });
 

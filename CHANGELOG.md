@@ -2,6 +2,15 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.7
+
+* Remove vscode dependency (https://code.visualstudio.com/api/working-with-extensions/testing-extension#migrating-from-vscode)
+* fix: Remove unnecessary trailing space when the editor has no selection (PR #63: @athos)
+* feat: Add setting: memo-life-for-you.titlePrefix (PR #64: @syou6162)
+* refactor: Update Dependency
+* docs: Update README 
+* refactor: error TS2794
+
 ## 0.5.6
 
 * fix: Issue #58. Insufficient action when no value was set in memotemplate
