@@ -10,6 +10,12 @@
   "categories": [
     "Other"
   ],
+  "capabilities": {
+		"untrustedWorkspaces": {
+			"supported": true
+		},
+		"virtualWorkspaces": true
+	},
   "icon": "media/icon.png",
   "homepage": "https://github.com/satokaz/vscode-memo-life-for-you",
   "repository": {
