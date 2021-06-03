@@ -2,6 +2,12 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.8
+
+* feat: adopt extension capabilities (https://github.com/microsoft/vscode/issues/120251)
+
+
+
 ## 0.5.7
 
 * Remove vscode dependency (https://code.visualstudio.com/api/working-with-extensions/testing-extension#migrating-from-vscode)
