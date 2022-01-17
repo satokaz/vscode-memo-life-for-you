@@ -2,11 +2,13 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.5.9
+
+* fix: issues/74 update your import of the built-in ripgrep 
+
 ## 0.5.8
 
 * feat: adopt extension capabilities (https://github.com/microsoft/vscode/issues/120251)
-
-
 
 ## 0.5.7
 
