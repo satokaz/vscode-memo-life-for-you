@@ -109,7 +109,15 @@ export class memoGrep extends memoConfigure  {
                     } else {
                         process.env.RIPGREP_CONFIG_PATH = ''; // unset
                         // console.log('memoGrep =', process.env.RIPGREP_CONFIG_PATH);
-                        args = ['--vimgrep', '--color', 'never', '-g', '*.md', '-S'];
+                        // 
+                        //ripgrep のオプションを組み立てる。
+                        //検索対象となるファイルは、memoListDisplayExtname 設定で指定されている拡張子を対象とする
+                        //
+                        args = ['--vimgrep', '--color', 'never', '-S'];
+                        for (let i = 0; i < this.memoListDisplayExtname.length; i++) {
+                            args.push('-g', '*.' + this.memoListDisplayExtname[i]);
+                        }
+
                         child = cp.spawn(rgPath, args.concat([keyword]).concat([this.memodir]), {
                                         stdio: ['inherit'],
                                         cwd: this.memodir

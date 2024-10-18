@@ -55,7 +55,7 @@ export class memoEdit extends memoConfigure {
         // listDisplayExtname　= [];
         // listDisplayExtname が空の場合は、強制的に .md のみ対象にする
         if (listDisplayExtname.length == 0 ) {
-            listDisplayExtname　= ["md"];
+            listDisplayExtname = ["md"];
         } 
 
         // 取得したファイル一覧を整形
