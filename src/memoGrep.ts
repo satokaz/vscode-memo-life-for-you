@@ -39,7 +39,9 @@ export class memoGrep extends memoConfigure  {
         // ASAR
         console.log(vscode.version);
 
-        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
+        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules","@vscode")))) {
+            rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "@vscode", "ripgrep", "bin", "rg"));
+        } else if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
             // vscode 1.64 or later 
             if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode")))) {
                 rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode", "ripgrep", "bin", "rg"));
