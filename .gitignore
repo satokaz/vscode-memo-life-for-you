@@ -5,3 +5,4 @@ node_modules
 package.nls.ja.json
 dist
 *.cpuprofile
+.DS_Store

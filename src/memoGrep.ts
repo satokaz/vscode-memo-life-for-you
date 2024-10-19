@@ -39,7 +39,9 @@ export class memoGrep extends memoConfigure  {
         // ASAR
         console.log(vscode.version);
 
-        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
+        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules","@vscode")))) {
+            rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "@vscode", "ripgrep", "bin", "rg"));
+        } else if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
             // vscode 1.64 or later 
             if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode")))) {
                 rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode", "ripgrep", "bin", "rg"));
@@ -107,7 +109,15 @@ export class memoGrep extends memoConfigure  {
                     } else {
                         process.env.RIPGREP_CONFIG_PATH = ''; // unset
                         // console.log('memoGrep =', process.env.RIPGREP_CONFIG_PATH);
-                        args = ['--vimgrep', '--color', 'never', '-g', '*.md', '-S'];
+                        // 
+                        //ripgrep のオプションを組み立てる。
+                        //検索対象となるファイルは、memoListDisplayExtname 設定で指定されている拡張子を対象とする
+                        //
+                        args = ['--vimgrep', '--color', 'never', '-S'];
+                        for (let i = 0; i < this.memoListDisplayExtname.length; i++) {
+                            args.push('-g', '*.' + this.memoListDisplayExtname[i]);
+                        }
+
                         child = cp.spawn(rgPath, args.concat([keyword]).concat([this.memodir]), {
                                         stdio: ['inherit'],
                                         cwd: this.memodir

@@ -190,6 +190,8 @@ export class memoConfigure {
         this.memoOpenChromeCustomizeURL = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('openChromeCustomizeURL');
         this.memoTyporaExecPath = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('TyporaExecPath');
         this.memoListDisplayExtname = vscode.workspace.getConfiguration('memo-life-for-you').get<string[]>('listDisplayExtname');
+        this.memoListDisplayExtname = vscode.workspace.getConfiguration('memo-life-for-you').get<string[]>('listDisplayExtname');
+        // this.memoconfdir = vscode.workspace.getConfiguration('memo-life-for-you').get<string>('memoconfdir');
     }
 
     get onDidChange() {
