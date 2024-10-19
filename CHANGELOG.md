@@ -2,6 +2,13 @@
 
 All notable changes to the "vscode-memo-life-for-you" extension will be documented in this file.
 
+## 0.6.0 
+
+* chore: update version to 0.6.0 and refine dependencies in package.json; add .DS_Store to .gitignore
+* chore: update dependencies and improve build scripts in package.json
+* feat: enhance file extension handling in memo functionalities
+* fix: update rgPath resolution for @vscode ripgrep
+
 ## 0.5.9
 
 * fix: issues/74 update your import of the built-in ripgrep 
