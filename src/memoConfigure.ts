@@ -123,6 +123,8 @@ export class memoConfigure {
 
             if (array[0].match(/memodir/)) {
                 this.memodir = upath.normalizeTrim(array[1]);
+                // replace `~/` with the user's home directory
+                this.memodir = this.memodir.replace(/^~/, process.env.HOME);
             }
 
             if (array[0].match(/memotemplate/)) {
