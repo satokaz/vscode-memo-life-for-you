@@ -39,11 +39,14 @@ export class memoGrep extends memoConfigure  {
         // ASAR
         console.log(vscode.version);
 
-        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules","@vscode")))) {
+        if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "@vscode", "ripgrep")))) {
             rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules", "@vscode", "ripgrep", "bin", "rg"));
         } else if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked")))) {
-            // vscode 1.64 or later 
-            if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode")))) {
+            if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode", "ripgrep-universal")))) {
+                // vscode 1.122 or later
+                rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode", "ripgrep-universal", "bin", `${process.platform}-${process.arch}`, "rg"));
+            } else if (fs.existsSync(upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode")))) {
+                // vscode 1.64 to 1.121
                 rgPath = upath.normalize(upath.join(vscode.env.appRoot, "node_modules.asar.unpacked", "@vscode", "ripgrep", "bin", "rg"));
             } else {
                 // vscode 1.21 to 1.63
@@ -124,6 +127,14 @@ export class memoGrep extends memoConfigure  {
                                     });
                     }
                         
+                    // without this handler a failed spawn (e.g. ENOENT) never settles the promise
+                    // and the progress notification stays open forever
+                    child.on("error", (err) => {
+                        list = [];
+                        vscode.window.showErrorMessage(localize('grepSpawnError', 'Failed to run ripgrep ({0}): {1}', rgPath, err.message));
+                        reject(err);
+                    });
+
                     child.stdout.setEncoding('utf-8');
                     child.stdout.on("data", (message) => {
                         // console.log('stdout =', message);
